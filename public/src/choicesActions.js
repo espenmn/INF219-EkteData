@@ -37,13 +37,7 @@ function getDataFromTextFields() {
     var dataToQuarry = [];
 
     for (var i = 0; i < dataTypes.length; i++) {
-
-        if(i === 2 || i === 3){
             dataToQuarry[i] = document.getElementById(dataTypes[i]).value;
-        }
-        else {
-            dataToQuarry[i] = document.getElementById(dataTypes[i]).value;
-        }
     }
     return dataToQuarry;
 

@@ -3,7 +3,7 @@ extends layout
 append body
     .starter-template
         .container
-            script(type='text/javascript' src='routes/choicesActions')
+            script(type='text/javascript' src='src/choicesActions.js')
             h1 Gabriel
             p.lead
                 | Use this document as a way to quickly start any new project.
@@ -17,22 +17,28 @@ append body
                 option(value="turbidity") Turbiditet
                 option(value="fluorescent") Fluorescens
                 option(value="airtemperature") Lufttemperatur
+            select(id="howMuchDataDropDown" name="howMuchDataDropDown")
+                option(value="" disabled=true) How much data
+                option(value="allData") All data
+                option(value="24hourAverage") Gjennomsnitt døgn
+                option(value="weeklyAverage") Gjennomsnitt uke
+                option(value="monthlyAverage") Gennomsnitt måned
+                option(value="yearlyAverage") Gjennomsnitt år
             input(id="fromDate" type="text" placeholder="Dato fra")
             input(id="toDate" type="text" placeholder="Dato til")
-            select(id="depth", name="depth")
+            select(id="depthDropDown", name="depth")
                 option(value="" disabled=true selected=true) Dybdetype
                 option(value="allDepths") Alle dybder
                 option(value="oneDepth") En dybde
                 option(value="betweenDepths") Dybde mellom
-            select(id="fromDepth", name="fromDepth")
+            select(id="depthFrom", name="depthFrom")
                 option(value="" disabled=true selected=true) Dybde fra
                 -for(var i = 0.5;i<19;i++){
                 option(value="#{i}") #{i}
                 -}
-            select(id="toDepth", name="toDepth")
+            select(id="depthTo", name="depthTo")
                 option(value="" disabled=true selected=true) Dybde til
                 -for(var i = 0.5;i<19;i++){
                 option(value="#{i}") #{i}
                 -}
-            input(id="acceptButton" type="button" value="Accept" onclick=test())
-
+            input(id="acceptButton" type="button" value="Accept" onclick="acceptButtonHit();")
