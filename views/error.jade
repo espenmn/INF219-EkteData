@@ -1,6 +1,8 @@
 extends layout
 
-block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+append body
+    .starter-template
+        .container
+            h1= message
+            h2= error.status
+            img.responsive-center(src="http://www.tatge.biz/wp-content/uploads/2013/02/13-0201-404-csstricks.jpg", width="500px", "")

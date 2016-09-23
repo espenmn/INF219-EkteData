@@ -1,17 +1,35 @@
 {
-  "name": "INF219-AmalieSkram",
-  "version": "0.0.0",
+  "name": "inf219-amalieskram",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
+    "bower": "^1.7.9",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "express": "~4.13.4",
+    "file-saver": "^1.3.2",
     "jade": "~1.11.0",
+    "jade-bootstrap": "^1.0.6",
+    "json-stable-stringify": "^1.0.1",
+    "mongodb": "^2.2.10",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0"
-  }
+  },
+  "description": "Gruppeprosjekt i INF219 for Amalie Skram",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosteinKringlen/INF219-AmalieSkram.git"
+  },
+  "author": "Vegar Rørvik, Jostein Kringlen, Kaja Dey, André Dyrstad",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/JosteinKringlen/INF219-AmalieSkram/issues"
+  },
+  "homepage": "https://github.com/JosteinKringlen/INF219-AmalieSkram#readme"
 }

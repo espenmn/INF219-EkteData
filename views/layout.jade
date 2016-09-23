@@ -1,7 +1,13 @@
+extends ../node_modules/jade-bootstrap/_bootstrap
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    append body
+        .navbar
+            +navbar-fixed("Gabriel","navbar","inverse")
+                +nav_item("/","active") Hjem
+                +nav_item("about") Om
+                +nav_item("contact") Kontakt
+
