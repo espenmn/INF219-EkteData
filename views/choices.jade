@@ -26,17 +26,17 @@ append body
                 option(value="yearlyAverage") Gjennomsnitt år
             input(id="fromDate" type="text" placeholder="Dato fra")
             input(id="toDate" type="text" placeholder="Dato til")
-            select(id="depthDropDown", name="depth")
+            select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
                 option(value="" disabled=true selected=true) Dybdetype
                 option(value="allDepths") Alle dybder
                 option(value="oneDepth") En dybde
-                option(value="betweenDepths") Dybde mellom
-            select(id="depthFrom", name="depthFrom")
+                option(value="depthBetween") Dybde mellom
+            select(id="depthFrom", name="depthFrom" disabled=true)
                 option(value="" disabled=true selected=true) Dybde fra
                 -for(var i = 0.5;i<19;i++){
                 option(value="#{i}") #{i}
                 -}
-            select(id="depthTo", name="depthTo")
+            select(id="depthTo", name="depthTo" disabled=true)
                 option(value="" disabled=true selected=true) Dybde til
                 -for(var i = 0.5;i<19;i++){
                 option(value="#{i}") #{i}
