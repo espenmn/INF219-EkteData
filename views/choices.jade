@@ -1,0 +1,35 @@
+extends layout
+
+append body
+    .starter-template
+        .container
+            h1 Gabriel
+            p.lead
+                | Use this document as a way to quickly start any new project.
+                br
+                |  All you get is this text and a mostly barebones HTML document.
+            select(id="parameterDropDown", name="parameter")
+                option(value="" disabled=true selected=true) Parameter
+                option(value="temperature") Temperatur
+                option(value="oxygen") Oksygen
+                option(value="salt") Salt
+                option(value="turbidity") Turbiditet
+                option(value="fluorescent") Fluorescens
+                option(value="airtemperature") Lufttemperatur
+            input(id="fromDate" type="text" placeholder="Dato fra")
+            input(id="toDate" type="text" placeholder="Dato til")
+            select(id="depth", name="depth")
+                option(value="" disabled=true selected=true) Dybdetype
+                option(value="allDepths") Alle dybder
+                option(value="oneDepth") En dybde
+                option(value="betweenDepths") Dybde mellom
+            select(id="fromDepth", name="fromDepth")
+                option(value="" disabled=true selected=true) Dybde fra
+                -for(var i = 0.5;i<19;i++){
+                option(value="#{i}") #{i}
+                -}
+            select(id="toDepth", name="toDepth")
+                option(value="" disabled=true selected=true) Dybde til
+                -for(var i = 0.5;i<19;i++){
+                option(value="#{i}") #{i}
+                -}
