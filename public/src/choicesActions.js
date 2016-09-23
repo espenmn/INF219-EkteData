@@ -305,11 +305,9 @@ function acceptButtonHit() {
     if (valid) {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
-        //var query = new MongoQueries(dataToQuery[2], dataToQuery[3],dataToQuery[5],dataToQuery[6],dataToQuery[0]);
         convertToQueryFormat(dataToQuery);
     }
-    //var query = new MongoQueries('2016-09-08T12:00:37Z', '2016-09-09T15:00:00Z', null, null, "timeseries.oxygene");
-    //query.saveToFile();
+
 }
 
 /**
@@ -325,14 +323,18 @@ function printError(title, message) {
 
 }
 
-
+/**
+ *
+ * @param depth1 the start-depth
+ * @param depth2 the the end-depth
+ * @returns {boolean} True if the end-depth is deeper than the start-depth
+ */
 function assertCorrectGapInDepths(depth1, depth2){
     if(parseInt(depth1)>=parseInt(depth2)){
         return false;
     }
     return true;
 }
-
 
 /**
  *
