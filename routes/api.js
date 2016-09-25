@@ -7,8 +7,11 @@ var assert = require('assert');
 var filesaver = require('../bower_components/file-saver/FileSaver');
 var stringify = require('json-stable-stringify');
 var queryToBeSavedAsText;
-router.get('/text', function (rec, res, next) {
+router.get('/text', function (req, res, next) {
     console.log("test");
+
+    console.log(req.query.test_key);
+
     var kattepiss = function (db, callback) {
         var cursor = db.collection('diveinterpolated').find({
                 startdatetime: {$gte: new Date('2016-09-08T12:00:00Z'), $lt: new Date('2016-09-09T15:00:00Z')}

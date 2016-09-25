@@ -306,8 +306,10 @@ function acceptButtonHit() {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
         convertToQueryFormat(dataToQuery);
-    }
 
+        var hostLink = 'http://localhost:3000';
+        $.get(hostLink + '/api/text', {test_key:hostLink});
+    }
 }
 
 /**
