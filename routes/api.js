@@ -10,13 +10,13 @@ var queryToBeSavedAsText;
 router.get('/text', function (req, res, next) {
     console.log("test");
 
-    console.log(req.query.test_key);
+    var test = req.query.test_key;
 
     var kattepiss = function (db, callback) {
         var cursor = db.collection('diveinterpolated').find({
                 startdatetime: {$gte: new Date('2016-09-08T12:00:00Z'), $lt: new Date('2016-09-09T15:00:00Z')}
             },
-            {_id: 0, 'timeseries.temp': 1, startdatetime: 1, airtemp: 1});
+            {_id: 0, [test]: 1, startdatetime: 1, airtemp: 1});
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
@@ -32,7 +32,7 @@ router.get('/text', function (req, res, next) {
         kattepiss(db, function () {
             db.close();
         })
-    })
+    });
     res.send();
 });
 module.exports = router;
