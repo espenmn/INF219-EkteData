@@ -11,8 +11,8 @@ append body
                 br
                 |  All you get is this text and a mostly barebones HTML document.
             select(id="parameterDropDown", name="parameter")
-                option(value="" disabled=true selected=true) Parameter
-                option(value="timeseries.temp") Temperatur
+                option(value="" disabled=true ) Parameter
+                option(value="timeseries.temp" selected=true) Temperatur
                 option(value="timeseries.oxygene") Oksygen
                 option(value="timeseries.salt") Salt
                 option(value="timeseries.turbidity") Turbiditet
@@ -20,16 +20,16 @@ append body
                 option(value="airtemp") Lufttemperatur
             select(id="howMuchDataDropDown" name="howMuchDataDropDown")
                 option(value="" disabled=true) How much data
-                option(value="allData") All data
+                option(value="allData" selected=true) All data
                 option(value="24hourAverage") Gjennomsnitt døgn
                 option(value="weeklyAverage") Gjennomsnitt uke
                 option(value="monthlyAverage") Gennomsnitt måned
                 option(value="yearlyAverage") Gjennomsnitt år
-            input(id="fromDate" type="text" placeholder="Dato fra")
-            input(id="toDate" type="text" placeholder="Dato til")
+            input(id="fromDate" type="text" placeholder="Dato fra" value="12/11/10/15")
+            input(id="toDate" type="text" placeholder="Dato til" value="12/12/10/15")
             select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
-                option(value="" disabled=true selected=true) Dybdetype
-                option(value="allDepths") Alle dybder
+                option(value="" disabled=true) Dybdetype
+                option(value="allDepths" selected=true) Alle dybder
                 option(value="oneDepth") En dybde
                 option(value="depthBetween") Dybde mellom
             select(id="depthFrom", name="depthFrom" disabled=true)
