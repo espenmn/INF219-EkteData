@@ -305,10 +305,8 @@ function acceptButtonHit() {
     if (valid) {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
-        convertToQueryFormat(dataToQuery);
-
         var hostLink = 'http://localhost:3000';
-        $.get(hostLink + '/api/text', {test_key:dataToQuery[0]});
+        $.get(hostLink + '/api/text', {parameter:dataToQuery[0],fromDate:dataToQuery[2],toDate:dataToQuery[3]});
     }
 }
 
@@ -349,6 +347,7 @@ function convertToQueryFormat(list) {
 
     list[2] = formatDate(list[2]);
     list[3] = formatDate(list[3]);
+
 
     if (list[4] === 'allDepths') {
         list[5] = "0.5";
