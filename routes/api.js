@@ -13,7 +13,7 @@ router.get('/text', function (req, res, next) {
     var fromDate = req.query.fromDate;
     var toDate = req.query.toDate;
 
-    var kattepiss = function (db, callback) {
+    var querySearch = function (db, callback) {
         var cursor = db.collection('diveinterpolated').find({
                 startdatetime: {$gte: new Date([fromDate]), $lt: new Date([toDate])}
             },
@@ -30,7 +30,7 @@ router.get('/text', function (req, res, next) {
     };
 
     MongoClient.connect(url, function (err, db) {
-        kattepiss(db, function () {
+        querySearch(db, function () {
             db.close();
         })
     });
