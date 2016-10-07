@@ -149,6 +149,7 @@ function formatDate(date,type) {
                 break;
             case 4:
                 formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
+                break;
         }
     } else {
         switch (list.length) {
@@ -163,6 +164,7 @@ function formatDate(date,type) {
                 break;
             case 4:
                 formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
+                break;
         }
     }
 
