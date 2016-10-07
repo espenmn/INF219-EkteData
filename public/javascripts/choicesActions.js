@@ -122,19 +122,49 @@ function validateInput(dataList) {
 }
 
 /**
+ *
  * Change the date to a format that the database can understand
  *
  * @param date
- * @returns {string}
+ * @param type
+ * @return {*}
  */
-function formatDate(date) {
+function formatDate(date,type) {
 
     var list = date.split("/");
-    var formatedDate;
+    var formattedDate;
 
-    formatedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
+    if(type) {
+        switch (list.length) {
+            case 1:
+                formattedDate = "20" + list[0] + "-01-01T00:00:00Z";
+                break;
+            case 2:
+                formattedDate = "20" + list[1] + "-" + list[0] + "-01T00:00:00Z";
+                break;
+            case 3:
+                formattedDate = 20 + list[2] + "-" + list[1] + "-" + list[0] + "T00:00:00Z";
+                break;
+            case 4:
+                formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
+        }
+    } else {
+        switch (list.length) {
+            case 1:
+                formattedDate = "20" + list[0] + "-12-31T23:59:59Z";
+                break;
+            case 2:
+                formattedDate = "20" + list[1] + "-" + list[0] + "-31T23:59:59Z";
+                break;
+            case 3:
+                formattedDate = 20 + list[2] + "-" + list[1] + "-" + list[0] + "T23:59:59Z";
+                break;
+            case 4:
+                formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
+        }
+    }
 
-    return formatedDate;
+    return formattedDate;
 }
 
 /**
@@ -345,7 +375,7 @@ function assertCorrectGapInDepths(depth1, depth2){
  */
 function convertToQueryFormat(list) {
 
-    list[2] = formatDate(list[2]);
+    list[2] = formatDate(list[2],true);
     list[3] = formatDate(list[3]);
 
 
