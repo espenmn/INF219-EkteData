@@ -13,8 +13,8 @@ router.get('/text', function (req, res, next) {
     var dataType = req.query.dataType;
     var fromDate = req.query.fromDate;
     var toDate = req.query.toDate;
-    var depthFrom = req.query.depthFrom;
-    var depthTo = req.query.depthTo;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
 
     var allValuesBetweenDatesForOneParameter = function (db, callback) {
         var cursor = db.collection('diveinterpolated').find({
@@ -32,14 +32,14 @@ router.get('/text', function (req, res, next) {
         })
     };
 
-
+/**
     var querySearchAverageMonthsBetweenDates = function (db, callback) {
         var cursor = db.collection('diveinterpolated').aggregate({$unwind: "$timeseries"},
             {$match: {'startdatetime': {$gte: new Date([fromDate]), $lt: new Date([toDate])}}},
             {
                 $group: {
                     _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
-                    avgTemp: {$avg: "$timeseries.temp"}
+                    avgTemp: {$avg: "$"+[parameter]}
                 }
             },
             {$sort: {_id: 1}});
@@ -53,18 +53,19 @@ router.get('/text', function (req, res, next) {
             }
         })
     };
+**/
 
     var querySearchAverageMonthsBetweenDatesAndDepths = function (db, callback) {
         var cursor = db.collection('diveinterpolated').aggregate({
                 $match: {
                     "startdatetime": {
-                        $gt: new Date([fromDate]),
-                        $lt: new Date([toDate])
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
                     }
                 }
             },
-            {$match: {"timeseries.pressure(dBAR)": {$gte: [depthFrom], $lte: [depthTo]}}},
-            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: [depthFrom], $lte: [depthTo]}}},
+            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
             {
                 $group: {
                     _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
@@ -82,6 +83,8 @@ router.get('/text', function (req, res, next) {
         })
     };
 
+
+    console.log(dataType);
     if(dataType==="allData") {
         MongoClient.connect(url, function (err, db) {
             allValuesBetweenDatesForOneParameter(db, function () {
@@ -89,6 +92,7 @@ router.get('/text', function (req, res, next) {
             })
         });
     }
+
     else if(dataType==="monthlyAverage") {
         MongoClient.connect(url, function (err, db) {
             querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
