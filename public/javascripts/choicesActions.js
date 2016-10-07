@@ -96,7 +96,7 @@ function validateInput(dataList) {
     //first date is after 15/12/05/15
     var legalFirstDate = checkDate1BeforeDate2(absoluteStartDate, dataList[2], dateType);
     //last date is before tha date today
-    var legalSecondDate = checkDate1BeforeDate2(dataList[3], getCurrentDate(), dateType);
+    var legalSecondDate = checkDate1BeforeDate2(dataList[3], getCurrentDate(dateType), dateType);
     //the first date is before the second date
     var legalStartEndDates = checkDate1BeforeDate2(dataList[2], dataList[3], dateType);
 
@@ -104,10 +104,12 @@ function validateInput(dataList) {
         if (!legalStartEndDates) {
             printError("Invalid date", "Not possible to place end-date earlier than start-date");
         }
-        else {
-            printError("Invalid date", "No data available before 15/12/05/15, or into the future");
+        else if(!legalFirstDate){
+            printError("Invalid date", "No data available before 15/12/05/15");
         }
-        return false;
+        else {
+            printError("Invalid date", "End-date cannot be later than the current date");
+        }return false;
     }
 
     //validate that in "depth between", the first depth is less than the second depth
@@ -143,7 +145,7 @@ function formatDate(date) {
  *
  * @return {Date}
  */
-function getCurrentDate() {
+function getCurrentDate(dateType) {
 
     var today = new Date();
     var dd = today.getDate();
@@ -156,8 +158,14 @@ function getCurrentDate() {
     if (mm < 10) {
         mm = '0' + mm
     }
-
-    today = (hh + "/" + dd + "/" + mm + "/" + yy);
+    if(dateType == "month") {
+        today = (mm + "/" + yy);
+    }
+    else if (dateType == "year") {
+        today = (yy);
+    }
+    else
+        today = (hh + "/" + dd + "/" + mm + "/" + yy);
     return today;
 
 }
@@ -196,9 +204,9 @@ function checkDate1BeforeDate2(date1, date2, dateType) {
             break;
     }
 
+
     var valid1 = checkValidDate(list1, listPosOfMonth, listPosOfYear);
     var valid2 = checkValidDate(list2, listPosOfMonth, listPosOfYear);
-
     if (valid1 && valid2) {
         //Return true if the two dates are equal
         for(var i=0; i<list1.length; i++){
