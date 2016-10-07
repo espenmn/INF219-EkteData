@@ -32,70 +32,12 @@ router.get('/text', function (req, res, next) {
         })
     };
 
-
-    var querySearchAverageMonthsBetweenDates = function (db, callback) {
-        var cursor = db.collection('diveinterpolated').aggregate({$unwind: "$timeseries"},
-            {$match: {'startdatetime': {$gte: new Date([fromDate]), $lt: new Date([toDate])}}},
-            {
-                $group: {
-                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
-                    avgTemp: {$avg: "$timeseries.temp"}
-                }
-            },
-            {$sort: {_id: 1}});
-        cursor.each(function (err, doc) {
-            assert.equal(err, null);
-            if (doc != null) {
-                console.log(doc);
-                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-            } else {
-                callback();
-            }
-        })
-    };
-
-    var querySearchAverageMonthsBetweenDatesAndDepths = function (db, callback) {
-        var cursor = db.collection('diveinterpolated').aggregate({
-                $match: {
-                    "startdatetime": {
-                        $gt: new Date([fromDate]),
-                        $lt: new Date([toDate])
-                    }
-                }
-            },
-            {$match: {"timeseries.pressure(dBAR)": {$gte: [depthFrom], $lte: [depthTo]}}},
-            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: [depthFrom], $lte: [depthTo]}}},
-            {
-                $group: {
-                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
-                    avgTemp: {$avg: "$timeseries.temp"}
-                }
-            }, {$sort: {_id: 1}});
-        cursor.each(function (err, doc) {
-            assert.equal(err, null);
-            if (doc != null) {
-                console.log(doc);
-                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-            } else {
-                callback();
-            }
-        })
-    };
-
-    if(dataType==="allData") {
         MongoClient.connect(url, function (err, db) {
             allValuesBetweenDatesForOneParameter(db, function () {
                 db.close();
             })
         });
-    }
-    else if(dataType==="monthlyAverage") {
-        MongoClient.connect(url, function (err, db) {
-            querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
-                db.close();
-            })
-        });
-    }
+
 
     res.send();
 });
