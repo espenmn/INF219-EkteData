@@ -306,7 +306,7 @@ function acceptButtonHit() {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
         var hostLink = 'http://localhost:3000';
-        $.get(hostLink + '/api/text', {parameter:dataToQuery[0],fromDate:dataToQuery[2],toDate:dataToQuery[3]});
+        $.get(hostLink + '/api/text', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
     }
 }
 
