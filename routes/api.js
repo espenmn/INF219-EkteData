@@ -69,7 +69,7 @@ router.get('/text', function (req, res, next) {
             {
                 $group: {
                     _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
-                    avgTemp: {$avg: "$timeseries.temp"}
+                    avgTemp: {$avg: "$"+[parameter]}
                 }
             }, {$sort: {_id: 1}});
         cursor.each(function (err, doc) {
