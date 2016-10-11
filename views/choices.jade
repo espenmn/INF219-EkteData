@@ -4,41 +4,67 @@ append body
     .starter-template
         .container
             script(type='text/javascript' src='/javascripts/choicesActions.js')
+            script(type='text/javascript' src='/javascripts/file-saver/FileSaver.js')
+            link(rel='stylesheet' href='/stylesheets/style.css')
             h1 Gabriel
             p.lead
                 | Use this document as a way to quickly start any new project.
                 br
                 |  All you get is this text and a mostly barebones HTML document.
-            select(id="parameterDropDown", name="parameter")
-                option(value="" disabled=true ) Parameter
-                option(value="timeseries.temp" selected=true) Temperatur
-                option(value="timeseries.oxygene") Oksygen
-                option(value="timeseries.salt") Salt
-                option(value="timeseries.turbidity") Turbiditet
-                option(value="timeseries.fluorescent") Fluorescens
-                option(value="airtemp") Lufttemperatur
-            select(id="howMuchDataDropDown" name="howMuchDataDropDown")
-                option(value="" disabled=true) How much data
-                option(value="allData" selected=true) All data
-                option(value="24hourAverage") Gjennomsnitt døgn
-                option(value="weeklyAverage") Gjennomsnitt uke
-                option(value="monthlyAverage") Gennomsnitt måned
-                option(value="yearlyAverage") Gjennomsnitt år
+            .select
+                select(id="parameterDropDown", name="parameter")
+                    option(value="" disabled=true ) Parameter
+                    option(value="timeseries.temp" selected=true) Temperatur
+                    option(value="timeseries.oxygene") Oksygen
+                    option(value="timeseries.salt") Salt
+                    option(value="timeseries.turbidity") Turbiditet
+                    option(value="timeseries.fluorescent") Fluorescens
+                    option(value="airtemp") Lufttemperatur
+                .select__arrow
+            .select
+                select(id="howMuchDataDropDown" name="howMuchDataDropDown")
+                    option(value="" disabled=true) How much data
+                    option(value="allData" selected=true) All data
+                    option(value="24hourAverage") Gjennomsnitt døgn
+                    option(value="weeklyAverage") Gjennomsnitt uke
+                    option(value="monthlyAverage") Gennomsnitt måned
+                    option(value="yearlyAverage") Gjennomsnitt år
+                .select__arrow
             input(id="fromDate" type="text" placeholder="Dato fra" value="12/11/10/15")
             input(id="toDate" type="text" placeholder="Dato til" value="12/12/10/15")
-            select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
-                option(value="" disabled=true) Dybdetype
-                option(value="allDepths" selected=true) Alle dybder
-                option(value="oneDepth") En dybde
-                option(value="depthBetween") Dybde mellom
-            select(id="depthFrom", name="depthFrom" disabled=true)
-                option(value="" disabled=true selected=true) Dybde fra
-                -for(var i = 0.5;i<19;i++){
-                option(value="#{i}") #{i}
-                -}
-            select(id="depthTo", name="depthTo" disabled=true)
-                option(value="" disabled=true selected=true) Dybde til
-                -for(var i = 0.5;i<19;i++){
-                option(value="#{i}") #{i}
-                -}
+            .select
+                select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
+                    option(value="" disabled=true) Dybdetype
+                    option(value="allDepths" selected=true) Alle dybder
+                    option(value="oneDepth") En dybde
+                    option(value="depthBetween") Dybde mellom
+                .select__arrow
+            .select
+                select(id="depthFrom", name="depthFrom" disabled=true)
+                    option(value="" disabled=true selected=true) Dybde fra
+                    -for(var i = 0.5;i<19;i++){
+                    option(value="#{i}") #{i}
+                    -}
+                .select__arrow
+            .select
+                select(id="depthTo", name="depthTo" disabled=true)
+                    option(value="" disabled=true selected=true) Dybde til
+                    -for(var i = 0.5;i<19;i++){
+                    option(value="#{i}") #{i}
+                    -}
+                .select__arrow
             input(id="acceptButton" type="button" value="Accept" onclick="acceptButtonHit();")
+            +input("text", "fileNameIn", "Filnavn", "Filnavn")
+            <input(id="saveButton" type="button" value="Save" onclick="saveFileHit();")
+            +a-btn("#")
+                +icon("download")
+                |Last ned
+            script.
+                function saveFileHit() {
+                    var filename = fileNameIn.value;
+                    var hostLink = 'http://localhost:3000';
+                    $.get(hostLink + "/api/text", function (res) {
+                        var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
+                        saveAs(blob, filename + ".txt");
+                    })
+                }
