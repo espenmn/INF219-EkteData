@@ -32,28 +32,6 @@ router.get('/text', function (req, res, next) {
         })
     };
 
-/**
-    var querySearchAverageMonthsBetweenDates = function (db, callback) {
-        var cursor = db.collection('diveinterpolated').aggregate({$unwind: "$timeseries"},
-            {$match: {'startdatetime': {$gte: new Date([fromDate]), $lt: new Date([toDate])}}},
-            {
-                $group: {
-                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
-                    avgTemp: {$avg: "$"+[parameter]}
-                }
-            },
-            {$sort: {_id: 1}});
-        cursor.each(function (err, doc) {
-            assert.equal(err, null);
-            if (doc != null) {
-                console.log(doc);
-                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-            } else {
-                callback();
-            }
-        })
-    };
-**/
 
     var querySearchAverageMonthsBetweenDatesAndDepths = function (db, callback) {
         var cursor = db.collection('diveinterpolated').aggregate({
@@ -69,7 +47,7 @@ router.get('/text', function (req, res, next) {
             {
                 $group: {
                     _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
-                    avgTemp: {$avg: "$"+[parameter]}
+                    average: {$avg: "$"+[parameter]}
                 }
             }, {$sort: {_id: 1}});
         cursor.each(function (err, doc) {
@@ -83,6 +61,117 @@ router.get('/text', function (req, res, next) {
         })
     };
 
+    var querySearchAverageDayBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {
+                $group: {
+                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}, day:  {$dayOfMonth:  "$startdatetime"}},
+                    average: {$avg: "$"+[parameter]}
+                }
+            }, {$sort: {_id: 1}});
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                console.log(doc);
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+    var querySearchAverageDayBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {
+                $group: {
+                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}, day:  {$dayOfMonth:  "$startdatetime"}},
+                    average: {$avg: "$"+[parameter]}
+                }
+            }, {$sort: {_id: 1}});
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                console.log(doc);
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+    var querySearchAverageWeekBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {
+                $group: {
+                    _id: {year: {$year: "$startdatetime"}, week: {$week: "$startdatetime"}},
+                    average: {$avg: "$"+[parameter]}
+                }
+            }, {$sort: {_id: 1}});
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                console.log(doc);
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+    var querySearchAverageYearBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {
+                $group: {
+                    _id: {year: {$year: "$startdatetime"}},
+                    average: {$avg: "$"+[parameter]}
+                }
+            }, {$sort: {_id: 1}});
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                console.log(doc);
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
 
     console.log(dataType);
     if(dataType==="allData") {
@@ -93,9 +182,33 @@ router.get('/text', function (req, res, next) {
         });
     }
 
+    else if(dataType==="yearlyAverage") {
+        MongoClient.connect(url, function (err, db) {
+            querySearchAverageYearBetweenDatesAndDepths(db, function () {
+                db.close();
+            })
+        });
+    }
+
     else if(dataType==="monthlyAverage") {
         MongoClient.connect(url, function (err, db) {
             querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
+                db.close();
+            })
+        });
+    }
+
+    else if(dataType==="weeklyAverage") {
+        MongoClient.connect(url, function (err, db) {
+            querySearchAverageWeekBetweenDatesAndDepths(db, function () {
+                db.close();
+            })
+        });
+    }
+
+    else if(dataType==="24hourAverage") {
+        MongoClient.connect(url, function (err, db) {
+            querySearchAverageDayBetweenDatesAndDepths(db, function () {
                 db.close();
             })
         });
