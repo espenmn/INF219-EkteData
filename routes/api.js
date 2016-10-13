@@ -207,10 +207,11 @@ router.get('/averageYear', function (req, res, next) {
             {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
             {
                 $group: {
-                    _id: {year: {$year: "$startdatetime"}},
+                    _id: {year: {$year: "$startdatetime"},depth: "$timeseries.pressure(dBAR)"},
                     average: {$avg: "$"+[parameter]}
                 }
-            }, {$sort: {_id: 1}});
+            },
+            {$sort:{'_id.year':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.depth':1}});
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
