@@ -21,9 +21,9 @@ router.get('/allData', function (req, res, next) {
 
     var allValuesBetweenDatesForOneParameter = function (db, callback) {
         var cursor = db.collection('diveinterpolated').find({
-                startdatetime: {$gte: new Date([fromDate]), $lt: new Date([toDate])}
+                startdatetime: {$gte: new Date([fromDate]), $lte: new Date([toDate])},
             },
-            {_id: 0, [parameter]: 1, startdatetime: 1});
+            {_id: 0, [parameter]: 1, startdatetime: 1, timeseries:{$slice:[intDepthFrom,intDepthTo]},"timeseries.pressure(dBAR)":1}).sort({startdatetime:1});
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
@@ -34,6 +34,37 @@ router.get('/allData', function (req, res, next) {
             }
         })
     };
+
+
+    /**
+     var allValuesBetweenDatesForOneParameter = function (db, callback) {
+       var cursor = db.collection('diveinterpolated').aggregate({
+               $match: {
+                   "startdatetime": {
+                       $gte: new Date([fromDate]),
+                       $lte: new Date([toDate])
+                   }
+               }
+           },
+           {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+           {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+           {
+               $group: {
+                   _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"},day:{$dayOfMonth:"$startdatetime"},hour:{$hour:"$startdatetime"},depth: "$timeseries.pressure(dBAR)",value:"$"+parameter},
+               }
+           }, {$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}});
+       cursor.each(function (err, doc) {
+           assert.equal(err, null);
+           if (doc != null) {
+               console.log(doc);
+               queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+           } else {
+               callback();
+           }
+       })
+   };
+     **/
+
 
     MongoClient.connect(url, function (err, db) {
         allValuesBetweenDatesForOneParameter(db, function () {
@@ -66,10 +97,10 @@ router.get('/averageMonth', function (req, res, next) {
             {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
             {
                 $group: {
-                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}},
-                    average: {$avg: "$"+[parameter]}
+                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"},depth: "$timeseries.pressure(dBAR)"},
+                    average: {$avg: "$" + [parameter]}
                 }
-            }, {$sort: {_id: 1}});
+            }, {$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}});
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
@@ -80,6 +111,7 @@ router.get('/averageMonth', function (req, res, next) {
             }
         })
     };
+
 
     MongoClient.connect(url, function (err, db) {
         querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
@@ -112,10 +144,10 @@ router.get('/averageDay', function (req, res, next) {
             {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
             {
                 $group: {
-                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}, day:  {$dayOfMonth:  "$startdatetime"}},
+                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}, day:  {$dayOfMonth:  "$startdatetime"},depth: "$timeseries.pressure(dBAR)"},
                     average: {$avg: "$"+[parameter]}
                 }
-            }, {$sort: {_id: 1}});
+            }, {$sort:{'_id.year':1,'_id.month':1,'_id.day':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.month':1,'_id.day':1,'_id.depth':1}});
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
@@ -160,10 +192,10 @@ router.get('/averageWeek', function (req, res, next) {
             {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
             {
                 $group: {
-                    _id: {year: {$year: "$startdatetime"}, week: {$week: "$startdatetime"}},
+                    _id: {year: {$year: "$startdatetime"}, week: {$week: "$startdatetime"},depth: "$timeseries.pressure(dBAR)"},
                     average: {$avg: "$"+[parameter]}
                 }
-            }, {$sort: {_id: 1}});
+            }, {$sort:{'_id.year':1,'_id.week':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.week':1,'_id.depth':1}});
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
