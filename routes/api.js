@@ -8,7 +8,9 @@ var filesaver = require('../bower_components/file-saver/FileSaver');
 var stringify = require('json-stable-stringify');
 var queryToBeSavedAsText;
 
-router.get('/allValues', function (req, res, next) {
+router.get('/allData', function (req, res, next) {
+
+    console.log("hello");
 
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
