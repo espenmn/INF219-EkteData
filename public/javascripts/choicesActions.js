@@ -399,6 +399,7 @@ function convertToQueryFormat(list) {
         list[6] = list[5];
     }
 
+
     return list;
 }
 
