@@ -7,7 +7,8 @@ var assert = require('assert');
 var filesaver = require('../bower_components/file-saver/FileSaver');
 var stringify = require('json-stable-stringify');
 var queryToBeSavedAsText;
-router.get('/text', function (req, res, next) {
+
+router.get('/allValues', function (req, res, next) {
 
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
@@ -32,6 +33,23 @@ router.get('/text', function (req, res, next) {
         })
     };
 
+    MongoClient.connect(url, function (err, db) {
+        allValuesBetweenDatesForOneParameter(db, function () {
+            db.close();
+        })
+    });
+
+    res.send();
+});
+
+router.get('/averageMonth', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
 
     var querySearchAverageMonthsBetweenDatesAndDepths = function (db, callback) {
         var cursor = db.collection('diveinterpolated').aggregate({
@@ -61,33 +79,23 @@ router.get('/text', function (req, res, next) {
         })
     };
 
-    var querySearchAverageDayBetweenDatesAndDepths = function (db, callback) {
-        var cursor = db.collection('diveinterpolated').aggregate({
-                $match: {
-                    "startdatetime": {
-                        $gte: new Date([fromDate]),
-                        $lte: new Date([toDate])
-                    }
-                }
-            },
-            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
-            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
-            {
-                $group: {
-                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"}, day:  {$dayOfMonth:  "$startdatetime"}},
-                    average: {$avg: "$"+[parameter]}
-                }
-            }, {$sort: {_id: 1}});
-        cursor.each(function (err, doc) {
-            assert.equal(err, null);
-            if (doc != null) {
-                console.log(doc);
-                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-            } else {
-                callback();
-            }
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
+            db.close();
         })
-    };
+    });
+
+    res.send();
+});
+
+router.get('/averageDay', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
 
     var querySearchAverageDayBetweenDatesAndDepths = function (db, callback) {
         var cursor = db.collection('diveinterpolated').aggregate({
@@ -116,6 +124,26 @@ router.get('/text', function (req, res, next) {
             }
         })
     };
+
+
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageDayBetweenDatesAndDepths(db, function () {
+            db.close();
+        })
+    });
+
+
+    res.send();
+});
+
+router.get('/averageWeek', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
 
     var querySearchAverageWeekBetweenDatesAndDepths = function (db, callback) {
         var cursor = db.collection('diveinterpolated').aggregate({
@@ -145,6 +173,25 @@ router.get('/text', function (req, res, next) {
         })
     };
 
+
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageWeekBetweenDatesAndDepths(db, function () {
+            db.close();
+        })
+    });
+
+    res.send();
+});
+
+router.get('/averageYear', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
+
     var querySearchAverageYearBetweenDatesAndDepths = function (db, callback) {
         var cursor = db.collection('diveinterpolated').aggregate({
                 $match: {
@@ -173,47 +220,13 @@ router.get('/text', function (req, res, next) {
         })
     };
 
-    console.log(dataType);
-    if(dataType==="allData") {
-        MongoClient.connect(url, function (err, db) {
-            allValuesBetweenDatesForOneParameter(db, function () {
-                db.close();
-            })
-        });
-    }
-
-    else if(dataType==="yearlyAverage") {
-        MongoClient.connect(url, function (err, db) {
-            querySearchAverageYearBetweenDatesAndDepths(db, function () {
-                db.close();
-            })
-        });
-    }
-
-    else if(dataType==="monthlyAverage") {
-        MongoClient.connect(url, function (err, db) {
-            querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
-                db.close();
-            })
-        });
-    }
-
-    else if(dataType==="weeklyAverage") {
-        MongoClient.connect(url, function (err, db) {
-            querySearchAverageWeekBetweenDatesAndDepths(db, function () {
-                db.close();
-            })
-        });
-    }
-
-    else if(dataType==="24hourAverage") {
-        MongoClient.connect(url, function (err, db) {
-            querySearchAverageDayBetweenDatesAndDepths(db, function () {
-                db.close();
-            })
-        });
-    }
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageYearBetweenDatesAndDepths(db, function () {
+            db.close();
+        })
+    });
 
     res.send();
 });
+
 module.exports = router;

@@ -345,8 +345,9 @@ function acceptButtonHit() {
     if (valid) {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
-        var hostLink = 'http://localhost:3000';
-        $.get(hostLink + '/api/text', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
+        sendToQuery(dataToQuery);
+        //var hostLink = 'http://localhost:3000';
+        //$.get(hostLink + '/api/text', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
     }
 }
 
@@ -399,4 +400,29 @@ function convertToQueryFormat(list) {
     }
 
     return list;
+}
+
+function sendToQuery(dataToQuery) {
+
+    var hostLink = 'http://localhost:3000';
+
+    switch (dataToQuery[1]){
+        case 'allData':
+            $.get(hostLink + '/api/allData', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
+            break;
+        case '24hourAverage':
+            $.get(hostLink + '/api/averageDay', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
+            break;
+        case 'weeklyAverage':
+            $.get(hostLink + '/api/averageWeek', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
+            break;
+        case 'monthlyAverage':
+            $.get(hostLink + '/api/averageMonth', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
+            break;
+        case 'yearlyAverage':
+            $.get(hostLink + '/api/averageYear', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
+            break;
+        default:
+            window.alert("invalid datatype");
+    }
 }
