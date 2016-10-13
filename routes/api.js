@@ -30,8 +30,9 @@ router.get('/allData', function (req, res, next) {
             assert.equal(err, null);
             if (doc != null) {
                 console.log(doc);
-                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-                removeElements(queryToBeSavedAsText);
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1});
+                console.log(removeElements(queryToBeSavedAsText));
+
             } else {
                 callback();
             }
