@@ -7,7 +7,11 @@ html
     append body
         .navbar
             +navbar-fixed("Gabriel","navbar","inverse")
-                +nav_item("/", "active") Hjem
-                +nav_item("about") Om
-                +nav_item("choices") Spørring
-                +nav_item("contact") Kontakt
+                li(class=(title == 'Gabriel') ? 'active' : undefined)
+                    a(href='/') Hjem
+                li(class=(title == 'Om') ? 'active' : undefined)
+                    a(href='/about') Om
+                li(class=(title == 'Spørring') ? 'active' : undefined)
+                    a(href='/choices') Spørring
+                li(class=(title == 'Kontakt') ? 'active' : undefined)
+                    a(href='/contact') Kontakt

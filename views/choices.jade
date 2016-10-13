@@ -11,27 +11,29 @@ append body
                 | Use this document as a way to quickly start any new project.
                 br
                 |  All you get is this text and a mostly barebones HTML document.
-            .select
-                select(id="parameterDropDown", name="parameter")
-                    option(value="" disabled=true ) Parameter
-                    option(value="timeseries.temp" selected=true) Temperatur
-                    option(value="timeseries.oxygene") Oksygen
-                    option(value="timeseries.salt") Salt
-                    option(value="timeseries.turbidity") Turbiditet
-                    option(value="timeseries.fluorescent") Fluorescens
-                    option(value="airtemp") Lufttemperatur
-                .select__arrow
-            .select
-                select(id="howMuchDataDropDown" name="howMuchDataDropDown")
-                    option(value="" disabled=true) How much data
-                    option(value="allData" selected=true) All data
-                    option(value="24hourAverage") Gjennomsnitt døgn
-                    option(value="weeklyAverage") Gjennomsnitt uke
-                    option(value="monthlyAverage") Gennomsnitt måned
-                    option(value="yearlyAverage") Gjennomsnitt år
-                .select__arrow
-            input(id="fromDate" type="text" placeholder="Dato fra" value="12/11/10/15")
-            input(id="toDate" type="text" placeholder="Dato til" value="12/12/10/15")
+            .section
+                .select
+                    select(id="parameterDropDown", name="parameter")
+                        option(value="" disabled=true ) Parameter
+                        option(value="timeseries.temp" selected=true) Temperatur
+                        option(value="timeseries.oxygene") Oksygen
+                        option(value="timeseries.salt") Salt
+                        option(value="timeseries.turbidity") Turbiditet
+                        option(value="timeseries.fluorescent") Fluorescens
+                        option(value="airtemp") Lufttemperatur
+                    .select__arrow
+                .select
+                    select(id="howMuchDataDropDown" name="howMuchDataDropDown")
+                        option(value="" disabled=true) How much data
+                        option(value="allData" selected=true) All data
+                        option(value="24hourAverage") Gjennomsnitt døgn
+                        option(value="weeklyAverage") Gjennomsnitt uke
+                        option(value="monthlyAverage") Gennomsnitt måned
+                        option(value="yearlyAverage") Gjennomsnitt år
+                    .select__arrow
+            .section
+                input(id="fromDate" type="text" placeholder="Dato fra" value="12/11/10/15")
+                input(id="toDate" type="text" placeholder="Dato til" value="12/12/10/15")
             .select
                 select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
                     option(value="" disabled=true) Dybdetype
@@ -40,12 +42,13 @@ append body
                     option(value="depthBetween") Dybde mellom
                 .select__arrow
             .select
-                select(id="depthFrom", name="depthFrom" disabled=true)
-                    option(value="" disabled=true selected=true) Dybde fra
-                    -for(var i = 0.5;i<19;i++){
-                    option(value="#{i}") #{i}
-                    -}
-                .select__arrow
+                .depth
+                    select(id="depthFrom", name="depthFrom" disabled=true)
+                        option(value="" disabled=true selected=true) Dybde fra
+                        -for(var i = 0.5;i<19;i++){
+                        option(value="#{i}") #{i}
+                        -}
+                    .select__arrow
             .select
                 select(id="depthTo", name="depthTo" disabled=true)
                     option(value="" disabled=true selected=true) Dybde til
@@ -55,11 +58,14 @@ append body
                 .select__arrow
             input(id="acceptButton" type="button" value="Accept" onclick="acceptButtonHit();")
             +input("text", "fileNameIn", "Filnavn", "Filnavn")
-            <input(id="saveButton" type="button" value="Save" onclick="saveFileHit();")
-            +a-btn("#")
+
+            button.btn.btn-default(type="default" onclick="saveFileHit();")
                 +icon("download")
                 |Last ned
             script.
+                $('saveButton').on('click', function () {
+                    alert("clicked");
+                })
                 function saveFileHit() {
                     var filename = fileNameIn.value;
                     var hostLink = 'http://localhost:3000';
