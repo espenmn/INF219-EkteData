@@ -18,6 +18,8 @@ router.get('/allData', function (req, res, next) {
     var toDate = req.query.toDate;
     var depthFrom = parseFloat(req.query.depthFrom);
     var depthTo = parseFloat(req.query.depthTo);
+    intDepthFrom = Math.floor(depthFrom);
+    intDepthTo = Math.ceil(depthTo)-depthFrom+1;
 
     var allValuesBetweenDatesForOneParameter = function (db, callback) {
         var cursor = db.collection('diveinterpolated').find({
