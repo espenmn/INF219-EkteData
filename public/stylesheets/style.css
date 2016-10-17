@@ -8,9 +8,9 @@ a {
 
 .select {
     position: relative;
-    display: inline-block;
+    display: block;
     margin-bottom: 5px;
-    width: 20rem;
+    width: 40rem;
     height: 3em
 }
 
@@ -77,9 +77,4 @@ span.caret {
 
 #acceptButton {
     display: block;
-}
-
-#depthFrom,
-#depthTo {
-    width: 10rem;
 }

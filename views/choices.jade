@@ -12,6 +12,11 @@ append body
                 br
                 | Fyll deretter ut ønsket filnavn, og trykk på Last ned
             .section
+                .sectionInput
+                    +input("text", "fromDate", "12/11/10/15", "Startdato")
+                .sectionInput
+                    +input("text", "toDate", "12/12/10/15", "Sluttdato")
+            .section
                 .select
                     select(id="parameterDropDown", name="parameter")
                         option(value="" disabled=true ) Parameter
@@ -31,11 +36,6 @@ append body
                         option(value="monthlyAverage") Gennomsnitt måned
                         option(value="yearlyAverage") Gjennomsnitt år
                     span.caret
-            .section
-                .sectionInput
-                    +input("text", "fromDate", "12/11/10/15", "Startdato")
-                .sectionInput
-                    +input("text", "toDate", "12/12/10/15", "Sluttdato")
             .select
                 select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
                     option(value="" disabled=true) Dybdetype
@@ -58,15 +58,14 @@ append body
                     -}
                 span.caret
 
-            button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton")
+            button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton" data-toggle="modal" data-target="#downloadModal")
                 +icon("ok")
                 |Accept
-            +input("text", "fileNameIn", "Filnavn", "Filnavn")
-
-            button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
-                +icon("download")
-                |Last ned
-
+            +modal("Last ned fil", "downloadModal")
+                +input("text", "fileNameIn", "Filnavn", "Filnavn")
+                button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
+                    +icon("download")
+                    | Last ned
             script.
                 function saveFileHit() {
                     var filename = fileNameIn.value;
