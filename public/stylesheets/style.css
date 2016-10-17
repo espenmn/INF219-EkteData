@@ -5,15 +5,19 @@ body {
 a {
     color: #00B7FF;
 }
+
 .select {
     position: relative;
     display: inline-block;
-    margin-bottom: 15px;
-    width: 15em;
+    margin-bottom: 5px;
+    width: 20rem;
+    height: 3em
 }
+
 .select select {
     display: inline-block;
-    width: 15em;
+    width: 100%;
+    height: auto;
     cursor: pointer;
     padding: 10px 15px;
     outline: 0;
@@ -25,19 +29,23 @@ a {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
 .select select::-ms-expand {
     display: none;
 }
+
 .select select:hover,
 .select select:focus {
     color: #000;
     background: #ccc;
 }
+
 .select select:disabled {
     opacity: 0.5;
     pointer-events: none;
 }
-.select__arrow {
+
+span.caret {
     position: absolute;
     top: 16px;
     right: 15px;
@@ -48,22 +56,36 @@ a {
     border-width: 8px 5px 0 5px;
     border-color: #7b7b7b transparent transparent transparent;
 }
-.select select:hover ~ .select__arrow,
-.select select:focus ~ .select__arrow {
-    border-top-color: #000;
+
+.glyphicon-menu-down {
+    position: absolute;
+    top: 16px;
+    right: 15px;
 }
-.select select:disabled ~ .select__arrow {
+
+.select select:hover ~ span.caret,
+.select select:focus ~ span.caret {
+    border-top-color: #000000;
+}
+
+.select select:disabled ~ span.caret {
     border-top-color: #ccc;
 }
 
-#depthTo, #depthFrom{
-    width: 7.5em;
-}
-#depthTo select,
-#depthFrom select{
-    width: 7.5em;
+#fromDate, #toDate, #fileNameIn {
+    width: 20rem;
+    display: block;
 }
 
-.form-control {
-    width: 15em;
+.sectionInput {
+    display: inline-block;
+}
+
+#acceptButton {
+    display: block;
+}
+
+#depthFrom,
+#depthTo {
+    width: 10rem;
 }
