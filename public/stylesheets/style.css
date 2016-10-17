@@ -57,12 +57,6 @@ span.caret {
     border-color: #7b7b7b transparent transparent transparent;
 }
 
-.glyphicon-menu-down {
-    position: absolute;
-    top: 16px;
-    right: 15px;
-}
-
 .select select:hover ~ span.caret,
 .select select:focus ~ span.caret {
     border-top-color: #000000;

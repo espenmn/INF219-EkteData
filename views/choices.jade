@@ -6,11 +6,11 @@ append body
             script(type='text/javascript' src='/javascripts/choicesActions.js')
             script(type='text/javascript' src='/javascripts/file-saver/FileSaver.js')
             link(rel='stylesheet' href='/stylesheets/style.css')
-            h1 Gabriel
+            h1 Ekte data
             p.lead
-                | Use this document as a way to quickly start any new project.
+                | Fyll ut informasjon og trykk på Accept
                 br
-                |  All you get is this text and a mostly barebones HTML document.
+                | Fyll deretter ut ønsket filnavn, og trykk på Last ned
             .section
                 .select
                     select(id="parameterDropDown", name="parameter")
@@ -32,8 +32,6 @@ append body
                         option(value="yearlyAverage") Gjennomsnitt år
                     span.caret
             .section
-                //input(id="fromDate" type="text" placeholder="Dato fra" value="12/11/10/15")
-                //input(id="toDate" type="text" placeholder="Dato til" value="12/12/10/15")
                 .sectionInput
                     +input("text", "fromDate", "12/11/10/15", "Startdato")
                 .sectionInput
@@ -68,6 +66,7 @@ append body
             button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
                 +icon("download")
                 |Last ned
+
             script.
                 function saveFileHit() {
                     var filename = fileNameIn.value;
