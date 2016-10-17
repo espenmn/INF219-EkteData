@@ -4,7 +4,6 @@ var router = express.Router();
 var url = 'mongodb://localhost:27017/saivasdata';
 var assert = require('assert');
 
-var filesaver = require('../bower_components/file-saver/FileSaver');
 var stringify = require('json-stable-stringify');
 var queryToBeSavedAsText;
 
@@ -75,6 +74,7 @@ router.get('/allData', function (req, res, next) {
             db.close();
         })
     });
+    res.send();
 
     res.send();
 });

@@ -8,15 +8,9 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
-
 var choices = require('./routes/choices');
 
 var app = express();
-
-
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-var url = 'mongodb://localhost:27017/saivasdata';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
