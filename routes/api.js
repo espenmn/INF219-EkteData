@@ -110,6 +110,7 @@ router.get('/averageMonth', function (req, res, next) {
             if (doc != null) {
                 console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -157,6 +158,7 @@ router.get('/averageDay', function (req, res, next) {
             if (doc != null) {
                 console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -205,6 +207,7 @@ router.get('/averageWeek', function (req, res, next) {
             if (doc != null) {
                 console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -253,6 +256,7 @@ router.get('/averageYear', function (req, res, next) {
             if (doc != null) {
                 console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -285,9 +289,6 @@ function removeElements(input){
 
     list = input.split(/,|_id:|timeseries:\[|\]/);
 
-    /*if(list[0].indexOf("startdatetime") !== -1)
-     parameter = list[2].substring(0,list[2].indexOf(":"));*/
-
     return addToList();
 
 }
@@ -306,16 +307,9 @@ function addToList() {
         else if(list[i].indexOf("depth") !== -1){
             if(!(list[i] in depthList))
                 depthList.push(list[i].substring(list[i].indexOf(":") + 1) + "m");
-        }
-        /*else if(list[i].indexOf("startdatetime") !== -1){
-         list[i] = list[i].replace(/-|T/g, ".");
-         list[i] = list[i].replace(/startdatetime:/g, "");
-         dateList.push(list[i].slice(0,-11))
-         }*/ else if(list[i] === ""){
+        } else if(list[i] === ""){
 
-        } /*else if(list[i].indexOf(parameter) !== -1){
-         dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
-         }*/
+        }
         else {
             date += list[i].substring(list[i].indexOf(":") + 1) + ".";
         }
