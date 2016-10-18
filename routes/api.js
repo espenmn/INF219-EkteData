@@ -35,11 +35,11 @@ router.get('/allData', function (req, res, next) {
                $group: {
                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"},day:{$dayOfMonth:"$startdatetime"},hour:{$hour:"$startdatetime"},depth: "$timeseries.pressure(dBAR)",value:"$"+parameter},
                }
-           }, {$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}});
+           }, {$sort:{'_id.year':1,'_id.month':1,'_id.day':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}});
        cursor.each(function (err, doc) {
            assert.equal(err, null);
            if (doc != null) {
-               console.log(doc);
+               //console.log(doc);
                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
            } else {
                callback();
@@ -265,6 +265,7 @@ function removeElements(input){
     input = input.replace(/{/g, "");
     input = input.replace(/}/g, "");
     input = input.replace(/"/g, "");
+    input = input.replace(/undefined/g, "");
 
     list = input.split(/,|_id:|timeseries:\[|\]/);
 
@@ -280,7 +281,10 @@ function addToList() {
 
         if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
             dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
-            dateList.push(date.slice(0,-1));
+
+            if(isInList(date,dateList))
+                dateList.push(date.slice(0,-1));
+
             date = "";
         }
         else if(list[i].indexOf("depth") !== -1){
@@ -302,24 +306,27 @@ function buildString() {
 
     var finalString = "";
 
-    for(var i=0;i<dateList.length;i++){
+    console.log(dataList.length);
+    console.log(dateList.length * 18);
+
+    for(var i=0;i<(dateList.length+1);i++){
 
         if(i == 0)
-            finalString += "Tid          Nr   ";
+            finalString += "Tid\tNr\t";
         else
-            finalString += dateList[i] + "   " + (i) + "  ";
+            finalString += dateList[i] + "\t" + (i) + "\t";
 
-        for(var j=0;j<depthList.length;j++) {
+        for(var j=(i*depthList.length);j<(depthList.length + i*depthList.length);j++) {
 
             if(i == 0)
-                finalString += depthList[j] + "      ";
+                finalString += depthList[j] + "\t";
             else
-                finalString += dataList[j] + "     ";
+                finalString += dataList[j] + "\t";
 
         }
         finalString += "\n";
     }
-    console.log(finalString);
+    //console.log(finalString);
     return finalString;
 }
 
@@ -330,7 +337,9 @@ function isInList(element,list){
     var add = true;
 
     for(var i=0;i<list.length;i++) {
-        if (element.substring(element.indexOf(":") + 1) + "m" === list[i]) {
+        if (element.substring(element.indexOf(":") + 1) + "m" === list[i] && element.indexOf("depth") !== -1) {
+            add = false;
+        } else if((element.substring(list[i].indexOf(":") + 1) + ".").slice(0,-2) === list[i] && element.indexOf("depth") == -1) {
             add = false;
         }
     }
