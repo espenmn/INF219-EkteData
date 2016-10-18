@@ -1,14 +1,14 @@
 extends layout
 
 append body
+    link(rel='stylesheet' href='/stylesheets/style.css')
+    script(type='text/javascript' src='/javascripts/choicesActions.js')
+    script(type='text/javascript' src='/javascripts/file-saver/FileSaver.js')
     .starter-template
         .container
-            script(type='text/javascript' src='/javascripts/choicesActions.js')
-            script(type='text/javascript' src='/javascripts/file-saver/FileSaver.js')
-            link(rel='stylesheet' href='/stylesheets/style.css')
             h1 Ekte data
             p.lead
-                | Fyll ut informasjon og trykk på Accept
+                | Fyll ut informasjon og trykk på OK
                 br
                 | Fyll deretter ut ønsket filnavn, og trykk på Last ned
             .section
@@ -60,18 +60,22 @@ append body
 
             button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton" data-toggle="modal" data-target="#downloadModal")
                 +icon("ok")
-                |Accept
+                | OK
             +modal("Last ned fil", "downloadModal")
                 +input("text", "fileNameIn", "Filnavn", "Filnavn")
                 button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
                     +icon("download")
                     | Last ned
+
+
+            button.btn.btn-default(type='button', data-toggle='tooltip', data-placement='left', title='', data-original-title='Tooltip on left')  Tooltip on left
+
             script.
                 function saveFileHit() {
                     var filename = fileNameIn.value;
                     var hostLink = 'http://localhost:3000';
                     $.get(hostLink + "/api/allData", function (res) {
-                        var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
-                        saveAs(blob, filename + ".txt");
+                        var FileDownload = new Blob([res], {type: "text/plain;charset=utf-8"});
+                        saveAs(FileDownload, filename + ".txt");
                     })
                 }

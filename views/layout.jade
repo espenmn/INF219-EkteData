@@ -3,15 +3,17 @@ doctype html
 html
     head
         title= title
-        link(rel='stylesheet' href='/stylesheets/style.css')
+        styles
+            link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
+
     append body
         .navbar
-            +navbar-fixed("Gabriel","navbar","inverse")
-                li(class=(title == 'Gabriel') ? 'active' : undefined)
+            +navbar-fixed("Ekte Data","navbar","inverse")
+                li(class=(title == 'Ekte Data') ? 'active' : undefined)
                     a(href='/') Hjem
-                li(class=(title == 'Om') ? 'active' : undefined)
-                    a(href='/about') Om
+                li(class=(title == 'Hjelp') ? 'active' : undefined)
+                    a(href='/help') Hjelp
                 li(class=(title == 'Spørring') ? 'active' : undefined)
-                    a(href='/choices') Spørring
+                    a(href='/queries') Spørring
                 li(class=(title == 'Kontakt') ? 'active' : undefined)
                     a(href='/contact') Kontakt
