@@ -20,26 +20,6 @@ router.get('/allData', function (req, res, next) {
     intDepthFrom = Math.floor(depthFrom);
     intDepthTo = Math.ceil(depthTo)-depthFrom+1;
 
-    /*var allValuesBetweenDatesForOneParameter = function (db, callback) {
-        var cursor = db.collection('diveinterpolated').find({
-                startdatetime: {$gte: new Date([fromDate]), $lte: new Date([toDate])},
-            },
-            {_id: 0, [parameter]: 1, startdatetime: 1, timeseries:{$slice:[intDepthFrom,intDepthTo]},"timeseries.pressure(dBAR)":1}).sort({startdatetime:1});
-        cursor.each(function (err, doc) {
-            assert.equal(err, null);
-            if (doc != null) {
-                console.log(doc);
-                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1});
-                console.log(removeElements(queryToBeSavedAsText));
-
-            } else {
-                callback();
-            }
-        })
-    };
-*/
-
-
      var allValuesBetweenDatesForOneParameter = function (db, callback) {
        var cursor = db.collection('diveinterpolated').aggregate({
                $match: {
@@ -59,7 +39,7 @@ router.get('/allData', function (req, res, next) {
        cursor.each(function (err, doc) {
            assert.equal(err, null);
            if (doc != null) {
-               console.log(doc);
+               //console.log(doc);
                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
            } else {
                callback();
@@ -284,6 +264,7 @@ function removeElements(input){
     input = input.replace(/\s/g, "");
     input = input.replace(/{/g, "");
     input = input.replace(/}/g, "");
+    input = input.replace(/"/g, "");
 
     list = input.split(/,|_id:|timeseries:\[|\]/);
 
@@ -303,7 +284,7 @@ function addToList() {
             date = "";
         }
         else if(list[i].indexOf("depth") !== -1){
-            if(!(list[i] in depthList))
+            if(isInList(list[i],depthList))
                 depthList.push(list[i].substring(list[i].indexOf(":") + 1) + "m");
         } else if(list[i] === ""){
 
@@ -312,6 +293,8 @@ function addToList() {
             date += list[i].substring(list[i].indexOf(":") + 1) + ".";
         }
     }
+
+
     return buildString();
 }
 
@@ -342,6 +325,17 @@ function buildString() {
 
 /////////////////
 
+function isInList(element,list){
 
+    var add = true;
+
+    for(var i=0;i<list.length;i++) {
+        if (element.substring(element.indexOf(":") + 1) + "m" === list[i]) {
+            add = false;
+        }
+    }
+    return add;
+
+}
 
 module.exports = router;
