@@ -37,7 +37,7 @@ router.get('/allData', function (req, res, next) {
        cursor.each(function (err, doc) {
            assert.equal(err, null);
            if (doc != null) {
-               console.log(doc);
+               //console.log(doc);
                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
            } else {
                callback();
@@ -86,7 +86,6 @@ router.get('/averageMonth', function (req, res, next) {
             if (doc != null) {
                 console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -132,9 +131,8 @@ router.get('/averageDay', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                console.log(doc);
+                //console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -181,9 +179,8 @@ router.get('/averageWeek', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                console.log(doc);
+                //console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -230,9 +227,8 @@ router.get('/averageYear', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                console.log(doc);
+                //console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-                console.log(removeElements(queryToBeSavedAsText));
             } else {
                 callback();
             }
@@ -248,7 +244,6 @@ router.get('/averageYear', function (req, res, next) {
     res.send(removeElements(queryToBeSavedAsText));
 });
 
-//////////////////////////
 var dateList = [];
 var dataList = [];
 var depthList = [];
@@ -288,8 +283,6 @@ function addToList() {
 
     }
 
-    //console.log(depthList);
-
     for (var i = 0; i < list.length; i++) {
 
         if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
@@ -301,8 +294,6 @@ function addToList() {
             date = "";
         }
         else if(list[i].indexOf("depth") !== -1){
-
-            console.log(list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) + "    " + expectedDepth.toString());
 
             while (list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) != expectedDepth.toString()) {
 
@@ -359,8 +350,6 @@ function buildString() {
     //console.log(finalString);
     return finalString;
 }
-
-/////////////////
 
 function isInList(element,list){
 
