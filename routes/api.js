@@ -39,7 +39,7 @@ router.get('/allData', function (req, res, next) {
        cursor.each(function (err, doc) {
            assert.equal(err, null);
            if (doc != null) {
-               //console.log(doc);
+               console.log(doc);
                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
            } else {
                callback();
@@ -305,16 +305,16 @@ function buildString() {
     for(var i=0;i<dateList.length;i++){
 
         if(i == 0)
-            finalString += "Tid            Nr   ";
+            finalString += "Tid          Nr   ";
         else
-            finalString += dateList[i] + "   " + (i) + "    ";
+            finalString += dateList[i] + "   " + (i) + "  ";
 
         for(var j=0;j<depthList.length;j++) {
 
             if(i == 0)
                 finalString += depthList[j] + "      ";
             else
-                finalString += dataList[j] + "      ";
+                finalString += dataList[j] + "     ";
 
         }
         finalString += "\n";
