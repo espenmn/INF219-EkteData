@@ -70,7 +70,7 @@ append body
                 function saveFileHit() {
                     var filename = fileNameIn.value;
                     var hostLink = 'http://localhost:3000';
-                    $.get(hostLink + "/api/text", function (res) {
+                    $.get(hostLink + "/api/alldata", function (res) {
                         var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
                         saveAs(blob, filename + ".txt");
                     })

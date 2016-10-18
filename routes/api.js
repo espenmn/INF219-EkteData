@@ -20,7 +20,7 @@ router.get('/allData', function (req, res, next) {
     intDepthFrom = Math.floor(depthFrom);
     intDepthTo = Math.ceil(depthTo)-depthFrom+1;
 
-    var allValuesBetweenDatesForOneParameter = function (db, callback) {
+    /*var allValuesBetweenDatesForOneParameter = function (db, callback) {
         var cursor = db.collection('diveinterpolated').find({
                 startdatetime: {$gte: new Date([fromDate]), $lte: new Date([toDate])},
             },
@@ -37,9 +37,9 @@ router.get('/allData', function (req, res, next) {
             }
         })
     };
+*/
 
 
-    /**
      var allValuesBetweenDatesForOneParameter = function (db, callback) {
        var cursor = db.collection('diveinterpolated').aggregate({
                $match: {
@@ -66,7 +66,7 @@ router.get('/allData', function (req, res, next) {
            }
        })
    };
-     **/
+
 
 
     MongoClient.connect(url, function (err, db) {
@@ -74,9 +74,7 @@ router.get('/allData', function (req, res, next) {
             db.close();
         })
     });
-    res.send();
-
-    res.send();
+    res.send(removeElements(queryToBeSavedAsText));
 });
 
 router.get('/averageMonth', function (req, res, next) {
@@ -124,7 +122,7 @@ router.get('/averageMonth', function (req, res, next) {
         })
     });
 
-    res.send();
+    res.send(removeElements(queryToBeSavedAsText));
 });
 
 router.get('/averageDay', function (req, res, next) {
@@ -173,7 +171,7 @@ router.get('/averageDay', function (req, res, next) {
     });
 
 
-    res.send();
+    res.send(removeElements(queryToBeSavedAsText));
 });
 
 router.get('/averageWeek', function (req, res, next) {
@@ -221,7 +219,7 @@ router.get('/averageWeek', function (req, res, next) {
         })
     });
 
-    res.send();
+    res.send(removeElements(queryToBeSavedAsText));
 });
 
 router.get('/averageYear', function (req, res, next) {
@@ -269,7 +267,7 @@ router.get('/averageYear', function (req, res, next) {
         })
     });
 
-    res.send();
+    res.send(removeElements(queryToBeSavedAsText));
 });
 
 //////////////////////////
