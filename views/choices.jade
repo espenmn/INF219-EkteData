@@ -3,42 +3,75 @@ extends layout
 append body
     .starter-template
         .container
-            script(type='text/javascript' src='javascripts/choicesActions.js')
-            h1 Gabriel
+            script(type='text/javascript' src='/javascripts/choicesActions.js')
+            script(type='text/javascript' src='/javascripts/file-saver/FileSaver.js')
+            link(rel='stylesheet' href='/stylesheets/style.css')
+            h1 Ekte data
             p.lead
-                | Use this document as a way to quickly start any new project.
+                | Fyll ut informasjon og trykk på Accept
                 br
-                |  All you get is this text and a mostly barebones HTML document.
-            select(id="parameterDropDown", name="parameter")
-                option(value="" disabled=true ) Parameter
-                option(value="timeseries.temp" selected=true) Temperatur
-                option(value="timeseries.oxygene") Oksygen
-                option(value="timeseries.salt") Salt
-                option(value="timeseries.turbidity") Turbiditet
-                option(value="timeseries.fluorescent") Fluorescens
-                option(value="airtemp") Lufttemperatur
-            select(id="howMuchDataDropDown" name="howMuchDataDropDown")
-                option(value="" disabled=true) How much data
-                option(value="allData" selected=true) All data
-                option(value="24hourAverage") Gjennomsnitt døgn
-                option(value="weeklyAverage") Gjennomsnitt uke
-                option(value="monthlyAverage") Gennomsnitt måned
-                option(value="yearlyAverage") Gjennomsnitt år
-            input(id="fromDate" type="text" placeholder="Dato fra" value="12/11/10/15")
-            input(id="toDate" type="text" placeholder="Dato til" value="12/12/10/15")
-            select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
-                option(value="" disabled=true) Dybdetype
-                option(value="allDepths" selected=true) Alle dybder
-                option(value="oneDepth") En dybde
-                option(value="depthBetween") Dybde mellom
-            select(id="depthFrom", name="depthFrom" disabled=true)
-                option(value="" disabled=true selected=true) Dybde fra
-                -for(var i = 0.5;i<19;i++){
-                option(value="#{i}") #{i}
-                -}
-            select(id="depthTo", name="depthTo" disabled=true)
-                option(value="" disabled=true selected=true) Dybde til
-                -for(var i = 0.5;i<19;i++){
-                option(value="#{i}") #{i}
-                -}
-            input(id="acceptButton" type="button" value="Accept" onclick="acceptButtonHit();")
+                | Fyll deretter ut ønsket filnavn, og trykk på Last ned
+            .section
+                .sectionInput
+                    +input("text", "fromDate", "12/11/10/15", "Startdato")
+                .sectionInput
+                    +input("text", "toDate", "12/12/10/15", "Sluttdato")
+            .section
+                .select
+                    select(id="parameterDropDown", name="parameter")
+                        option(value="" disabled=true ) Parameter
+                        option(value="timeseries.temp" selected=true) Temperatur
+                        option(value="timeseries.oxygene") Oksygen
+                        option(value="timeseries.salt") Salt
+                        option(value="timeseries.turbidity") Turbiditet
+                        option(value="timeseries.fluorescent") Fluorescens
+                        option(value="airtemp") Lufttemperatur
+                    span.caret
+                .select
+                    select(id="howMuchDataDropDown" name="howMuchDataDropDown")
+                        option(value="" disabled=true) How much data
+                        option(value="allData" selected=true) All data
+                        option(value="24hourAverage") Gjennomsnitt døgn
+                        option(value="weeklyAverage") Gjennomsnitt uke
+                        option(value="monthlyAverage") Gennomsnitt måned
+                        option(value="yearlyAverage") Gjennomsnitt år
+                    span.caret
+            .select
+                select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
+                    option(value="" disabled=true) Dybdetype
+                    option(value="allDepths" selected=true) Alle dybder
+                    option(value="oneDepth") En dybde
+                    option(value="depthBetween") Dybde mellom
+                span.caret
+            .select
+                select(id="depthFrom", name="depthFrom" disabled=true)
+                    option(value="" disabled=true selected=true) Dybde fra
+                    -for(var i = 0.5;i<19;i++){
+                    option(value="#{i}") #{i}
+                    -}
+                span.caret
+            .select
+                select(id="depthTo", name="depthTo" disabled=true)
+                    option(value="" disabled=true selected=true) Dybde til
+                    -for(var i = 0.5;i<19;i++){
+                    option(value="#{i}") #{i}
+                    -}
+                span.caret
+
+            button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton" data-toggle="modal" data-target="#downloadModal")
+                +icon("ok")
+                |Accept
+            +modal("Last ned fil", "downloadModal")
+                +input("text", "fileNameIn", "Filnavn", "Filnavn")
+                button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
+                    +icon("download")
+                    | Last ned
+            script.
+                function saveFileHit() {
+                    var filename = fileNameIn.value;
+                    var hostLink = 'http://localhost:3000';
+                    $.get(hostLink + "/api/allData", function (res) {
+                        var blob = new Blob([res], {type: "text/plain;charset=utf-8"});
+                        saveAs(blob, filename + ".txt");
+                    })
+                }
