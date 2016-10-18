@@ -9,8 +9,6 @@ var queryToBeSavedAsText;
 
 router.get('/allData', function (req, res, next) {
 
-    console.log("hello");
-
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
     var fromDate = req.query.fromDate;
@@ -35,11 +33,11 @@ router.get('/allData', function (req, res, next) {
                $group: {
                    _id: {year: {$year: "$startdatetime"}, month: {$month: "$startdatetime"},day:{$dayOfMonth:"$startdatetime"},hour:{$hour:"$startdatetime"},depth: "$timeseries.pressure(dBAR)",value:"$"+parameter},
                }
-           }, {$sort:{'_id.year':1,'_id.month':1,'_id.day':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}});
+           }, {$sort:{'_id.year':1,'_id.month':1,'_id.day':1,'_id.hour':1,'_id.depth':1}},{$sort:{'_id.year':1,'_id.month':1,'_id.depth':1}});
        cursor.each(function (err, doc) {
            assert.equal(err, null);
            if (doc != null) {
-               //console.log(doc);
+               console.log(doc);
                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
            } else {
                callback();
@@ -276,11 +274,26 @@ function removeElements(input){
 function addToList() {
 
     var date = "";
+    var lastDepth = "";
+    var expectedDepth = 0;
+
+    for(var d = 0; d<list.length;d++){
+
+        if(list[d].indexOf("depth") !== -1){
+
+            if(isInList(list[d],depthList)) {
+                depthList.push(list[d].substring(list[d].indexOf(":") + 1) + "m");
+            }
+        }
+
+    }
+
+    //console.log(depthList);
 
     for (var i = 0; i < list.length; i++) {
 
         if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
-            dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
+                dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
 
             if(isInList(date,dateList))
                 dateList.push(date.slice(0,-1));
@@ -288,8 +301,28 @@ function addToList() {
             date = "";
         }
         else if(list[i].indexOf("depth") !== -1){
-            if(isInList(list[i],depthList))
-                depthList.push(list[i].substring(list[i].indexOf(":") + 1) + "m");
+
+            console.log(list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) + "    " + expectedDepth.toString());
+
+            while (list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) != expectedDepth.toString()) {
+
+                dataList.push("-");
+
+                if (expectedDepth === depthList.length - 1)
+                    expectedDepth = 0;
+                else
+                    expectedDepth++;
+
+            }
+
+            if (expectedDepth === depthList.length - 1)
+                expectedDepth = 0;
+            else
+                expectedDepth++;
+
+
+
+
         } else if(list[i] === ""){
 
         }
@@ -306,10 +339,7 @@ function buildString() {
 
     var finalString = "";
 
-    console.log(dataList.length);
-    console.log(dateList.length * 18);
-
-    for(var i=0;i<(dateList.length+1);i++){
+    for(var i=0;i<(dateList.length);i++){
 
         if(i == 0)
             finalString += "Tid\tNr\t";
@@ -321,7 +351,7 @@ function buildString() {
             if(i == 0)
                 finalString += depthList[j] + "\t";
             else
-                finalString += dataList[j] + "\t";
+                finalString += dataList[j-depthList.length] + "\t";
 
         }
         finalString += "\n";
