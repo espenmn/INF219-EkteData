@@ -49,7 +49,7 @@ function getDataFromTextFields() {
 function validateInput(dataList) {
     //To/From date tests
     var dateType = "";
-    var dayAverage = /^([1-9]|1[0-9]|2[0-4])[/](0[1-9]|[1-2][0-9]|3[0-1])[/](0[0-9]|1[0-2])[/]([1-9][0-9])$/;
+    var dayAverage = /^(0[1-9]|1[0-9]|2[0-4])[/](0[1-9]|[1-2][0-9]|3[0-1])[/](0[0-9]|1[0-2])[/]([1-9][0-9])$/;
     var monthAverage = /^(0[0-9]|1[0-2])[/]([1-9][0-9])$/;
     var yearAverage = /^([1-9][0-9])$/;
     var absoluteStartDate = "15/12/05/15";
