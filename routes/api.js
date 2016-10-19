@@ -262,13 +262,10 @@ function removeElements(input){
 
     list = input.split(/,|_id:|\[|\]/);
 
-    if(list[0] === "") {
-        console.log("s")
-    }
+    if(list[0] === "")
         dateList.shift();
-    }
 
-    console.log(list);
+    //console.log(list);
 
     return addToList();
 
@@ -288,6 +285,7 @@ function addToList() {
     var year = "";
 
     var firstElement = "";
+    var lastElement = "";
 
     for(var d = 0; d<list.length;d++){
 
@@ -306,9 +304,11 @@ function addToList() {
 
     for (var i = 0; i < list.length; i++) {
 
-        if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
-                dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
-
+        if(lastElement === "") {
+            if (list[i + 1] === firstElement)
+                lastElement = list[i].substring(0, list[i].indexOf(":"));
+        }
+        else if(list[i].indexOf(lastElement) !== -1){
             date = (year + month + week + day + hour + "").slice(0,-1);
 
             if(isInList(date,dateList))
@@ -321,7 +321,11 @@ function addToList() {
             year = "";
             date = "";
         }
-        else if(list[i].indexOf("depth") !== -1){
+
+        if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
+                dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
+        }
+        else if(list[i].indexOf("depth") !== -1) {
 
             while (list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) != expectedDepth.toString()) {
 
@@ -331,13 +335,13 @@ function addToList() {
                     expectedDepth = lowDepth;
                 else
                     expectedDepth++;
-
             }
 
             if (expectedDepth.toString() === highDepth)
                 expectedDepth = lowDepth;
             else
                 expectedDepth++;
+        }
         else {
 
             if(firstElement === "")
@@ -355,9 +359,6 @@ function addToList() {
                 year = list[i].substring(list[i].indexOf(":") + 1) + ".";
         }
     }
-
-
-    dateList.shift();
 
     return buildString();
 }
@@ -401,10 +402,6 @@ function isInList(element,list){
         } else if((element.substring(list[i].indexOf(":") + 1) + ".").slice(0,-1) === list[i] && element.indexOf("depth") == -1) {
             add = false;
         }
-
-        //if(add)
-            //console.log(element + "    " + list[i]);
-
     }
 
 
