@@ -260,9 +260,14 @@ function removeElements(input){
     input = input.replace(/"/g, "");
     input = input.replace(/undefined/g, "");
 
-    console.log(input);
-
     list = input.split(/,|_id:|\[|\]/);
+
+    if(list[0] === "") {
+        console.log("s")
+    }
+        dateList.shift();
+    }
+
     console.log(list);
 
     return addToList();
@@ -275,6 +280,14 @@ function addToList() {
     var expectedDepth;
     var lowDepth;
     var highDepth;
+
+    var hour = "";
+    var day = "";
+    var week = "";
+    var month = "";
+    var year = "";
+
+    var firstElement = "";
 
     for(var d = 0; d<list.length;d++){
 
@@ -296,9 +309,16 @@ function addToList() {
         if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
                 dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
 
-            if(isInList(date,dateList))
-                dateList.push(date.slice(0,-1));
+            date = (year + month + week + day + hour + "").slice(0,-1);
 
+            if(isInList(date,dateList))
+                dateList.push(date);
+
+            hour = "";
+            day = "";
+            week = "";
+            month = "";
+            year = "";
             date = "";
         }
         else if(list[i].indexOf("depth") !== -1){
@@ -318,16 +338,24 @@ function addToList() {
                 expectedDepth = lowDepth;
             else
                 expectedDepth++;
-
-        } else if(list[i] === ""){
-
-        }
         else {
-            date += list[i].substring(list[i].indexOf(":") + 1) + ".";
+
+            if(firstElement === "")
+                firstElement = list[i];
+
+            if(list[i].indexOf("hour") !== -1 )
+                hour = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("day") !== -1 )
+                day = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("week") !== -1 )
+                week = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("month") !== -1 )
+                month = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("year") !== -1 )
+                year = list[i].substring(list[i].indexOf(":") + 1) + ".";
         }
     }
 
-    console.log(dateList);
 
     dateList.shift();
 
@@ -370,10 +398,16 @@ function isInList(element,list){
     for(var i=0;i<list.length;i++) {
         if (element.substring(element.indexOf(":") + 1) + "m" === list[i] && element.indexOf("depth") !== -1) {
             add = false;
-        } else if((element.substring(list[i].indexOf(":") + 1) + ".").slice(0,-2) === list[i] && element.indexOf("depth") == -1) {
+        } else if((element.substring(list[i].indexOf(":") + 1) + ".").slice(0,-1) === list[i] && element.indexOf("depth") == -1) {
             add = false;
         }
+
+        //if(add)
+            //console.log(element + "    " + list[i]);
+
     }
+
+
     return add;
 
 }
