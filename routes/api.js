@@ -347,6 +347,11 @@ function addToList() {
             if(firstElement === "")
                 firstElement = list[i];
 
+            if((list[i].substring(list[i].indexOf(":") + 1).length) === 1){
+                list[i] = "0" + list[i];
+                console.log(list[i])
+            }
+
             if(list[i].indexOf("hour") !== -1 )
                 hour = list[i].substring(list[i].indexOf(":") + 1) + ".";
             else if(list[i].indexOf("day") !== -1 )
