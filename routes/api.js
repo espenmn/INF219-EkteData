@@ -260,7 +260,10 @@ function removeElements(input){
     input = input.replace(/"/g, "");
     input = input.replace(/undefined/g, "");
 
-    list = input.split(/,|_id:|timeseries:\[|\]/);
+    console.log(input);
+
+    list = input.split(/,|_id:|\[|\]/);
+    console.log(list);
 
     return addToList();
 
@@ -288,8 +291,6 @@ function addToList() {
     highDepth = depthList[depthList.length-1].slice(0,-3);
     expectedDepth = lowDepth;
 
-    console.log(lowDepth + "---" + highDepth);
-
     for (var i = 0; i < list.length; i++) {
 
         if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
@@ -306,9 +307,6 @@ function addToList() {
 
                 dataList.push("-");
 
-                //console.log(highDepth + "   " +  expectedDepth);
-                console.log(list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) + "    " + expectedDepth);
-
                 if (expectedDepth.toString() === highDepth)
                     expectedDepth = lowDepth;
                 else
@@ -316,15 +314,10 @@ function addToList() {
 
             }
 
-            console.log(highDepth);
-
             if (expectedDepth.toString() === highDepth)
                 expectedDepth = lowDepth;
             else
                 expectedDepth++;
-
-
-
 
         } else if(list[i] === ""){
 
@@ -334,6 +327,9 @@ function addToList() {
         }
     }
 
+    console.log(dateList);
+
+    dateList.shift();
 
     return buildString();
 }
@@ -342,12 +338,16 @@ function buildString() {
 
     var finalString = "";
 
-    for(var i=0;i<(dateList.length);i++){
+
+
+    for(var i=0;i<dateList.length+1;i++){
 
         if(i == 0)
             finalString += "Tid\tNr\t";
-        else
+        else if(i == (dataList.length - 1 ))
             finalString += dateList[i] + "\t" + (i) + "\t";
+        else
+            finalString += dateList[i-1] + "\t" + (i) + "\t";
 
         for(var j=(i*depthList.length);j<(depthList.length + i*depthList.length);j++) {
 
