@@ -19,6 +19,7 @@ router.get('/allData', function (req, res, next) {
     intDepthTo = Math.ceil(depthTo)-depthFrom+1;
 
      var allValuesBetweenDatesForOneParameter = function (db, callback) {
+
        var cursor = db.collection('diveinterpolated').aggregate({
                $match: {
                    "startdatetime": {
@@ -37,7 +38,7 @@ router.get('/allData', function (req, res, next) {
        cursor.each(function (err, doc) {
            assert.equal(err, null);
            if (doc != null) {
-               //console.log(doc);
+               console.log(doc);
                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
            } else {
                callback();
@@ -45,13 +46,12 @@ router.get('/allData', function (req, res, next) {
        })
    };
 
-
-
     MongoClient.connect(url, function (err, db) {
         allValuesBetweenDatesForOneParameter(db, function () {
             db.close();
         })
     });
+
     res.send(removeElements(queryToBeSavedAsText));
 });
 
@@ -269,8 +269,9 @@ function removeElements(input){
 function addToList() {
 
     var date = "";
-    var lastDepth = "";
-    var expectedDepth = 0;
+    var expectedDepth;
+    var lowDepth;
+    var highDepth;
 
     for(var d = 0; d<list.length;d++){
 
@@ -282,6 +283,12 @@ function addToList() {
         }
 
     }
+
+    lowDepth = depthList[0].slice(0,-3);
+    highDepth = depthList[depthList.length-1].slice(0,-3);
+    expectedDepth = lowDepth;
+
+    console.log(lowDepth + "---" + highDepth);
 
     for (var i = 0; i < list.length; i++) {
 
@@ -299,15 +306,20 @@ function addToList() {
 
                 dataList.push("-");
 
-                if (expectedDepth === depthList.length - 1)
-                    expectedDepth = 0;
+                //console.log(highDepth + "   " +  expectedDepth);
+                console.log(list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) + "    " + expectedDepth);
+
+                if (expectedDepth.toString() === highDepth)
+                    expectedDepth = lowDepth;
                 else
                     expectedDepth++;
 
             }
 
-            if (expectedDepth === depthList.length - 1)
-                expectedDepth = 0;
+            console.log(highDepth);
+
+            if (expectedDepth.toString() === highDepth)
+                expectedDepth = lowDepth;
             else
                 expectedDepth++;
 
