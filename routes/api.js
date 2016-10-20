@@ -38,7 +38,7 @@ router.get('/allData', function (req, res, next) {
        cursor.each(function (err, doc) {
            assert.equal(err, null);
            if (doc != null) {
-               console.log(doc);
+               //console.log(doc);
                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
            } else {
                callback();
@@ -84,7 +84,7 @@ router.get('/averageMonth', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                console.log(doc);
+                //console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
             } else {
                 callback();
@@ -349,7 +349,7 @@ function addToList() {
 
             if((list[i].substring(list[i].indexOf(":") + 1).length) === 1){
                 list[i] = "0" + list[i];
-                console.log(list[i])
+                list[i] = [list[i].slice(0, list[i].indexOf(":") + 1), "0", list[i].slice(list[i].indexOf(":") + 1)].join('');
             }
 
             if(list[i].indexOf("hour") !== -1 )
