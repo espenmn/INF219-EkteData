@@ -13,9 +13,9 @@ append body
                 | Fyll deretter ut ønsket filnavn, og trykk på Last ned
             .section
                 .sectionInput
-                    +input("text", "fromDate", "12/11/10/15", "Startdato")
+                    +input("text", "fromDate", "HH/DD/MM/YY", "Startdato")
                 .sectionInput
-                    +input("text", "toDate", "12/12/10/15", "Sluttdato")
+                    +input("text", "toDate", "HH/DD/MM/YY", "Sluttdato")
             .section
                 .select
                     select(id="parameterDropDown", name="parameter")
@@ -66,16 +66,26 @@ append body
                 button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
                     +icon("download")
                     | Last ned
-
-
-            button.btn.btn-default(type='button', data-toggle='tooltip', data-placement='left', title='', data-original-title='Tooltip on left')  Tooltip on left
-
             script.
+                fromDate.value = "12/01/10/16";
+                toDate.value = "12/02/10/16";
+
                 function saveFileHit() {
                     var filename = fileNameIn.value;
                     var hostLink = 'http://localhost:3000';
-                    $.get(hostLink + "/api/allData", function (res) {
+                    $.get(hostLink + "/api/allData", {parameter:First, dataType:Second, fromDate:Third, toDate:Fourth, depthFrom:Fifth, depthTo:Sixth},function (res) {
                         var FileDownload = new Blob([res], {type: "text/plain;charset=utf-8"});
                         saveAs(FileDownload, filename + ".txt");
-                    })
+                    });
+                    fileNameIn.value = "";
+                }
+
+                var First, Second, Third, Fourth, Fifth, Sixth;
+                function getQueryValues(first, second, third, fourth, fifth, sixth){
+                    First = first;
+                    Second = second;
+                    Third = third;
+                    Fourth = fourth;
+                    Fifth = fifth;
+                    Sixth = sixth;
                 }

@@ -345,9 +345,7 @@ function acceptButtonHit() {
     if (valid) {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
-        sendToQuery(dataToQuery);
-        //var hostLink = 'http://localhost:3000';
-        //$.get(hostLink + '/api/text', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
+        getQueryValues(dataToQuery[0],dataToQuery[1],dataToQuery[2],dataToQuery[3],dataToQuery[5],dataToQuery[6]);
     }
 }
 
@@ -403,7 +401,7 @@ function convertToQueryFormat(list) {
     return list;
 }
 
-function sendToQuery(dataToQuery) {
+/*function sendToQuery(dataToQuery) {
 
     var hostLink = 'http://localhost:3000';
 
@@ -426,4 +424,4 @@ function sendToQuery(dataToQuery) {
         default:
             window.alert("invalid datatype");
     }
-}
+}*/
