@@ -331,7 +331,6 @@ function outputTest(list) {
     for (var i = 0; i < list.length; i++) {
         string += list[i] + "\n";
     }
-    window.alert(string);
 }
 
 /**

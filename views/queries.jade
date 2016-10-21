@@ -70,16 +70,6 @@ append body
                 fromDate.value = "12/01/10/16";
                 toDate.value = "12/02/10/16";
 
-                function saveFileHit() {
-                    var filename = fileNameIn.value;
-                    var hostLink = 'http://localhost:3000';
-                    $.get(hostLink + "/api/allData", {parameter:First, dataType:Second, fromDate:Third, toDate:Fourth, depthFrom:Fifth, depthTo:Sixth},function (res) {
-                        var FileDownload = new Blob([res], {type: "text/plain;charset=utf-8"});
-                        saveAs(FileDownload, filename + ".txt");
-                    });
-                    fileNameIn.value = "";
-                }
-
                 var First, Second, Third, Fourth, Fifth, Sixth;
                 function getQueryValues(first, second, third, fourth, fifth, sixth){
                     First = first;
@@ -89,3 +79,34 @@ append body
                     Fifth = fifth;
                     Sixth = sixth;
                 }
+
+                function saveFileHit() {
+                    var queryRequest = "";
+                    var filename = fileNameIn.value;
+                    var hostLink = 'http://localhost:3000';
+                    switch (Second){
+                        case 'allData':
+                            queryRequest = 'allData';
+                            break;
+                        case '24hourAverage':
+                            queryRequest = 'averageDay';
+                            break;
+                        case 'weeklyAverage':
+                            queryRequest = 'averageWeek';
+                            break;
+                        case 'monthlyAverage':
+                            queryRequest = 'averageMonth';
+                            break;
+                        case 'yearlyAverage':
+                            queryRequest = 'averageYear';
+                            break;
+                        default:
+                            console.log("Woopsies, something went wrong!");
+                    }
+                    $.get(hostLink + "/api/" + queryRequest, {parameter:First, dataType:Second, fromDate:Third, toDate:Fourth, depthFrom:Fifth, depthTo:Sixth},function (res) {
+                        var FileDownload = new Blob([res], {type: "text/plain;charset=utf-8"});
+                        saveAs(FileDownload, filename + ".txt");
+                    });
+                    fileNameIn.value = "";
+                }
+

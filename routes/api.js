@@ -53,7 +53,6 @@ router.get('/allData', function (req, res, next) {
             assert.equal(err, null);
             if (doc != null) {
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
-                //console.log(doc);
             } else {
                 callback();
             }
@@ -64,7 +63,6 @@ router.get('/allData', function (req, res, next) {
         allValuesBetweenDatesForOneParameter(db, function () {
             db.close();
             res.send(removeElements(queryToBeSavedAsText));
-            res.end();
         })
     });
 
@@ -122,10 +120,10 @@ router.get('/averageMonth', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
             db.close();
+            res.send(removeElements(queryToBeSavedAsText));
         })
     });
 
-    res.send(removeElements(queryToBeSavedAsText));
 });
 
 router.get('/averageDay', function (req, res, next) {
@@ -170,7 +168,6 @@ router.get('/averageDay', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                //console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
             } else {
                 callback();
@@ -182,11 +179,11 @@ router.get('/averageDay', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageDayBetweenDatesAndDepths(db, function () {
             db.close();
+            res.send(removeElements(queryToBeSavedAsText));
         })
     });
 
 
-    res.send(removeElements(queryToBeSavedAsText));
 });
 
 router.get('/averageWeek', function (req, res, next) {
@@ -229,7 +226,6 @@ router.get('/averageWeek', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                //console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
             } else {
                 callback();
@@ -241,10 +237,10 @@ router.get('/averageWeek', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageWeekBetweenDatesAndDepths(db, function () {
             db.close();
+            res.send(removeElements(queryToBeSavedAsText));
         })
     });
 
-    res.send(removeElements(queryToBeSavedAsText));
 });
 
 router.get('/averageYear', function (req, res, next) {
@@ -278,7 +274,6 @@ router.get('/averageYear', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                //console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
             } else {
                 callback();
@@ -289,10 +284,10 @@ router.get('/averageYear', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageYearBetweenDatesAndDepths(db, function () {
             db.close();
+            res.send(removeElements(queryToBeSavedAsText));
         })
     });
 
-    res.send(removeElements(queryToBeSavedAsText));
 });
 
 var dateList = [];
@@ -312,7 +307,6 @@ function removeElements(input) {
     input = input.replace(/undefined/g, "");
 
     list = input.split(/,|_id:|timeseries:\[|\]/);
-    console.log("length: " + list.length);
     return addToList();
 
 }
@@ -377,7 +371,6 @@ function addToList() {
 
 function buildString() {
 
-    console.log("buildString()");
 
     var finalString = "";
 
