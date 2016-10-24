@@ -244,15 +244,22 @@ router.get('/averageYear', function (req, res, next) {
     res.send(removeElements(queryToBeSavedAsText));
 });
 
+var parameter = "";
+
 var dateList = [];
 var dataList = [];
 var depthList = [];
 
-var parameter = "";
-
-var list;
+/**
+ *
+ * Remove unnecessary items from the string. Splits the string into an array
+ *
+ * @param input
+ */
 
 function removeElements(input){
+
+    var list;
 
     input = input.replace(/\s/g, "");
     input = input.replace(/{/g, "");
@@ -265,13 +272,18 @@ function removeElements(input){
     if(list[0] === "")
         dateList.shift();
 
-    //console.log(list);
-
-    return addToList();
+    return addToList(list);
 
 }
 
-function addToList() {
+
+/**
+ *
+ * Take information from a list, and split it into more lists according to value type
+ *
+ * @param list
+ */
+function addToList(list) {
 
     var date = "";
     var expectedDepth;
@@ -295,7 +307,6 @@ function addToList() {
                 depthList.push(list[d].substring(list[d].indexOf(":") + 1) + "m");
             }
         }
-
     }
 
     lowDepth = depthList[0].slice(0,-3);
@@ -368,11 +379,16 @@ function addToList() {
     return buildString();
 }
 
+/**
+ *
+ * Takes information from the different lists, and put them together to make the final string.
+ *
+ * @return {string}
+ */
+
 function buildString() {
 
     var finalString = "";
-
-
 
     for(var i=0;i<dateList.length+1;i++){
 
@@ -393,10 +409,17 @@ function buildString() {
         }
         finalString += "\n";
     }
-    //console.log(finalString);
     return finalString;
 }
 
+/**
+ *
+ * Check if a list is containing a specific element. Used for depth and date to prevent duplicates
+ *
+ * @param element
+ * @param list
+ * @return {boolean}
+ */
 function isInList(element,list){
 
     var add = true;
