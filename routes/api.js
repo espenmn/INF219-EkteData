@@ -297,9 +297,10 @@ var depthList = [];
 
 var parameter = "";
 
-var list;
 
 function removeElements(input) {
+
+    var list;
 
     input = input.replace(/\s/g, "");
     input = input.replace(/{/g, "");
@@ -312,11 +313,11 @@ function removeElements(input) {
     if(list[0] === "")
         dateList.shift();
 
-    return addToList();
+    return addToList(list);
 
 }
 
-function addToList() {
+function addToList(list) {
 
     var date = "";
     var expectedDepth;
@@ -438,7 +439,7 @@ function buildString() {
         }
         finalString += "\n";
     }
-    list = "";
+    //list = "";
     dateList = [];
     dataList = [];
     depthList = [];
