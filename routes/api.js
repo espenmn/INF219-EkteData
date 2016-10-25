@@ -59,6 +59,8 @@ router.get('/allData', function (req, res, next) {
         })
     };
 
+
+
     MongoClient.connect(url, function (err, db) {
         allValuesBetweenDatesForOneParameter(db, function () {
             db.close();
@@ -108,7 +110,6 @@ router.get('/averageMonth', function (req, res, next) {
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
-                console.log(doc);
                 queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
             } else {
                 callback();
@@ -306,7 +307,11 @@ function removeElements(input) {
     input = input.replace(/"/g, "");
     input = input.replace(/undefined/g, "");
 
-    list = input.split(/,|_id:|timeseries:\[|\]/);
+    list = input.split(/,|_id:|\[|\]/);
+
+    if(list[0] === "")
+        dateList.shift();
+
     return addToList();
 
 }
@@ -314,8 +319,18 @@ function removeElements(input) {
 function addToList() {
 
     var date = "";
-    var lastDepth = "";
-    var expectedDepth = 0;
+    var expectedDepth;
+    var lowDepth;
+    var highDepth;
+
+    var hour = "";
+    var day = "";
+    var week = "";
+    var month = "";
+    var year = "";
+
+    var firstElement = "";
+    var lastElement = "";
 
     for (var d = 0; d < list.length; d++) {
 
@@ -328,65 +343,97 @@ function addToList() {
 
     }
 
+    lowDepth = depthList[0].slice(0,-3);
+    highDepth = depthList[depthList.length-1].slice(0,-3);
+    expectedDepth = lowDepth;
+
     for (var i = 0; i < list.length; i++) {
 
-        if (list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
-            dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
+        if(lastElement === "") {
+            if (list[i + 1] === firstElement)
+                lastElement = list[i].substring(0, list[i].indexOf(":"));
+        }
+        else if(list[i].indexOf(lastElement) !== -1){
+            date = (year + month + week + day + hour + "").slice(0,-1);
 
-            if (isInList(date, dateList))
-                dateList.push(date.slice(0, -1));
+            if(isInList(date,dateList))
+                dateList.push(date);
 
+            hour = "";
+            day = "";
+            week = "";
+            month = "";
+            year = "";
             date = "";
         }
-        else if (list[i].indexOf("depth") !== -1) {
+
+        if(list[i].indexOf("average") !== -1 || list[i].indexOf("value") !== -1) {
+                dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
+        }
+        else if(list[i].indexOf("depth") !== -1) {
 
             while (list[i].substring(list[i].indexOf(":") + 1).slice(0, -2) != expectedDepth.toString()) {
 
                 dataList.push("-");
 
-                if (expectedDepth === depthList.length - 1)
-                    expectedDepth = 0;
+                if (expectedDepth.toString() === highDepth)
+                    expectedDepth = lowDepth;
                 else
                     expectedDepth++;
-
             }
 
-            if (expectedDepth === depthList.length - 1)
-                expectedDepth = 0;
+            if (expectedDepth.toString() === highDepth)
+                expectedDepth = lowDepth;
             else
                 expectedDepth++;
-
-
-        } else if (list[i] === "") {
-
         }
         else {
-            date += list[i].substring(list[i].indexOf(":") + 1) + ".";
+
+            if(firstElement === "")
+                firstElement = list[i];
+
+            if((list[i].substring(list[i].indexOf(":") + 1).length) === 1){
+                list[i] = "0" + list[i];
+                list[i] = [list[i].slice(0, list[i].indexOf(":") + 1), "0", list[i].slice(list[i].indexOf(":") + 1)].join('');
+            }
+
+            if(list[i].indexOf("hour") !== -1 )
+                hour = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("day") !== -1 )
+                day = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("week") !== -1 )
+                week = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("month") !== -1 )
+                month = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("year") !== -1 )
+                year = list[i].substring(list[i].indexOf(":") + 1) + ".";
         }
     }
-
 
     return buildString();
 }
 
 function buildString() {
 
-
     var finalString = "";
 
-    for (var i = 0; i < (dateList.length); i++) {
+
+
+    for(var i=0;i<dateList.length+1;i++){
 
         if (i == 0)
             finalString += "Tid\tNr\t";
-        else
+        else if(i == (dataList.length - 1 ))
             finalString += dateList[i] + "\t" + (i) + "\t";
+        else
+            finalString += dateList[i-1] + "\t" + (i) + "\t";
 
-        for (var j = (i * depthList.length); j < (depthList.length + i * depthList.length); j++) {
+        for(var j=(i*depthList.length);j<(depthList.length + i*depthList.length);j++) {
 
-            if (i == 0)
+            if(i == 0)
                 finalString += depthList[j] + "\t";
             else
-                finalString += dataList[j - depthList.length] + "\t";
+                finalString += dataList[j-depthList.length] + "\t";
 
         }
         finalString += "\n";
@@ -405,7 +452,7 @@ function isInList(element, list) {
     for (var i = 0; i < list.length; i++) {
         if (element.substring(element.indexOf(":") + 1) + "m" === list[i] && element.indexOf("depth") !== -1) {
             add = false;
-        } else if ((element.substring(list[i].indexOf(":") + 1) + ".").slice(0, -2) === list[i] && element.indexOf("depth") == -1) {
+        } else if((element.substring(list[i].indexOf(":") + 1) + ".").slice(0,-1) === list[i] && element.indexOf("depth") == -1) {
             add = false;
         }
     }
