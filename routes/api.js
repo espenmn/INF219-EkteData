@@ -455,8 +455,13 @@ function buildString() {
 
             if(i == 0)
                 finalString += depthList[j] + "\t";
-            else
-                finalString += dataList[j-depthList.length] + "\t";
+            else{
+                if(dataList[j-depthList.length] === undefined)
+                    finalString += "-\t";
+                else
+                    finalString += dataList[j-depthList.length] + "\t";
+            }
+
 
         }
         finalString += "\n";
