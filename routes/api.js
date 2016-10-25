@@ -277,6 +277,7 @@ function removeElements(input){
 }
 
 
+
 /**
  *
  * Take information from a list, and split it into more lists according to value type
