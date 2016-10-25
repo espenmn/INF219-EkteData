@@ -297,6 +297,12 @@ var depthList = [];
 
 var parameter = "";
 
+/**
+ *
+ * Remove unnecessary items from the string. Splits the string into an array
+ *
+ * @param input
+ */
 
 function removeElements(input) {
 
@@ -317,6 +323,14 @@ function removeElements(input) {
 
 }
 
+
+
+/**
+ *
+ * Take information from a list, and split it into more lists according to value type
+ *
+ * @param list
+ */
 function addToList(list) {
 
     var date = "";
@@ -414,6 +428,13 @@ function addToList(list) {
     return buildString();
 }
 
+/**
+ *
+ * Takes information from the different lists, and put them together to make the final string.
+ *
+ * @return {string}
+ */
+
 function buildString() {
 
     var finalString = "";
@@ -446,7 +467,15 @@ function buildString() {
     return finalString;
 }
 
-function isInList(element, list) {
+/**
+ *
+ * Check if a list is containing a specific element. Used for depth and date to prevent duplicates
+ *
+ * @param element
+ * @param list
+ * @return {boolean}
+ */
+function isInList(element,list){
 
     var add = true;
 
