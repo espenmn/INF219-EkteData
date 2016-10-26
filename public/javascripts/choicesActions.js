@@ -368,7 +368,7 @@ function printError(title, message) {
  * @returns {boolean} True if the end-depth is deeper than the start-depth
  */
 function assertCorrectGapInDepths(depth1, depth2){
-    if(parseInt(depth1)>=parseInt(depth2)){
+    if(parseInt(depth1)>parseInt(depth2)){
         return false;
     }
     return true;
