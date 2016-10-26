@@ -344,7 +344,8 @@ function acceptButtonHit() {
     if (valid) {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
-        getQueryValues(dataToQuery[0],dataToQuery[1],dataToQuery[2],dataToQuery[3],dataToQuery[5],dataToQuery[6]);
+        //getQueryValues(dataToQuery[0],dataToQuery[1],dataToQuery[2],dataToQuery[3],dataToQuery[5],dataToQuery[6]);
+        runQuery(dataToQuery);
     }
 }
 
@@ -400,27 +401,9 @@ function convertToQueryFormat(list) {
     return list;
 }
 
-/*function sendToQuery(dataToQuery) {
-
+function runQuery(req) {
     var hostLink = 'http://localhost:3000';
-
-    switch (dataToQuery[1]){
-        case 'allData':
-            $.get(hostLink + '/api/allData', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
-            break;
-        case '24hourAverage':
-            $.get(hostLink + '/api/averageDay', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
-            break;
-        case 'weeklyAverage':
-            $.get(hostLink + '/api/averageWeek', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
-            break;
-        case 'monthlyAverage':
-            $.get(hostLink + '/api/averageMonth', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
-            break;
-        case 'yearlyAverage':
-            $.get(hostLink + '/api/averageYear', {parameter:dataToQuery[0],dataType:dataToQuery[1],fromDate:dataToQuery[2],toDate:dataToQuery[3],depthFrom:dataToQuery[5],depthTo:dataToQuery[6]});
-            break;
-        default:
-            window.alert("invalid datatype");
-    }
-}*/
+    $.get(hostLink + '/api/' + req[1], {parameter:req[0],dataType:req[1],fromDate:req[2],toDate:req[3],depthFrom:req[5],depthTo:req[6]}, function (res) {
+        getStringFromBackEnd(res);
+    });
+}

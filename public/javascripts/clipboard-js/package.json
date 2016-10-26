@@ -1,0 +1,95 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "clipboard-js",
+        "scope": null,
+        "escapedName": "clipboard-js",
+        "name": "clipboard-js",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/Jostein/Documents/SKOLE/INF219/INF219-AmalieSkram"
+    ]
+  ],
+  "_from": "clipboard-js@latest",
+  "_id": "clipboard-js@0.3.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/clipboard-js",
+  "_nodeVersion": "4.4.7",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/clipboard-js-0.3.1.tgz_1474616499390_0.31447913357988"
+  },
+  "_npmUser": {
+    "name": "lgarron",
+    "email": "code@garron.net"
+  },
+  "_npmVersion": "2.15.8",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "clipboard-js",
+    "scope": null,
+    "escapedName": "clipboard-js",
+    "name": "clipboard-js",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/clipboard-js/-/clipboard-js-0.3.1.tgz",
+  "_shasum": "33bef15c4420662ea8297827d57b51526e821047",
+  "_shrinkwrap": null,
+  "_spec": "clipboard-js",
+  "_where": "/Users/Jostein/Documents/SKOLE/INF219/INF219-AmalieSkram",
+  "author": {
+    "name": "Lucas Garron",
+    "email": "code@garron.net",
+    "url": "https://garron.net/"
+  },
+  "bugs": {
+    "url": "https://github.com/lgarron/clipboard.js/issues"
+  },
+  "dependencies": {},
+  "description": "A web shim to handle clipboard APIs across browsers using a simple Promise API.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "33bef15c4420662ea8297827d57b51526e821047",
+    "tarball": "https://registry.npmjs.org/clipboard-js/-/clipboard-js-0.3.1.tgz"
+  },
+  "homepage": "https://github.com/lgarron/clipboard.js#readme",
+  "keywords": [
+    "clipboard",
+    "HTML5",
+    "copy",
+    "copying",
+    "cut",
+    "paste",
+    "execCommand",
+    "setData",
+    "getData"
+  ],
+  "license": "MIT",
+  "main": "clipboard.js",
+  "maintainers": [
+    {
+      "name": "lgarron",
+      "email": "code@garron.net"
+    }
+  ],
+  "name": "clipboard-js",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lgarron/clipboard.js.git"
+  },
+  "scripts": {},
+  "version": "0.3.1"
+}
