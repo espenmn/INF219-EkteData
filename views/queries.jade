@@ -4,6 +4,7 @@ append body
     link(rel='stylesheet' href='/stylesheets/style.css')
     script(type='text/javascript' src='/javascripts/choicesActions.js')
     script(type='text/javascript' src='/javascripts/file-saver/FileSaver.js')
+    script(type='text/javascript' src='/javascripts/clipboard-js/clipboard.js')
     .starter-template
         .container
             h1 Ekte data
@@ -66,48 +67,26 @@ append body
                 button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
                     +icon("download")
                     | Last ned
+                button.btn.btn-default(type="default" id="clipboardButton" onclick='copyButtonHit();')
+                    +icon("copy")
+                    | Kopier
             script.
-                fromDate.value = "12/01/10/16";
-                toDate.value = "12/02/10/16";
+                fromDate.value = "12/01/08/16";
+                toDate.value = "12/02/08/16";
 
-                var First, Second, Third, Fourth, Fifth, Sixth;
-                function getQueryValues(first, second, third, fourth, fifth, sixth){
-                    First = first;
-                    Second = second;
-                    Third = third;
-                    Fourth = fourth;
-                    Fifth = fifth;
-                    Sixth = sixth;
+                var queryString = "";
+                function getStringFromBackEnd(stringIn) {
+                    queryString = stringIn;
                 }
 
                 function saveFileHit() {
-                    var queryRequest = "";
                     var filename = fileNameIn.value;
-                    //var hostLink = 'http://localhost:3000';
-                    var hostLink = 'http://ektedata.herokuapp.com';
-                    switch (Second){
-                        case 'allData':
-                            queryRequest = 'allData';
-                            break;
-                        case '24hourAverage':
-                            queryRequest = 'averageDay';
-                            break;
-                        case 'weeklyAverage':
-                            queryRequest = 'averageWeek';
-                            break;
-                        case 'monthlyAverage':
-                            queryRequest = 'averageMonth';
-                            break;
-                        case 'yearlyAverage':
-                            queryRequest = 'averageYear';
-                            break;
-                        default:
-                            console.log("Woopsies, something went wrong!");
-                    }
-                    $.get(hostLink + "/api/" + queryRequest, {parameter:First, dataType:Second, fromDate:Third, toDate:Fourth, depthFrom:Fifth, depthTo:Sixth},function (res) {
-                        var FileDownload = new Blob([res], {type: "text/plain;charset=utf-8"});
-                        saveAs(FileDownload, filename + ".txt");
-                    });
+                    var FileDownload = new Blob([queryString], {type: "text/plain;charset=utf-8"});
+                    saveAs(FileDownload, filename + ".txt");
                     fileNameIn.value = "";
+                }
+
+                function copyButtonHit() {
+                    clipboard.copy(queryString);
                 }
 

@@ -71,3 +71,7 @@ span.caret {
 #acceptButton {
     display: block;
 }
+
+#saveButton, #clipboardButton{
+    width: 10rem;
+}

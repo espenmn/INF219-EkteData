@@ -71,7 +71,7 @@ router.get('/allData', function (req, res, next) {
 
 });
 
-router.get('/averageMonth', function (req, res, next) {
+router.get('/monthlyAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
@@ -128,7 +128,7 @@ router.get('/averageMonth', function (req, res, next) {
 
 });
 
-router.get('/averageDay', function (req, res, next) {
+router.get('/24hourAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
@@ -188,7 +188,7 @@ router.get('/averageDay', function (req, res, next) {
 
 });
 
-router.get('/averageWeek', function (req, res, next) {
+router.get('/weeklyAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
@@ -245,7 +245,7 @@ router.get('/averageWeek', function (req, res, next) {
 
 });
 
-router.get('/averageYear', function (req, res, next) {
+router.get('/yearlyAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
