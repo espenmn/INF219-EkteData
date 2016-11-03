@@ -402,7 +402,8 @@ function convertToQueryFormat(list) {
 }
 
 function runQuery(req) {
-    var hostLink = 'http://ektedata.herokuapp.com';
+    var hostLink = 'http://localhost:3000';
+    //var hostLink = 'http://ektedata.herokuapp.com';
     $.get(hostLink + '/api/' + req[1], {parameter:req[0],dataType:req[1],fromDate:req[2],toDate:req[3],depthFrom:req[5],depthTo:req[6]}, function (res) {
         getStringFromBackEnd(res);
     });

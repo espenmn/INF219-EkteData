@@ -27,8 +27,7 @@ router.get('/allData', function (req, res, next) {
                     }
                 }
             },
-            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
-            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {$unwind: "$timeseries"},
             {
                 $group: {
                     _id: {
@@ -36,9 +35,8 @@ router.get('/allData', function (req, res, next) {
                         month: {$month: "$startdatetime"},
                         day: {$dayOfMonth: "$startdatetime"},
                         hour: {$hour: "$startdatetime"},
-                        depth: "$timeseries.pressure(dBAR)",
-                        value: "$" + parameter
                     },
+                    average: {$avg: "$" + [parameter]}
                 }
             }, {
                 $sort: {
@@ -46,9 +44,8 @@ router.get('/allData', function (req, res, next) {
                     '_id.month': 1,
                     '_id.day': 1,
                     '_id.hour': 1,
-                    '_id.depth': 1
                 }
-            }, {$sort: {'_id.year': 1, '_id.month': 1, '_id.depth': 1}});
+            }, {$sort: {'_id.year': 1, '_id.month': 1}});
 
         cursor.each(function (err, doc) {
             assert.equal(err, null);
@@ -308,6 +305,7 @@ var parameter = "";
 function removeElements(input) {
 
     var list;
+    var containDepth = false;
 
     input = input.replace(/\s/g, "");
     input = input.replace(/{/g, "");
@@ -320,7 +318,19 @@ function removeElements(input) {
     if(list[0] === "")
         dateList.shift();
 
-    return addToList(list);
+    for(var i=0;i<list.length;i++){
+        if(list[i].indexOf("depth") !== -1){
+            containDepth = true;
+            break;
+        }
+    }
+
+    console.log(list);
+
+    if(containDepth)
+        return addToList(list);
+    else
+        return addToAverage(list);
 
 }
 
@@ -359,10 +369,11 @@ function addToList(list) {
 
     }
 
-    lowDepth = depthList[0].slice(0,-3);
-    highDepth = depthList[depthList.length-1].slice(0,-3);
-    expectedDepth = lowDepth;
-
+    if (!(depthList[0] === undefined)){
+        lowDepth = depthList[0].slice(0, -3);
+        highDepth = depthList[depthList.length - 1].slice(0, -3);
+        expectedDepth = lowDepth;
+}
     for (var i = 0; i < list.length; i++) {
 
         if(lastElement === "") {
@@ -426,7 +437,7 @@ function addToList(list) {
         }
     }
 
-    return buildString();
+    return buildString2();
 }
 
 /**
@@ -494,6 +505,90 @@ function isInList(element,list){
     }
     return add;
 
+}
+
+function addToAverage(list) {
+
+    var date = "";
+    var hour = "";
+    var day = "";
+    var week = "";
+    var month = "";
+    var year = "";
+
+
+    for (var i = 0; i < list.length; i++) {
+
+
+        if(list[i].indexOf("average") !== -1){
+
+            dataList.push(parseFloat(list[i].substring(list[i].indexOf(":") + 1)).toFixed(3));
+
+            date = (year + month + week + day + hour + "").slice(0,-1);
+
+            if(isInList(date,dateList))
+                dateList.push(date);
+
+            hour = "";
+            day = "";
+            week = "";
+            month = "";
+            year = "";
+            date = "";
+        }
+
+        else {
+
+            if((list[i].substring(list[i].indexOf(":") + 1).length) === 1){
+                list[i] = "0" + list[i];
+                list[i] = [list[i].slice(0, list[i].indexOf(":") + 1), "0", list[i].slice(list[i].indexOf(":") + 1)].join('');
+            }
+
+            if(list[i].indexOf("hour") !== -1 )
+                hour = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("day") !== -1 )
+                day = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("week") !== -1 )
+                week = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("month") !== -1 )
+                month = list[i].substring(list[i].indexOf(":") + 1) + ".";
+            else if(list[i].indexOf("year") !== -1 )
+                year = list[i].substring(list[i].indexOf(":") + 1) + ".";
+        }
+    }
+
+    return buildString2();
+}
+
+function buildString2() {
+
+    var finalString = "";
+
+    console.log(dateList);
+    console.log(dataList);
+
+    for(var i=0;i<dateList.length+1;i++){
+
+        if (i == 0)
+            finalString += "Tid\tNr\t";
+        else if(i == (dataList.length - 1 ))
+            finalString += dateList[i] + "\t" + (i) + "\t";
+        else
+            finalString += dateList[i-1] + "\t" + (i) + "\t";
+
+        if(i != 0) {
+            if (dataList[i-1] === undefined)
+                finalString += "-\t";
+            else
+                finalString += dataList[i-1] + "\t";
+        }
+        finalString += "\n";
+    }
+    //list = "";
+    dateList = [];
+    dataList = [];
+    depthList = [];
+    return finalString;
 }
 
 module.exports = router;
