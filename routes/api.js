@@ -437,76 +437,14 @@ function addToList(list) {
         }
     }
 
-    return buildString2();
+    return buildStringAverage();
 }
 
 /**
+ * Add values from vertical average into lists
  *
- * Takes information from the different lists, and put them together to make the final string.
- *
- * @return {string}
- */
-
-function buildString() {
-
-    var finalString = "";
-
-
-
-    for(var i=0;i<dateList.length+1;i++){
-
-        if (i == 0)
-            finalString += "Tid\tNr\t";
-        else if(i == (dataList.length - 1 ))
-            finalString += dateList[i] + "\t" + (i) + "\t";
-        else
-            finalString += dateList[i-1] + "\t" + (i) + "\t";
-
-        for(var j=(i*depthList.length);j<(depthList.length + i*depthList.length);j++) {
-
-            if(i == 0)
-                finalString += depthList[j] + "\t";
-            else{
-                if(dataList[j-depthList.length] === undefined)
-                    finalString += "-\t";
-                else
-                    finalString += dataList[j-depthList.length] + "\t";
-            }
-
-
-        }
-        finalString += "\n";
-    }
-    //list = "";
-    dateList = [];
-    dataList = [];
-    depthList = [];
-    return finalString;
-}
-
-/**
- *
- * Check if a list is containing a specific element. Used for depth and date to prevent duplicates
- *
- * @param element
  * @param list
- * @return {boolean}
  */
-function isInList(element,list){
-
-    var add = true;
-
-    for (var i = 0; i < list.length; i++) {
-        if (element.substring(element.indexOf(":") + 1) + "m" === list[i] && element.indexOf("depth") !== -1) {
-            add = false;
-        } else if((element.substring(list[i].indexOf(":") + 1) + ".").slice(0,-1) === list[i] && element.indexOf("depth") == -1) {
-            add = false;
-        }
-    }
-    return add;
-
-}
-
 function addToAverage(list) {
 
     var date = "";
@@ -557,10 +495,54 @@ function addToAverage(list) {
         }
     }
 
-    return buildString2();
+    return buildStringAverage();
 }
 
-function buildString2() {
+/**
+ *
+ * Takes information from the different lists, and put them together to make the final string.
+ *
+ * @return {string}
+ */
+
+function buildString() {
+
+    var finalString = "";
+
+
+
+    for(var i=0;i<dateList.length+1;i++){
+
+        if (i == 0)
+            finalString += "Tid\tNr\t";
+        else if(i == (dataList.length - 1 ))
+            finalString += dateList[i] + "\t" + (i) + "\t";
+        else
+            finalString += dateList[i-1] + "\t" + (i) + "\t";
+
+        for(var j=(i*depthList.length);j<(depthList.length + i*depthList.length);j++) {
+
+            if(i == 0)
+                finalString += depthList[j] + "\t";
+            else{
+                if(dataList[j-depthList.length] === undefined)
+                    finalString += "-\t";
+                else
+                    finalString += dataList[j-depthList.length] + "\t";
+            }
+
+
+        }
+        finalString += "\n";
+    }
+    //list = "";
+    dateList = [];
+    dataList = [];
+    depthList = [];
+    return finalString;
+}
+
+function buildStringAverage() {
 
     var finalString = "";
 
@@ -584,11 +566,34 @@ function buildString2() {
         }
         finalString += "\n";
     }
-    //list = "";
     dateList = [];
     dataList = [];
     depthList = [];
     return finalString;
+}
+
+
+/**
+ *
+ * Check if a list is containing a specific element. Used for depth and date to prevent duplicates
+ *
+ * @param element
+ * @param list
+ * @return {boolean}
+ */
+function isInList(element,list){
+
+    var add = true;
+
+    for (var i = 0; i < list.length; i++) {
+        if (element.substring(element.indexOf(":") + 1) + "m" === list[i] && element.indexOf("depth") !== -1) {
+            add = false;
+        } else if((element.substring(list[i].indexOf(":") + 1) + ".").slice(0,-1) === list[i] && element.indexOf("depth") == -1) {
+            add = false;
+        }
+    }
+    return add;
+
 }
 
 module.exports = router;
