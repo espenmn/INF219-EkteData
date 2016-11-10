@@ -7,6 +7,12 @@ var assert = require('assert');
 
 var stringify = require('json-stable-stringify');
 
+/**
+ * @req variables chosen in queries.jade and fixed in choicesActions
+ * @res TODO
+ * @next TODO
+ * Query that retrieves all Data when "All Data" is chosen in queries.jade
+ */
 router.get('/allData', function (req, res, next) {
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
@@ -71,7 +77,12 @@ router.get('/allData', function (req, res, next) {
 
 });
 
-
+/**
+ * @req variables chosen in queries.jade and fixed in choicesActions
+ * @res TODO
+ * @next TODO
+ * Query that retrieves Vertial Average of All Data when "All Data" and "Vertikalt Snitt" are chosen in queries.jade
+ */
 router.get('/allDataVerticalAverage', function (req, res, next) {
     var parameter = req.query.parameter;
     var dataType = req.query.dataType;
@@ -133,6 +144,12 @@ router.get('/allDataVerticalAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req TODO
+ * @res TODO
+ * @next TODO
+ * Queries the server for monthly average for chosen depths
+ */
 router.get('/monthlyAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -190,6 +207,12 @@ router.get('/monthlyAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req variables chosen in queries.jade and fixed in choicesActions
+ * @res TODO
+ * @next TODO
+ * Query that retrieves Vertial Average on monthly basis when "Gjennomsnitt måned" and "Vertikalt Snitt" are chosen in queries.jade
+ */
 router.get('/monthlyAverageVerticalAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -244,6 +267,12 @@ router.get('/monthlyAverageVerticalAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req TODO
+ * @res TODO
+ * @next TODO
+ * Queries the server for daily average for chosen depths
+ */
 router.get('/24hourAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -304,6 +333,12 @@ router.get('/24hourAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req variables chosen in queries.jade and fixed in choicesActions
+ * @res TODO
+ * @next TODO
+ * Query that retrieves Vertial Average on daily basis when "Gjennomsnitt døgn" "Vertikalt Snitt" are chosen in queries.jade
+ */
 router.get('/24hourAverageVerticalAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -361,6 +396,12 @@ router.get('/24hourAverageVerticalAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req TODO
+ * @res TODO
+ * @next TODO
+ * Queries the server for weekly average for chosen depths
+ */
 router.get('/weeklyAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -418,6 +459,12 @@ router.get('/weeklyAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req variables chosen in queries.jade and fixed in choicesActions
+ * @res TODO
+ * @next TODO
+ * Query that retrieves Vertial Average on weekly basis when "Gjennomsnitt uke" and"Vertikalt Snitt" are chosen in queries.jade
+ */
 router.get('/weeklyAverageVerticalAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -472,6 +519,12 @@ router.get('/weeklyAverageVerticalAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req TODO
+ * @res TODO
+ * @next TODO
+ * Queries the server for yearly average for chosen depths
+ */
 router.get('/yearlyAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -519,6 +572,12 @@ router.get('/yearlyAverage', function (req, res, next) {
 
 });
 
+/**
+ * @req variables chosen in queries.jade and fixed in choicesActions
+ * @res TODO
+ * @next TODO
+ * Query that retrieves Vertial Average on yearly basis when "Gjennomsnitt år" and "Vertikalt Snitt" are chosen in queries.jade
+ */
 router.get('/yearlyAverageVerticalAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
