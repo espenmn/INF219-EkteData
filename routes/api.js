@@ -27,6 +27,70 @@ router.get('/allData', function (req, res, next) {
                     }
                 }
             },
+            {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {$unwind: "$timeseries"}, {$match: {"timeseries.pressure(dBAR)": {$gte: depthFrom, $lte: depthTo}}},
+            {
+                $group: {
+                    _id: {
+                        year: {$year: "$startdatetime"},
+                        month: {$month: "$startdatetime"},
+                        day: {$dayOfMonth: "$startdatetime"},
+                        hour: {$hour: "$startdatetime"},
+                        depth: "$timeseries.pressure(dBAR)",
+                        value: "$" + parameter
+                    },
+                }
+            }, {
+                $sort: {
+                    '_id.year': 1,
+                    '_id.month': 1,
+                    '_id.day': 1,
+                    '_id.hour': 1,
+                    '_id.depth': 1
+                }
+            }, {$sort: {'_id.year': 1, '_id.month': 1, '_id.depth': 1}});
+
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+
+
+    MongoClient.connect(url, function (err, db) {
+        allValuesBetweenDatesForOneParameter(db, function () {
+            db.close();
+            res.send(removeElements(queryToBeSavedAsText));
+        })
+    });
+
+});
+
+router.get('/allDataVerticalAverage', function (req, res, next) {
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
+    intDepthFrom = Math.floor(depthFrom);
+    intDepthTo = Math.ceil(depthTo) - depthFrom + 1;
+    var queryToBeSavedAsText = "";
+
+    var allValuesBetweenDatesForOneParameter = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
             {$unwind: "$timeseries"},
             {
                 $group: {
@@ -125,6 +189,60 @@ router.get('/monthlyAverage', function (req, res, next) {
 
 });
 
+router.get('/monthlyVerticalAverage', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
+    var queryToBeSavedAsText = "";
+
+    var querySearchAverageMonthsBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+            {$unwind: "$timeseries"},
+            {
+                $group: {
+                    _id: {
+                        year: {$year: "$startdatetime"},
+                        month: {$month: "$startdatetime"},
+                    },
+                    average: {$avg: "$" + [parameter]}
+                }
+            }, {$sort: {'_id.year': 1, '_id.month': 1}}, {
+                $sort: {
+                    '_id.year': 1,
+                    '_id.month': 1,
+                }
+            });
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
+            db.close();
+            res.send(removeElements(queryToBeSavedAsText));
+        })
+    });
+
+});
+
 router.get('/24hourAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -162,6 +280,63 @@ router.get('/24hourAverage', function (req, res, next) {
                     '_id.month': 1,
                     '_id.day': 1,
                     '_id.depth': 1
+                }
+            });
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageDayBetweenDatesAndDepths(db, function () {
+            db.close();
+            res.send(removeElements(queryToBeSavedAsText));
+        })
+    });
+
+
+});
+
+router.get('/24hourVerticalAverage', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
+    var queryToBeSavedAsText = "";
+
+    var querySearchAverageDayBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+            {$unwind: "$timeseries"},
+            {
+                $group: {
+                    _id: {
+                        year: {$year: "$startdatetime"},
+                        month: {$month: "$startdatetime"},
+                        day: {$dayOfMonth: "$startdatetime"},
+                    },
+                    average: {$avg: "$" + [parameter]}
+                }
+            }, {$sort: {'_id.year': 1, '_id.month': 1, '_id.day': 1}}, {
+                $sort: {
+                    '_id.year': 1,
+                    '_id.month': 1,
+                    '_id.day': 1,
                 }
             });
         cursor.each(function (err, doc) {
@@ -242,6 +417,60 @@ router.get('/weeklyAverage', function (req, res, next) {
 
 });
 
+router.get('/weeklyVerticalAverage', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
+    var queryToBeSavedAsText = "";
+
+    var querySearchAverageWeekBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+            {$unwind: "$timeseries"},
+            {
+                $group: {
+                    _id: {
+                        year: {$year: "$startdatetime"},
+                        week: {$week: "$startdatetime"},
+                    },
+                    average: {$avg: "$" + [parameter]}
+                }
+            }, {$sort: {'_id.year': 1, '_id.week': 1}}, {
+                $sort: {
+                    '_id.year': 1,
+                    '_id.week': 1,
+                }
+            });
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageWeekBetweenDatesAndDepths(db, function () {
+            db.close();
+            res.send(removeElements(queryToBeSavedAsText));
+        })
+    });
+
+});
+
 router.get('/yearlyAverage', function (req, res, next) {
 
     var parameter = req.query.parameter;
@@ -270,6 +499,53 @@ router.get('/yearlyAverage', function (req, res, next) {
                 }
             },
             {$sort: {'_id.year': 1, '_id.depth': 1}}, {$sort: {'_id.year': 1, '_id.depth': 1}});
+        cursor.each(function (err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                queryToBeSavedAsText += stringify(doc, {pretty: true, space: 1})
+            } else {
+                callback();
+            }
+        })
+    };
+
+    MongoClient.connect(url, function (err, db) {
+        querySearchAverageYearBetweenDatesAndDepths(db, function () {
+            db.close();
+            res.send(removeElements(queryToBeSavedAsText));
+        })
+    });
+
+});
+
+router.get('/yearlyVerticalAverage', function (req, res, next) {
+
+    var parameter = req.query.parameter;
+    var dataType = req.query.dataType;
+    var fromDate = req.query.fromDate;
+    var toDate = req.query.toDate;
+    var depthFrom = parseFloat(req.query.depthFrom);
+    var depthTo = parseFloat(req.query.depthTo);
+    var queryToBeSavedAsText = "";
+
+    var querySearchAverageYearBetweenDatesAndDepths = function (db, callback) {
+        var cursor = db.collection('diveinterpolated').aggregate({
+                $match: {
+                    "startdatetime": {
+                        $gte: new Date([fromDate]),
+                        $lte: new Date([toDate])
+                    }
+                }
+            },
+
+            {$unwind: "$timeseries"},
+            {
+                $group: {
+                    _id: {year: {$year: "$startdatetime"}},
+                    average: {$avg: "$" + [parameter]}
+                }
+            },
+            {$sort: {'_id.year': 1, '_id.depth': 1}}, {$sort: {'_id.year': 1}});
         cursor.each(function (err, doc) {
             assert.equal(err, null);
             if (doc != null) {
