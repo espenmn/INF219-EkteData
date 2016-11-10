@@ -388,15 +388,10 @@ function convertToQueryFormat(list) {
     list[3] = formatDate(list[3]);
 
 
-    if (list[4] === 'allDepths') {
+    if (list[4] === 'allDepths' || list[4] === 'VerticalAverage') {
         list[5] = "0.5";
         list[6] = "18.5";
     }
-
-    if (list[4] === 'oneDepth') {
-        list[6] = list[5];
-    }
-
 
     return list;
 }
@@ -404,7 +399,29 @@ function convertToQueryFormat(list) {
 function runQuery(req) {
     var hostLink = 'http://localhost:3000';
     //var hostLink = 'http://ektedata.herokuapp.com';
-    $.get(hostLink + '/api/' + req[1], {parameter:req[0],dataType:req[1],fromDate:req[2],toDate:req[3],depthFrom:req[5],depthTo:req[6]}, function (res) {
-        getStringFromBackEnd(res);
-    });
+    if(req[4]==='VerticalAverage') {
+        $.get(hostLink + '/api/' + req[1] + req[4], {
+            parameter: req[0],
+            dataType: req[1],
+            fromDate: req[2],
+            toDate: req[3],
+            depthFrom: req[5],
+            depthTo: req[6]
+        }, function (res) {
+            getStringFromBackEnd(res);
+        });
+    }
+
+    else {
+        $.get(hostLink + '/api/' + req[1], {
+            parameter: req[0],
+            dataType: req[1],
+            fromDate: req[2],
+            toDate: req[3],
+            depthFrom: req[5],
+            depthTo: req[6]
+        }, function (res) {
+            getStringFromBackEnd(res);
+        });
+    }
 }
