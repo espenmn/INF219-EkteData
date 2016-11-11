@@ -890,8 +890,6 @@ function buildStringAverage(parameterInput) {
 
         if (i == 0)
             finalString += "Tid\tNr\t" + parameterInput;
-        else if(i == (dataList.length - 1 ))
-            finalString += dateList[i] + "\t" + (i) + "\t";
         else
             finalString += dateList[i-1] + "\t" + (i) + "\t";
 
