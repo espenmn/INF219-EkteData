@@ -773,7 +773,7 @@ function addToList(list) {
         }
     }
 
-    return buildStringAverage();
+    return buildString();
 }
 
 /**
