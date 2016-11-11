@@ -662,8 +662,6 @@ function removeElements(input,parameter) {
         }
     }
 
-    console.log(list);
-
     if(containDepth)
         return addToList(list,parameterInput);
     else
@@ -896,9 +894,6 @@ function buildString(parameterInput) {
 function buildStringAverage(parameterInput) {
 
     var finalString = "";
-
-    console.log(dateList);
-    console.log(dataList);
 
     for(var i=0;i<dateList.length+1;i++){
 
