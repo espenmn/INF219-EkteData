@@ -633,8 +633,8 @@ var depthList = [];
  *
  * Remove unnecessary items from the string. Splits the string into an array
  *
- * @param input
- * @param parameter
+ * @param input from query
+ * @param parameter from user
  */
 
 function removeElements(input,parameter) {
@@ -672,13 +672,15 @@ function removeElements(input,parameter) {
 }
 
 
-
 /**
  *
  * Take information from a list, and split it into more lists according to value type
  *
  * @param list
+ * @param parameterInput from user
+ * @return {string}
  */
+
 function addToList(list,parameterInput) {
 
     var date = "";
@@ -778,9 +780,12 @@ function addToList(list,parameterInput) {
 }
 
 /**
- * Add values from vertical average into lists
+ *
+ * Add values from vertical average into lists.
  *
  * @param list
+ * @param parameterInput from user
+ * @return {string}
  */
 function addToAverage(list,parameterInput) {
 
@@ -838,8 +843,9 @@ function addToAverage(list,parameterInput) {
 /**
  *
  * Takes information from the different lists, and put them together to make the final string.
+ * This is only used when the there is a depth
  *
- * @return {string}
+ * @return {string} String to save in text file
  */
 
 function buildString(parameterInput) {
@@ -872,12 +878,20 @@ function buildString(parameterInput) {
         }
         finalString += "\n";
     }
-    //list = "";
     dateList = [];
     dataList = [];
     depthList = [];
     return finalString;
 }
+
+/**
+ *
+ * Takes information from the different lists, and put them together to make the final string.
+ * This is only used if there is no depth.
+ *
+ * @param parameterInput from user
+ * @return {string}
+ */
 
 function buildStringAverage(parameterInput) {
 
@@ -931,6 +945,13 @@ function isInList(element,list){
 
 }
 
+/**
+ *
+ * Converts the input from the jade file to a norwegian output
+ *
+ * @param parameter from the jade file
+ * @return {*} The norwegian word
+ */
 function rewriteParameter(parameter) {
 
     switch (parameter){
