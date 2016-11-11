@@ -942,7 +942,7 @@ function rewriteParameter(parameter) {
             return "Salt";
         case "timeseries.turbidity":
             return "Turbiditet";
-        case "timeseries.fluorescent":
+        case "timeseries.fluorescens":
             return "Fluorescens";
         case "airtemp":
             return "Lufttemperatur";
