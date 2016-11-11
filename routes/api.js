@@ -944,7 +944,7 @@ function rewriteParameter(parameter) {
             return "Turbiditet";
         case "timeseries.fluorescent":
             return "Fluorescens";
-        case "airTemp":
+        case "airtemp":
             return "Lufttemperatur";
     }
 
