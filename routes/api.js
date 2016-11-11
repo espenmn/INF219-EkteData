@@ -71,7 +71,7 @@ router.get('/allData', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         allValuesBetweenDatesForOneParameter(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -138,7 +138,7 @@ router.get('/allDataVerticalAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         allValuesBetweenDatesForOneParameter(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -201,7 +201,7 @@ router.get('/monthlyAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -261,7 +261,7 @@ router.get('/monthlyAverageVerticalAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageMonthsBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -326,7 +326,7 @@ router.get('/24hourAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageDayBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -389,7 +389,7 @@ router.get('/24hourAverageVerticalAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageDayBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -453,7 +453,7 @@ router.get('/weeklyAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageWeekBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -513,7 +513,7 @@ router.get('/weeklyAverageVerticalAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageWeekBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -566,7 +566,7 @@ router.get('/yearlyAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageYearBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -619,7 +619,7 @@ router.get('/yearlyAverageVerticalAverage', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         querySearchAverageYearBetweenDatesAndDepths(db, function () {
             db.close();
-            res.send(removeElements(queryToBeSavedAsText));
+            res.send(removeElements(queryToBeSavedAsText,parameter));
         })
     });
 
@@ -629,19 +629,20 @@ var dateList = [];
 var dataList = [];
 var depthList = [];
 
-var parameter = "";
-
 /**
  *
  * Remove unnecessary items from the string. Splits the string into an array
  *
  * @param input
+ * @param parameter
  */
 
-function removeElements(input) {
+function removeElements(input,parameter) {
 
     var list;
     var containDepth = false;
+
+    var parameterInput = rewriteParameter(parameter);
 
     input = input.replace(/\s/g, "");
     input = input.replace(/{/g, "");
@@ -664,9 +665,9 @@ function removeElements(input) {
     console.log(list);
 
     if(containDepth)
-        return addToList(list);
+        return addToList(list,parameterInput);
     else
-        return addToAverage(list);
+        return addToAverage(list,parameterInput);
 
 }
 
@@ -678,7 +679,7 @@ function removeElements(input) {
  *
  * @param list
  */
-function addToList(list) {
+function addToList(list,parameterInput) {
 
     var date = "";
     var expectedDepth;
@@ -773,7 +774,7 @@ function addToList(list) {
         }
     }
 
-    return buildString();
+    return buildString(parameterInput);
 }
 
 /**
@@ -781,7 +782,7 @@ function addToList(list) {
  *
  * @param list
  */
-function addToAverage(list) {
+function addToAverage(list,parameterInput) {
 
     var date = "";
     var hour = "";
@@ -831,7 +832,7 @@ function addToAverage(list) {
         }
     }
 
-    return buildStringAverage();
+    return buildStringAverage(parameterInput);
 }
 
 /**
@@ -841,7 +842,7 @@ function addToAverage(list) {
  * @return {string}
  */
 
-function buildString() {
+function buildString(parameterInput) {
 
     var finalString = "";
 
@@ -859,7 +860,7 @@ function buildString() {
         for(var j=(i*depthList.length);j<(depthList.length + i*depthList.length);j++) {
 
             if(i == 0)
-                finalString += depthList[j] + "\t";
+                finalString += parameterInput +": "+ depthList[j] + "\t";
             else{
                 if(dataList[j-depthList.length] === undefined)
                     finalString += "-\t";
@@ -878,7 +879,7 @@ function buildString() {
     return finalString;
 }
 
-function buildStringAverage() {
+function buildStringAverage(parameterInput) {
 
     var finalString = "";
 
@@ -888,7 +889,7 @@ function buildStringAverage() {
     for(var i=0;i<dateList.length+1;i++){
 
         if (i == 0)
-            finalString += "Tid\tNr\t";
+            finalString += "Tid\tNr\t" + parameterInput;
         else if(i == (dataList.length - 1 ))
             finalString += dateList[i] + "\t" + (i) + "\t";
         else
@@ -929,6 +930,25 @@ function isInList(element,list){
         }
     }
     return add;
+
+}
+
+function rewriteParameter(parameter) {
+
+    switch (parameter){
+        case "timeseries.temp":
+            return "Temperatur";
+        case "timeseries.oxygene":
+            return "Oksygen";
+        case "timeseries.salt":
+            return "Salt";
+        case "timeseries.turbidity":
+            return "Turbiditet";
+        case "timeseries.fluorescent":
+            return "Fluorescens";
+        case "airTemp":
+            return "Lufttemperatur";
+    }
 
 }
 
