@@ -20,8 +20,7 @@ append body
             .section
                 .select
                     select(id="parameterDropDown", name="parameter")
-                        option(value="" disabled=true ) Parameter
-                        option(value="timeseries.temp" selected=true) Temperatur
+                        option(value="timeseries.temp") Temperatur
                         option(value="timeseries.oxygene") Oksygen
                         option(value="timeseries.salt") Salt
                         option(value="timeseries.turbidity") Turbiditet
@@ -30,8 +29,7 @@ append body
                     span.caret
                 .select
                     select(id="howMuchDataDropDown" name="howMuchDataDropDown")
-                        option(value="" disabled=true) How much data
-                        option(value="allData" selected=true) All data
+                        option(value="allData") Alle målinger
                         option(value="24hourAverage") Gjennomsnitt døgn
                         option(value="weeklyAverage") Gjennomsnitt uke
                         option(value="monthlyAverage") Gennomsnitt måned
@@ -39,23 +37,22 @@ append body
                     span.caret
             .select
                 select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
-                    option(value="" disabled=true) Dybdetype
-                    option(value="allDepths" selected=true) Alle dybder
-                    option(value="VerticalAverage") Vertikalt snitt
+                    option(value="allDepths") Alle dybder
+                    option(value="VerticalAverage") Vertikalt gjennomsnitt
                     option(value="depthBetween") Dybde mellom
                 span.caret
             .select
                 select(id="depthFrom", name="depthFrom" disabled=true)
                     option(value="" disabled=true selected=true) Dybde fra
                     -for(var i = 0.5;i<19;i++){
-                    option(value="#{i}") #{i}
+                    option(value="#{i}") #{i}m
                     -}
                 span.caret
             .select
                 select(id="depthTo", name="depthTo" disabled=true)
                     option(value="" disabled=true selected=true) Dybde til
                     -for(var i = 0.5;i<19;i++){
-                    option(value="#{i}") #{i}
+                    option(value="#{i}") #{i}m
                     -}
                 span.caret
 
@@ -69,11 +66,8 @@ append body
                     | Last ned
                 button.btn.btn-default(type="default" id="clipboardButton" onclick='copyButtonHit();')
                     +icon("copy")
-                    | Kopier
+                    | Kopier til utklippstavle
             script.
-                fromDate.value = "12/01/08/16";
-                toDate.value = "12/02/08/16";
-
                 var queryString = "";
                 function getStringFromBackEnd(stringIn) {
                     queryString = stringIn;
