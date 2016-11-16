@@ -64,43 +64,21 @@ function getDataFromTextFields() {
 function validateInput(dataList) {
     //To/From date tests
     var dateType = "";
-    var dayAverage = /^(0[1-9]|1[0-9]|2[0-4])[/](0[1-9]|[1-2][0-9]|3[0-1])[/](0[0-9]|1[0-2])[/]([1-9][0-9])$/;
-    var monthAverage = /^(0[0-9]|1[0-2])[/]([1-9][0-9])$/;
+    var dayAverage = /^(0[1-9]|1[0-9]|2[0-4])[-](0[1-9]|[1-2][0-9]|3[0-1])[-](0[0-9]|1[0-2])[-]([1-9][0-9])$/;
+    var monthAverage = /^(0[0-9]|1[0-2])[-]([1-9][0-9])$/;
     var yearAverage = /^([1-9][0-9])$/;
-    var absoluteStartDate = "15/12/05/15";
+    var absoluteStartDate = "15-12-05-15";
 
-    if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
-        if (!dayAverage.test(dataList[2])) {
-            printError("Invalid date", "The field must contain: HH/DD/MM/YY");
-            return false;
-        }
-        if (!dayAverage.test(dataList[3])) {
-            printError("Invalid date", "The field must contain: HH/DD/MM/YY");
-            return false;
-        }
+     if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
         dateType = 'day';
     }
     else if (dataList[1] === 'monthlyAverage') {
-        if (!monthAverage.test(dataList[2])) {
-            printError("Invalid date", "The field must contain: MM/YY");
-            return false;
-        }
-        if (!monthAverage.test(dataList[3])) {
-            printError("Invalid date", "The field must contain: MM/YY");
-            return false;
-        }
+
         dateType = 'month';
-        absoluteStartDate = "05/15";
+        absoluteStartDate = "05-15";
     }
     else if (dataList[1] === 'yearlyAverage') {
-        if (!yearAverage.test(dataList[2])) {
-            printError("Invalid date", "The field must contain: YY");
-            return false;
-        }
-        if (!yearAverage.test(dataList[3])) {
-            printError("Invalid date", "The field must contain: YY");
-            return false;
-        }
+
         dateType = 'year';
         absoluteStartDate = "15";
     } else {
@@ -133,7 +111,6 @@ function validateInput(dataList) {
             printError("Invalid depths", " the start depth cannot be a higher value than the end depth");
             return false;
         }
-
     }
     return true;
 }
@@ -176,13 +153,13 @@ function getCurrentDate(dateType) {
         mm = '0' + mm
     }
     if(dateType == "month") {
-        today = (mm + "/" + yy);
+        today = (mm + "-" + yy);
     }
     else if (dateType == "year") {
         today = (yy);
     }
     else
-        today = (hh + "/" + dd + "/" + mm + "/" + yy);
+        today = (hh + "-" + dd + "-" + mm + "-" + yy);
     return today;
 
 }
@@ -197,8 +174,8 @@ function getCurrentDate(dateType) {
  * @returns {boolean}
  */
 function checkDate1BeforeDate2(date1, date2, dateType) {
-    var list1 = date1.split("/");
-    var list2 = date2.split("/");
+    var list1 = date1.split("-");
+    var list2 = date2.split("-");
     var listPosOfMonth = "";
     var listPosOfYear = "";
 
