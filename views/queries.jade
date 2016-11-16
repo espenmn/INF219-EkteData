@@ -27,9 +27,8 @@ append body
             .section
                 .sectionInput
                     +input("text", "fromDate", "HH/DD/MM/YY", "Startdato", "startdato")
-                    //input(type='text', name='startdato', value='01/01/2015 - 01/31/2015')
                 .sectionInput
-                    +input("date", "toDate", "HH/DD/MM/YY", "Sluttdato")
+                    +input("text", "toDate", "HH/DD/MM/YY", "Sluttdato", "sluttdato")
             .select
                 select(id="fromHour", name="fromHour")
                     option(value="" disabled=true selected=true) Starttid
@@ -123,12 +122,12 @@ append body
                     clipboard.copy(queryString);
                 }
 
-                $('input[name="startdato"]').daterangepicker({
+                $('input[id="fromDate"]').daterangepicker({
                     "singleDatePicker": true,
-                    "timePicker": true,
-                    "timePicker24Hour": true,
+                    "timePicker": false,
+                    "timePicker24Hour": false,
                     "locale": {
-                        "format": "MM/DD/YYYY",
+                        "format": "DD/MM/YYYY",
                         "separator": " / ",
                         "applyLabel": "OK",
                         "cancelLabel": "Avbryt",
@@ -161,9 +160,49 @@ append body
                         ],
                         "firstDay": 1
                     },
-                    "startDate": "11/19/2016",
-                    "endDate": "11/16/2016"
                 }, function (start, end, label) {
-                    showError("test", "Kjør: " + $(this).val(start.startDate.format('MM/DD/YYYY')));
+                    console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+                });
+
+
+                $('input[id="toDate"]').daterangepicker({
+                    "singleDatePicker": true,
+                    "timePicker": false,
+                    "timePicker24Hour": false,
+                    "locale": {
+                        "format": "DD/MM/YYYY",
+                        "separator": " / ",
+                        "applyLabel": "OK",
+                        "cancelLabel": "Avbryt",
+                        "fromLabel": "Fra",
+                        "toLabel": "Til",
+                        "customRangeLabel": "Custom",
+                        "weekLabel": "UkeNr",
+                        "daysOfWeek": [
+                            "Søn",
+                            "Man",
+                            "Tir",
+                            "Ons",
+                            "Tor",
+                            "Fre",
+                            "Lør"
+                        ],
+                        "monthNames": [
+                            "Januar",
+                            "Februar",
+                            "Mars",
+                            "April",
+                            "Mai",
+                            "Juni",
+                            "Juli",
+                            "August",
+                            "September",
+                            "Oktober",
+                            "November",
+                            "Desember"
+                        ],
+                        "firstDay": 1
+                    },
+                }, function (start, end, label) {
                     console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
                 });
