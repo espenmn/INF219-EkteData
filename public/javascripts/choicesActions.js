@@ -1,4 +1,4 @@
-var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate", "depthDropDown", "depthFrom", "depthTo"];
+var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate", "depthDropDown", "depthFrom", "depthTo", "fromHour", "toHour"];
 /**
  *
  * This function will change the availability of the selection boxes.
@@ -35,6 +35,21 @@ function getDataFromTextFields() {
     for (var i = 0; i < dataTypes.length; i++) {
         dataToQuery[i] = document.getElementById(dataTypes[i]).value;
     }
+
+    var split = dataToQuery[2].split("-");
+    dataToQuery[2] = "";
+
+    var split2 = dataToQuery[3].split("-");
+    dataToQuery[3] = "";
+
+    for(var j = split.length;j>0;j--) {
+        dataToQuery[2] += split[i];
+        dataToQuery[3] += split2[i];
+    }
+
+    dataToQuery[2] = dataToQuery[7] + dataToQuery[2];
+    dataToQuery[3] = dataToQuery[8] + dataToQuery[3];
+
     return dataToQuery;
 
 }
@@ -133,40 +148,10 @@ function validateInput(dataList) {
  */
 function formatDate(date,type) {
 
-    var list = date.split("/");
+    var list = date.split("-");
     var formattedDate;
 
-    if(type) {
-        switch (list.length) {
-            case 1:
-                formattedDate = "20" + list[0] + "-01-01T00:00:00Z";
-                break;
-            case 2:
-                formattedDate = "20" + list[1] + "-" + list[0] + "-01T00:00:00Z";
-                break;
-            case 3:
-                formattedDate = 20 + list[2] + "-" + list[1] + "-" + list[0] + "T00:00:00Z";
-                break;
-            case 4:
-                formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
-                break;
-        }
-    } else {
-        switch (list.length) {
-            case 1:
-                formattedDate = "20" + list[0] + "-12-31T23:59:59Z";
-                break;
-            case 2:
-                formattedDate = "20" + list[1] + "-" + list[0] + "-31T23:59:59Z";
-                break;
-            case 3:
-                formattedDate = 20 + list[2] + "-" + list[1] + "-" + list[0] + "T23:59:59Z";
-                break;
-            case 4:
-                formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
-                break;
-        }
-    }
+    formattedDate = list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
 
     return formattedDate;
 }
@@ -344,7 +329,6 @@ function acceptButtonHit() {
     if (valid) {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
-        //getQueryValues(dataToQuery[0],dataToQuery[1],dataToQuery[2],dataToQuery[3],dataToQuery[5],dataToQuery[6]);
         runQuery(dataToQuery);
     }
 }
@@ -425,3 +409,4 @@ function runQuery(req) {
         });
     }
 }
+
