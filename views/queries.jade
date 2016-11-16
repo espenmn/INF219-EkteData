@@ -5,6 +5,14 @@ append body
     script(type='text/javascript' src='/javascripts/choicesActions.js')
     script(type='text/javascript' src='/javascripts/file-saver/FileSaver.js')
     script(type='text/javascript' src='/javascripts/clipboard-js/clipboard.js')
+
+    script(type='text/javascript' src='//cdn.jsdelivr.net/jquery/1/jquery.min.js')
+    script(type='text/javascript' src='//cdn.jsdelivr.net/momentjs/latest/moment.min.js')
+    link(rel="stylesheet" href='//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css')
+
+    script(type='text/javascript' src='//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js')
+    link(rel="stylesheet" href='//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css')
+
     .starter-template
         .container
             h1 Ekte data
@@ -14,27 +22,40 @@ append body
                 | Fyll deretter ut ønsket filnavn, og trykk på Last ned
             .section
                 .sectionInput
-                    +input("text", "fromDate", "HH/DD/MM/YY", "Startdato")
+                    +input("text", "fromDate", "HH/DD/MM/YY", "Startdato", "startdato")
                 .sectionInput
-                    +input("text", "toDate", "HH/DD/MM/YY", "Sluttdato")
-            .section
-                .select
-                    select(id="parameterDropDown", name="parameter")
-                        option(value="timeseries.temp") Temperatur
-                        option(value="timeseries.oxygene") Oksygen
-                        option(value="timeseries.salt") Salt
-                        option(value="timeseries.turbidity") Turbiditet
-                        option(value="timeseries.fluorescens") Fluorescens
-                        option(value="airtemp") Lufttemperatur
-                    span.caret
-                .select
-                    select(id="howMuchDataDropDown" name="howMuchDataDropDown")
-                        option(value="allData") Alle målinger
-                        option(value="24hourAverage") Gjennomsnitt døgn
-                        option(value="weeklyAverage") Gjennomsnitt uke
-                        option(value="monthlyAverage") Gennomsnitt måned
-                        option(value="yearlyAverage") Gjennomsnitt år
-                    span.caret
+                    +input("text", "toDate", "HH/DD/MM/YY", "Sluttdato", "sluttdato")
+            .select
+                select(id="fromHour", name="fromHour")
+                    option(value="" disabled=true selected=true) Starttid
+                    -for(var i = 0;i<23;i++){
+                    option(value="#{i}") #{i}:00
+                    -}
+                span.caret
+            .select
+                select(id="toHour", name="toHour")
+                    option(value="" disabled=true selected=true) Sluttid
+                    -for(var i = 0;i<23;i++){
+                    option(value="#{i}") #{i}:00
+                    -}
+                span.caret
+            .select
+                select(id="parameterDropDown", name="parameter")
+                    option(value="timeseries.temp") Temperatur
+                    option(value="timeseries.oxygene") Oksygen
+                    option(value="timeseries.salt") Salt
+                    option(value="timeseries.turbidity") Turbiditet
+                    option(value="timeseries.fluorescens") Fluorescens
+                    option(value="airtemp") Lufttemperatur
+                span.caret
+            .select
+                select(id="howMuchDataDropDown" name="howMuchDataDropDown")
+                    option(value="allData") Alle målinger
+                    option(value="24hourAverage") Gjennomsnitt døgn
+                    option(value="weeklyAverage") Gjennomsnitt uke
+                    option(value="monthlyAverage") Gennomsnitt måned
+                    option(value="yearlyAverage") Gjennomsnitt år
+                span.caret
             .select
                 select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
                     option(value="allDepths") Alle dybder
@@ -56,7 +77,7 @@ append body
                     -}
                 span.caret
 
-            button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton" data-toggle="modal" data-target="#downloadModal")
+            button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton")
                 +icon("ok")
                 | OK
             +modal("Last ned fil", "downloadModal")
@@ -67,10 +88,23 @@ append body
                 button.btn.btn-default(type="default" id="clipboardButton" onclick='copyButtonHit();')
                     +icon("copy")
                     | Kopier til utklippstavle
+
+            +modal("Test", "errorModal")
+                p Test
             script.
                 var queryString = "";
                 function getStringFromBackEnd(stringIn) {
                     queryString = stringIn;
+                    $('#downloadModal').modal('show');
+                }
+
+                function showError(title, error) {
+                    $('#errorModal').on('show.bs.modal', function (event) {
+                        var modal = $(this);
+                        modal.find('.modal-title').text(title);
+                        modal.find('.modal-body').text(error);
+                    })
+                    $('#errorModal').modal('show');
                 }
 
                 function saveFileHit() {
@@ -84,3 +118,85 @@ append body
                     clipboard.copy(queryString);
                 }
 
+                $('input[id="fromDate"]').daterangepicker({
+                    "singleDatePicker": true,
+                    "timePicker": false,
+                    "timePicker24Hour": false,
+                    "locale": {
+                        "format": "DD/MM/YYYY",
+                        "separator": " / ",
+                        "applyLabel": "OK",
+                        "cancelLabel": "Avbryt",
+                        "fromLabel": "Fra",
+                        "toLabel": "Til",
+                        "customRangeLabel": "Custom",
+                        "weekLabel": "UkeNr",
+                        "daysOfWeek": [
+                            "Søn",
+                            "Man",
+                            "Tir",
+                            "Ons",
+                            "Tor",
+                            "Fre",
+                            "Lør"
+                        ],
+                        "monthNames": [
+                            "Januar",
+                            "Februar",
+                            "Mars",
+                            "April",
+                            "Mai",
+                            "Juni",
+                            "Juli",
+                            "August",
+                            "September",
+                            "Oktober",
+                            "November",
+                            "Desember"
+                        ],
+                        "firstDay": 1
+                    },
+                }, function (start, end, label) {
+                });
+
+
+                $('input[id="toDate"]').daterangepicker({
+                    "singleDatePicker": true,
+                    "timePicker": false,
+                    "timePicker24Hour": false,
+                    "locale": {
+                        "format": "DD/MM/YYYY",
+                        "separator": " / ",
+                        "applyLabel": "OK",
+                        "cancelLabel": "Avbryt",
+                        "fromLabel": "Fra",
+                        "toLabel": "Til",
+                        "customRangeLabel": "Custom",
+                        "weekLabel": "UkeNr",
+                        "daysOfWeek": [
+                            "Søn",
+                            "Man",
+                            "Tir",
+                            "Ons",
+                            "Tor",
+                            "Fre",
+                            "Lør"
+                        ],
+                        "monthNames": [
+                            "Januar",
+                            "Februar",
+                            "Mars",
+                            "April",
+                            "Mai",
+                            "Juni",
+                            "Juli",
+                            "August",
+                            "September",
+                            "Oktober",
+                            "November",
+                            "Desember"
+                        ],
+                        "firstDay": 1
+                    },
+                }, function (start, end, label) {
+                });

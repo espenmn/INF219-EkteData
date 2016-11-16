@@ -58,7 +58,7 @@ span.caret {
     border-top-color: #ccc;
 }
 
-#fromDate, #toDate, #fileNameIn {
+#fromDate, #toDate, #fileNameIn{
     width: 20rem;
     display: block;
 }
