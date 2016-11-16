@@ -14,27 +14,40 @@ append body
                 | Fyll deretter ut ønsket filnavn, og trykk på Last ned
             .section
                 .sectionInput
-                    +input("text", "fromDate", "HH/DD/MM/YY", "Startdato")
+                    +input("date", "fromDate", "HH/DD/MM/YY", "Startdato")
                 .sectionInput
-                    +input("text", "toDate", "HH/DD/MM/YY", "Sluttdato")
+                    +input("date", "toDate", "HH/DD/MM/YY", "Sluttdato")
             .section
-                .select
-                    select(id="parameterDropDown", name="parameter")
-                        option(value="timeseries.temp") Temperatur
-                        option(value="timeseries.oxygene") Oksygen
-                        option(value="timeseries.salt") Salt
-                        option(value="timeseries.turbidity") Turbiditet
-                        option(value="timeseries.fluorescens") Fluorescens
-                        option(value="airtemp") Lufttemperatur
-                    span.caret
-                .select
-                    select(id="howMuchDataDropDown" name="howMuchDataDropDown")
-                        option(value="allData") Alle målinger
-                        option(value="24hourAverage") Gjennomsnitt døgn
-                        option(value="weeklyAverage") Gjennomsnitt uke
-                        option(value="monthlyAverage") Gennomsnitt måned
-                        option(value="yearlyAverage") Gjennomsnitt år
-                    span.caret
+                select(id="fromHour", name="fromHour" disabled=true)
+                    option(value="" disabled=true selected=true) Starttid
+                    -for(var i = 0;i<23;i++){
+                    option(value="#{i}") #{i}:00
+                    -}
+                span.caret
+            .section
+                select(id="toHour", name="toHour" disabled=true)
+                    option(value="" disabled=true selected=true) Sluttid
+                    -for(var i = 0;i<23;i++){
+                    option(value="#{i}") #{i}:00
+                    -}
+                span.caret
+            .select
+                select(id="parameterDropDown", name="parameter")
+                    option(value="timeseries.temp") Temperatur
+                    option(value="timeseries.oxygene") Oksygen
+                    option(value="timeseries.salt") Salt
+                    option(value="timeseries.turbidity") Turbiditet
+                    option(value="timeseries.fluorescens") Fluorescens
+                    option(value="airtemp") Lufttemperatur
+                span.caret
+            .select
+                select(id="howMuchDataDropDown" name="howMuchDataDropDown")
+                    option(value="allData") Alle målinger
+                    option(value="24hourAverage") Gjennomsnitt døgn
+                    option(value="weeklyAverage") Gjennomsnitt uke
+                    option(value="monthlyAverage") Gennomsnitt måned
+                    option(value="yearlyAverage") Gjennomsnitt år
+                span.caret
             .select
                 select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
                     option(value="allDepths") Alle dybder
