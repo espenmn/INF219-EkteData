@@ -26,7 +26,7 @@ function changedBox(idFrom, idTo, idBox) {
 }
 
 /**
- * Take information from <form id=choices> and print them out on the screen.
+ * Take information from <form id=choices> and also adapt the time/date format to form hh-dd-mm-yy
  */
 function getDataFromTextFields() {
 
@@ -35,21 +35,20 @@ function getDataFromTextFields() {
     for (var i = 0; i < dataTypes.length; i++) {
         dataToQuery[i] = document.getElementById(dataTypes[i]).value;
     }
-
     var split = dataToQuery[2].split("-");
     dataToQuery[2] = "";
-
     var split2 = dataToQuery[3].split("-");
     dataToQuery[3] = "";
 
-    for(var j = split.length;j>0;j--) {
-        dataToQuery[2] += split[i];
-        dataToQuery[3] += split2[i];
+    for(var j = split.length-1;j>=0;j--) {
+        dataToQuery[2] += "-"+split[j];
+        dataToQuery[3] += "-"+split2[j];
     }
-
+    if (dataToQuery[7]<10) {
+        dataToQuery[7] = "0" + dataToQuery[7];
+    }
     dataToQuery[2] = dataToQuery[7] + dataToQuery[2];
     dataToQuery[3] = dataToQuery[8] + dataToQuery[3];
-
     return dataToQuery;
 
 }
@@ -64,29 +63,26 @@ function getDataFromTextFields() {
 function validateInput(dataList) {
     //To/From date tests
     var dateType = "";
-    var dayAverage = /^(0[1-9]|1[0-9]|2[0-4])[-](0[1-9]|[1-2][0-9]|3[0-1])[-](0[0-9]|1[0-2])[-]([1-9][0-9])$/;
-    var monthAverage = /^(0[0-9]|1[0-2])[-]([1-9][0-9])$/;
-    var yearAverage = /^([1-9][0-9])$/;
     var absoluteStartDate = "15-12-05-15";
-
      if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
         dateType = 'day';
     }
-    else if (dataList[1] === 'monthlyAverage') {
 
+    else if (dataList[1] === 'monthlyAverage') {
         dateType = 'month';
         absoluteStartDate = "05-15";
     }
-    else if (dataList[1] === 'yearlyAverage') {
 
+    else if (dataList[1] === 'yearlyAverage') {
         dateType = 'year';
         absoluteStartDate = "15";
-    } else {
+    }
+     else {
         printError("Invalid input", "You have to choose a time period");
         return false;
     }
 
-    //first date is after 15/12/05/15
+    //first date is after 15-12-05-15
     var legalFirstDate = checkDate1BeforeDate2(absoluteStartDate, dataList[2], dateType);
     //last date is before tha date today
     var legalSecondDate = checkDate1BeforeDate2(dataList[3], getCurrentDate(dateType), dateType);
@@ -98,7 +94,7 @@ function validateInput(dataList) {
             printError("Invalid date", "Not possible to place end-date earlier than start-date");
         }
         else if(!legalFirstDate){
-            printError("Invalid date", "No data available before 15/12/05/15");
+            printError("Invalid date", "No data available before 15-12-05-15");
         }
         else {
             printError("Invalid date", "End-date cannot be later than the current date");
@@ -144,7 +140,7 @@ function getCurrentDate(dateType) {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
-    var yy = today.getFullYear().toString().substr(2, 2);
+    var yy = today.getFullYear();
     var hh = today.getHours();
     if (dd < 10) {
         dd = '0' + dd
@@ -213,7 +209,7 @@ function checkDate1BeforeDate2(date1, date2, dateType) {
             }
         }
 
-        //check that date1 comes after date2:
+        //check that date1 comes before date2:
         if (list2[listPosOfYear] >= list1[listPosOfYear]) {
             if (list2[listPosOfYear] == list1[listPosOfYear]) {
                 if ((listPosOfMonth == 2 || listPosOfMonth == 0) && (list2[listPosOfMonth] >= list1[listPosOfMonth])) {
@@ -358,7 +354,7 @@ function convertToQueryFormat(list) {
 }
 
 function runQuery(req) {
-    //var hostLink = 'http://localhost:3000';
+   // var hostLink = 'http://localhost:3000';
     var hostLink = 'http://ektedata.herokuapp.com';
     if(req[4]==='VerticalAverage') {
         $.get(hostLink + '/api/' + req[1] + req[4], {
