@@ -31,14 +31,14 @@ append body
                 .sectionInput
                     +input("date", "toDate", "HH/DD/MM/YY", "Sluttdato")
             .select
-                select(id="fromHour", name="fromHour" disabled=false)
+                select(id="fromHour", name="fromHour")
                     option(value="" disabled=true selected=true) Starttid
                     -for(var i = 0;i<23;i++){
                     option(value="#{i}") #{i}:00
                     -}
                 span.caret
             .select
-                select(id="toHour", name="toHour" disabled=false)
+                select(id="toHour", name="toHour")
                     option(value="" disabled=true selected=true) Sluttid
                     -for(var i = 0;i<23;i++){
                     option(value="#{i}") #{i}:00

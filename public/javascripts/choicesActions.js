@@ -1,4 +1,4 @@
-var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate", "depthDropDown", "depthFrom", "depthTo"];
+var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate", "depthDropDown", "depthFrom", "depthTo", "fromHour", "toHour"];
 /**
  *
  * This function will change the availability of the selection boxes.
@@ -26,7 +26,7 @@ function changedBox(idFrom, idTo, idBox) {
 }
 
 /**
- * Take information from <form id=choices> and print them out on the screen.
+ * Take information from <form id=choices> and also adapt the time/date format to form hh-dd-mm-yy
  */
 function getDataFromTextFields() {
 
@@ -35,6 +35,20 @@ function getDataFromTextFields() {
     for (var i = 0; i < dataTypes.length; i++) {
         dataToQuery[i] = document.getElementById(dataTypes[i]).value;
     }
+    var split = dataToQuery[2].split("-");
+    dataToQuery[2] = "";
+    var split2 = dataToQuery[3].split("-");
+    dataToQuery[3] = "";
+
+    for(var j = split.length-1;j>=0;j--) {
+        dataToQuery[2] += "-"+split[j];
+        dataToQuery[3] += "-"+split2[j];
+    }
+    if (dataToQuery[7]<10) {
+        dataToQuery[7] = "0" + dataToQuery[7];
+    }
+    dataToQuery[2] = dataToQuery[7] + dataToQuery[2];
+    dataToQuery[3] = dataToQuery[8] + dataToQuery[3];
     return dataToQuery;
 
 }
@@ -49,51 +63,26 @@ function getDataFromTextFields() {
 function validateInput(dataList) {
     //To/From date tests
     var dateType = "";
-    var dayAverage = /^(0[1-9]|1[0-9]|2[0-4])[/](0[1-9]|[1-2][0-9]|3[0-1])[/](0[0-9]|1[0-2])[/]([1-9][0-9])$/;
-    var monthAverage = /^(0[0-9]|1[0-2])[/]([1-9][0-9])$/;
-    var yearAverage = /^([1-9][0-9])$/;
-    var absoluteStartDate = "15/12/05/15";
-
-    if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
-        if (!dayAverage.test(dataList[2])) {
-            showError("Invalid date", "The field must contain: HH/DD/MM/YY");
-            return false;
-        }
-        if (!dayAverage.test(dataList[3])) {
-            showError("Invalid date", "The field must contain: HH/DD/MM/YY");
-            return false;
-        }
+    var absoluteStartDate = "15-12-05-15";
+     if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
         dateType = 'day';
     }
+
     else if (dataList[1] === 'monthlyAverage') {
-        if (!monthAverage.test(dataList[2])) {
-            showError("Invalid date", "The field must contain: MM/YY");
-            return false;
-        }
-        if (!monthAverage.test(dataList[3])) {
-            showError("Invalid date", "The field must contain: MM/YY");
-            return false;
-        }
         dateType = 'month';
-        absoluteStartDate = "05/15";
+        absoluteStartDate = "05-15";
     }
+
     else if (dataList[1] === 'yearlyAverage') {
-        if (!yearAverage.test(dataList[2])) {
-            showError("Invalid date", "The field must contain: YY");
-            return false;
-        }
-        if (!yearAverage.test(dataList[3])) {
-            showError("Invalid date", "The field must contain: YY");
-            return false;
-        }
         dateType = 'year';
         absoluteStartDate = "15";
-    } else {
-        showError("Invalid input", "You have to choose a time period");
+    }
+     else {
+        printError("Invalid input", "You have to choose a time period");
         return false;
     }
 
-    //first date is after 15/12/05/15
+    //first date is after 15-12-05-15
     var legalFirstDate = checkDate1BeforeDate2(absoluteStartDate, dataList[2], dateType);
     //last date is before tha date today
     var legalSecondDate = checkDate1BeforeDate2(dataList[3], getCurrentDate(dateType), dateType);
@@ -118,7 +107,6 @@ function validateInput(dataList) {
             showError("Invalid depths", " the start depth cannot be a higher value than the end depth");
             return false;
         }
-
     }
     return true;
 }
@@ -133,40 +121,10 @@ function validateInput(dataList) {
  */
 function formatDate(date,type) {
 
-    var list = date.split("/");
+    var list = date.split("-");
     var formattedDate;
 
-    if(type) {
-        switch (list.length) {
-            case 1:
-                formattedDate = "20" + list[0] + "-01-01T00:00:00Z";
-                break;
-            case 2:
-                formattedDate = "20" + list[1] + "-" + list[0] + "-01T00:00:00Z";
-                break;
-            case 3:
-                formattedDate = 20 + list[2] + "-" + list[1] + "-" + list[0] + "T00:00:00Z";
-                break;
-            case 4:
-                formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
-                break;
-        }
-    } else {
-        switch (list.length) {
-            case 1:
-                formattedDate = "20" + list[0] + "-12-31T23:59:59Z";
-                break;
-            case 2:
-                formattedDate = "20" + list[1] + "-" + list[0] + "-31T23:59:59Z";
-                break;
-            case 3:
-                formattedDate = 20 + list[2] + "-" + list[1] + "-" + list[0] + "T23:59:59Z";
-                break;
-            case 4:
-                formattedDate = 20 + list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
-                break;
-        }
-    }
+    formattedDate = list[3] + "-" + list[2] + "-" + list[1] + "T" + list[0] + ":00:00Z";
 
     return formattedDate;
 }
@@ -182,7 +140,7 @@ function getCurrentDate(dateType) {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
-    var yy = today.getFullYear().toString().substr(2, 2);
+    var yy = today.getFullYear();
     var hh = today.getHours();
     if (dd < 10) {
         dd = '0' + dd
@@ -191,13 +149,13 @@ function getCurrentDate(dateType) {
         mm = '0' + mm
     }
     if(dateType == "month") {
-        today = (mm + "/" + yy);
+        today = (mm + "-" + yy);
     }
     else if (dateType == "year") {
         today = (yy);
     }
     else
-        today = (hh + "/" + dd + "/" + mm + "/" + yy);
+        today = (hh + "-" + dd + "-" + mm + "-" + yy);
     return today;
 
 }
@@ -212,8 +170,8 @@ function getCurrentDate(dateType) {
  * @returns {boolean}
  */
 function checkDate1BeforeDate2(date1, date2, dateType) {
-    var list1 = date1.split("/");
-    var list2 = date2.split("/");
+    var list1 = date1.split("-");
+    var list2 = date2.split("-");
     var listPosOfMonth = "";
     var listPosOfYear = "";
 
@@ -251,7 +209,7 @@ function checkDate1BeforeDate2(date1, date2, dateType) {
             }
         }
 
-        //check that date1 comes after date2:
+        //check that date1 comes before date2:
         if (list2[listPosOfYear] >= list1[listPosOfYear]) {
             if (list2[listPosOfYear] == list1[listPosOfYear]) {
                 if ((listPosOfMonth == 2 || listPosOfMonth == 0) && (list2[listPosOfMonth] >= list1[listPosOfMonth])) {
@@ -344,23 +302,10 @@ function acceptButtonHit() {
     if (valid) {
         dataToQuery = convertToQueryFormat(dataToQuery);
         outputTest(dataToQuery);
-        //getQueryValues(dataToQuery[0],dataToQuery[1],dataToQuery[2],dataToQuery[3],dataToQuery[5],dataToQuery[6]);
         runQuery(dataToQuery);
     }
 }
 
-/**
- *
- * This function is printing out error messages to the user.
- *
- * @param title
- * @param message
- */
-function showError(title, message) {
-
-    window.alert(title + ": " + message)
-
-}
 
 /**
  *
@@ -397,8 +342,8 @@ function convertToQueryFormat(list) {
 }
 
 function runQuery(req) {
-    var hostLink = 'http://localhost:3000';
-    //var hostLink = 'http://ektedata.herokuapp.com';
+    //var hostLink = 'http://localhost:3000';
+    var hostLink = 'http://ektedata.herokuapp.com';
     if(req[4]==='VerticalAverage') {
         $.get(hostLink + '/api/' + req[1] + req[4], {
             parameter: req[0],
