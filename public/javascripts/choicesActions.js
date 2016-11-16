@@ -412,6 +412,19 @@ function runQuery(req) {
         });
     }
 
+    else if(req[0]==="airtemp") {
+        $.get(hostLink + '/api/' + req[1] + "VerticalAverage", {
+            parameter: req[0],
+            dataType: req[1],
+            fromDate: req[2],
+            toDate: req[3],
+            depthFrom: req[5],
+            depthTo: req[6]
+        }, function (res) {
+            getStringFromBackEnd(res);
+        });
+    }
+
     else {
         $.get(hostLink + '/api/' + req[1], {
             parameter: req[0],
