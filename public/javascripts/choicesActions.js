@@ -56,22 +56,22 @@ function validateInput(dataList) {
 
     if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
         if (!dayAverage.test(dataList[2])) {
-            printError("Invalid date", "The field must contain: HH/DD/MM/YY");
+            showError("Invalid date", "The field must contain: HH/DD/MM/YY");
             return false;
         }
         if (!dayAverage.test(dataList[3])) {
-            printError("Invalid date", "The field must contain: HH/DD/MM/YY");
+            showError("Invalid date", "The field must contain: HH/DD/MM/YY");
             return false;
         }
         dateType = 'day';
     }
     else if (dataList[1] === 'monthlyAverage') {
         if (!monthAverage.test(dataList[2])) {
-            printError("Invalid date", "The field must contain: MM/YY");
+            showError("Invalid date", "The field must contain: MM/YY");
             return false;
         }
         if (!monthAverage.test(dataList[3])) {
-            printError("Invalid date", "The field must contain: MM/YY");
+            showError("Invalid date", "The field must contain: MM/YY");
             return false;
         }
         dateType = 'month';
@@ -79,17 +79,17 @@ function validateInput(dataList) {
     }
     else if (dataList[1] === 'yearlyAverage') {
         if (!yearAverage.test(dataList[2])) {
-            printError("Invalid date", "The field must contain: YY");
+            showError("Invalid date", "The field must contain: YY");
             return false;
         }
         if (!yearAverage.test(dataList[3])) {
-            printError("Invalid date", "The field must contain: YY");
+            showError("Invalid date", "The field must contain: YY");
             return false;
         }
         dateType = 'year';
         absoluteStartDate = "15";
     } else {
-        printError("Invalid input", "You have to choose a time period");
+        showError("Invalid input", "You have to choose a time period");
         return false;
     }
 
@@ -102,20 +102,20 @@ function validateInput(dataList) {
 
     if (!legalFirstDate || !legalSecondDate || !legalStartEndDates) {
         if (!legalStartEndDates) {
-            printError("Invalid date", "Not possible to place end-date earlier than start-date");
+            showError("Invalid date", "Not possible to place end-date earlier than start-date");
         }
         else if(!legalFirstDate){
-            printError("Invalid date", "No data available before 15/12/05/15");
+            showError("Invalid date", "No data available before 15/12/05/15");
         }
         else {
-            printError("Invalid date", "End-date cannot be later than the current date");
+            showError("Invalid date", "End-date cannot be later than the current date");
         }return false;
     }
 
     //validate that in "depth between", the first depth is less than the second depth
     if(dataList[4] === 'depthBetween'){
         if(!assertCorrectGapInDepths(dataList[5],dataList[6])){
-            printError("Invalid depths", " the start depth cannot be a higher value than the end depth");
+            showError("Invalid depths", " the start depth cannot be a higher value than the end depth");
             return false;
         }
 
@@ -294,7 +294,7 @@ function checkValidDate(list, listPosOfMonth, listPosOfYear) {
         || list[listPosOfMonth] == 9 || list[listPosOfMonth] == 10 || list[listPosOfMonth] == 12) {
 
         if ((listPosOfMonth == 2) && (list[1] > 31)) {
-            printError("Invalid date", "Only 31 days in the selected month ");
+            showError("Invalid date", "Only 31 days in the selected month ");
             return false;
         }
 
@@ -302,19 +302,19 @@ function checkValidDate(list, listPosOfMonth, listPosOfYear) {
     } else if (list[listPosOfMonth] == 4 || list[listPosOfMonth] == 6 || list[listPosOfMonth] == 8 || list[listPosOfMonth] == 11) {
 
         if ((listPosOfMonth == 2) && (list[1] > 30)) {
-            printError("Invalid date", "Only 30 days in the selected month ");
+            showError("Invalid date", "Only 30 days in the selected month ");
             return false;
         }
     } else if (list[listPosOfMonth] == 2) {
         //if leap year
         if (((list[listPosOfYear] % 4 == 0) && (list[listPosOfYear] % 100 != 0)) || (list[listPosOfYear] % 400 == 0)) {
             if ((listPosOfMonth == 2) && (list[1] > 29)) {
-                printError("Invalid date", "Only 29 days in February in the selected year year");
+                showError("Invalid date", "Only 29 days in February in the selected year year");
                 return false;
             }
         }
         else if ((listPosOfMonth == 2) && (list[1] > 28)) {
-            printError("Invalid date", "Only 28 days in February in the selected year");
+            showError("Invalid date", "Only 28 days in February in the selected year");
             return false;
         }
     }
@@ -356,7 +356,7 @@ function acceptButtonHit() {
  * @param title
  * @param message
  */
-function printError(title, message) {
+function showError(title, message) {
 
     window.alert(title + ": " + message)
 
@@ -397,8 +397,8 @@ function convertToQueryFormat(list) {
 }
 
 function runQuery(req) {
-    //var hostLink = 'http://localhost:3000';
-    var hostLink = 'http://ektedata.herokuapp.com';
+    var hostLink = 'http://localhost:3000';
+    //var hostLink = 'http://ektedata.herokuapp.com';
     if(req[4]==='VerticalAverage') {
         $.get(hostLink + '/api/' + req[1] + req[4], {
             parameter: req[0],
