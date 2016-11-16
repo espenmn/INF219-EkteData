@@ -35,12 +35,12 @@ function getDataFromTextFields() {
     for (var i = 0; i < dataTypes.length; i++) {
         dataToQuery[i] = document.getElementById(dataTypes[i]).value;
     }
-    var split = dataToQuery[2].split("-");
+    var split = dataToQuery[2].split("/");
     dataToQuery[2] = "";
-    var split2 = dataToQuery[3].split("-");
+    var split2 = dataToQuery[3].split("/");
     dataToQuery[3] = "";
 
-    for(var j = split.length-1;j>=0;j--) {
+    for(var j = 0;j<split.length;j++) {
         dataToQuery[2] += "-"+split[j];
         dataToQuery[3] += "-"+split2[j];
     }

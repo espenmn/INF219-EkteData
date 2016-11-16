@@ -1,8 +1,8 @@
 var express = require('express');
 var MongoClient = require("mongodb");
 var router = express.Router();
-//var url = 'mongodb://localhost:27017/saivasdata';
-var url = 'mongodb://gabriel:psw123@ds061354.mlab.com:61354/diveinterpolated';
+var url = 'mongodb://localhost:27017/saivasdata';
+//var url = 'mongodb://gabriel:psw123@ds061354.mlab.com:61354/diveinterpolated';
 var assert = require('assert');
 
 var stringify = require('json-stable-stringify');
@@ -638,6 +638,8 @@ var depthList = [];
  */
 
 function removeElements(input,parameter) {
+
+    console.log(input);
 
     var list;
     var containDepth = false;
