@@ -47,6 +47,10 @@ function getDataFromTextFields() {
     if (dataToQuery[7]<10) {
         dataToQuery[7] = "0" + dataToQuery[7];
     }
+    if (dataToQuery[8]<10) {
+        dataToQuery[8] = "0" + dataToQuery[8];
+    }
+
     dataToQuery[2] = dataToQuery[7] + dataToQuery[2];
     dataToQuery[3] = dataToQuery[8] + dataToQuery[3];
     return dataToQuery;
