@@ -26,21 +26,8 @@ append body
                 .sectionInput
                     +input("text", "toDate", "HH/DD/MM/YY", "Sluttdato", "sluttdato")
             .select
-                select(id="fromHour", name="fromHour")
-                    option(value="" disabled=true selected=true) Starttid
-                    -for(var i = 0;i<23;i++){
-                    option(value="#{i}") #{i}:00
-                    -}
-                span.caret
-            .select
-                select(id="toHour", name="toHour")
-                    option(value="" disabled=true selected=true) Sluttid
-                    -for(var i = 0;i<23;i++){
-                    option(value="#{i}") #{i}:00
-                    -}
-                span.caret
-            .select
                 select(id="parameterDropDown", name="parameter")
+                    option(value="" selected=true disabled=true) Parameter
                     option(value="timeseries.temp") Temperatur
                     option(value="timeseries.oxygene") Oksygen
                     option(value="timeseries.salt") Salt
@@ -50,6 +37,7 @@ append body
                 span.caret
             .select
                 select(id="howMuchDataDropDown" name="howMuchDataDropDown")
+                    option(value="" selected=true disabled=true) Gjennomsnitt
                     option(value="allData") Alle målinger
                     option(value="24hourAverage") Gjennomsnitt døgn
                     option(value="weeklyAverage") Gjennomsnitt uke
@@ -57,7 +45,22 @@ append body
                     option(value="yearlyAverage") Gjennomsnitt år
                 span.caret
             .select
+                select(id="fromHour", name="fromHour")
+                    option(value="" disabled=true selected=true) Starttid
+                    -for(var i = 0;i<24;i++){
+                    option(value="#{i}") #{i}:00
+                    -}
+                span.caret
+            .select
+                select(id="toHour", name="toHour")
+                    option(value="" disabled=true selected=true) Sluttid
+                    -for(var i = 0;i<24;i++){
+                    option(value="#{i}") #{i}:00
+                    -}
+                span.caret
+            .select
                 select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
+                    option(value="" selected=true disabled=true) Dybder
                     option(value="allDepths") Alle dybder
                     option(value="VerticalAverage") Vertikalt gjennomsnitt
                     option(value="depthBetween") Dybde mellom
