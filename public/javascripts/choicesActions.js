@@ -1,4 +1,5 @@
 var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate", "depthDropDown", "depthFrom", "depthTo", "fromHour", "toHour"];
+
 /**
  *
  * This function will change the availability of the selection boxes.
@@ -19,6 +20,16 @@ function changedBox(idFrom, idTo, idBox) {
         document.getElementById(idTo).disabled = true;
     }
 }
+
+/**
+ *
+ * This function will change the availability of the selection boxes.
+ *
+ * @param idFrom
+ * @param idTo
+ * @param idBox
+ */
+
 function changedBox2(idFrom, idTo, idBox) {
     if (document.getElementById(idBox).value === "allData" && idBox === "howMuchDataDropDown") {
         document.getElementById(idFrom).disabled = false;
