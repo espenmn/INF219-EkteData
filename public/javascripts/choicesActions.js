@@ -21,6 +21,7 @@ function changedBox(idFrom, idTo, idBox) {
     }
 }
 
+
 /**
  *
  * This function will change the availability of the selection boxes.
