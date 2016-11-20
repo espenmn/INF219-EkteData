@@ -46,14 +46,14 @@ append body
                 span.caret
             .select
                 select(id="fromHour", name="fromHour" disabled=true)
-                    option(value="" disabled=true selected=true) Starttid
+                    option(value="0" disabled=true selected=true) Starttid
                     -for(var i = 0;i<24;i++){
                     option(value="#{i}") #{i}:00
                     -}
                 span.caret
             .select
                 select(id="toHour", name="toHour" disabled=true)
-                    option(value="" disabled=true selected=true) Sluttid
+                    option(value="23" disabled=true selected=true) Sluttid
                     -for(var i = 0;i<24;i++){
                     option(value="#{i}") #{i}:00
                     -}

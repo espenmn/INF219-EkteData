@@ -32,12 +32,12 @@ function changedBox(idFrom, idTo, idBox) {
  */
 
 function changedBox2(idFrom, idTo, idBox) {
-    if (document.getElementById(idBox).value === "allData" && idBox === "howMuchDataDropDown") {
+    if (document.getElementById(idBox).value === "allData") {
         document.getElementById(idFrom).disabled = false;
         document.getElementById(idTo).disabled = false;
     } else {
-        document.getElementById(idFrom).value = "";
-        document.getElementById(idTo).value = "";
+        document.getElementById(idFrom).value = "0";
+        document.getElementById(idTo).value = "23";
         document.getElementById(idFrom).disabled = true;
         document.getElementById(idTo).disabled = true;
     }
@@ -71,6 +71,9 @@ function getDataFromTextFields() {
 
     dataToQuery[2] = dataToQuery[7] + dataToQuery[2];
     dataToQuery[3] = dataToQuery[8] + dataToQuery[3];
+
+    console.log(dataToQuery[2] + "   " + dataToQuery[3]);
+
     return dataToQuery;
 
 }
@@ -85,6 +88,13 @@ function validateInput(dataList) {
     //To/From date tests
     var dateType = "";
     var absoluteStartDate = "15-12-05-2015";
+
+    for(var i=0;i<5;i++)
+        if(dataList[i] === "") {
+        showError("Mangler verdi","Dato, Parameter, Gjennomsnitt og Dybder må ha en verdi");
+            return false;
+        }
+
      if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
         dateType = 'day';
     }
