@@ -63,7 +63,7 @@ span.caret {
     display: block;
 }
 
-.sectionInput {
+.sectionInput, .section {
     display: inline-block;
 }
 
@@ -73,4 +73,9 @@ span.caret {
 
 #saveButton,#clipboardButton{
     width: auto;
+}
+
+.infobutton {
+    display: inline-block;
+    padding-left: 4rem;
 }

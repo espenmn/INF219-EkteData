@@ -13,20 +13,27 @@ append body
     script(type='text/javascript' src='//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js')
     link(rel="stylesheet" href='//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css')
 
+    script(type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+
     .starter-template
         .container
-            h1 Ekte data
+            h1 Ekte Data
             p.lead
                 | Fyll ut informasjon og trykk på OK
                 br
                 | Fyll deretter ut ønsket filnavn, og trykk på Last ned
             .section
                 .sectionInput
-                    +input("text", "fromDate", "HH/DD/MM/YY", "Startdato", "startdato")
+                    +input("text", "fromDate", "DD/MM/YYYY", "Startdato", "startdato")
                 .sectionInput
-                    +input("text", "toDate", "HH/DD/MM/YY", "Sluttdato", "sluttdato")
+                    +input("text", "toDate", "DD/MM/YYYY", "Sluttdato", "sluttdato")
+            .infobutton
+                button.btn.btn-default(type="button",aria-label="#{info-sign}", title="Datoinformasjon", data-toggle="popover" ,data-trigger="hover",data-content="test")
+                    +icon("info-sign")
+
             .select
-                select(id="parameterDropDown", name="parameter")
+                select(id="parameterDropDown", name="parameter", title="Datoinformasjon", data-toggle="popover" ,data-trigger="hover",data-content="test")
                     option(value="" selected=true disabled=true) Parameter
                     option(value="timeseries.temp") Temperatur
                     option(value="timeseries.oxygene") Oksygen
@@ -92,8 +99,10 @@ append body
                     +icon("copy")
                     | Kopier til utklippstavle
 
-            +modal("Test", "errorModal")
-                p Test
+            +modal("Error", "errorModal")
+                p Error
+
+
             script.
                 var queryString = "";
                 function getStringFromBackEnd(stringIn) {
@@ -120,6 +129,11 @@ append body
                 function copyButtonHit() {
                     clipboard.copy(queryString);
                 }
+
+
+                $(document).ready(function () {
+                    $('[data-toggle="popover"]').popover();
+                });
 
                 $('input[id="fromDate"]').daterangepicker({
                     "singleDatePicker": true,
