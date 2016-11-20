@@ -1,4 +1,5 @@
 var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate", "depthDropDown", "depthFrom", "depthTo", "fromHour", "toHour"];
+
 /**
  *
  * This function will change the availability of the selection boxes.
@@ -9,14 +10,31 @@ var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate
  */
 function changedBox(idFrom, idTo, idBox) {
 
-    if (document.getElementById(idBox).value === "depthBetween") {
+    if (document.getElementById(idBox).value === "depthBetween" && idBox === "depthDropDown") {
         document.getElementById(idFrom).disabled = false;
         document.getElementById(idTo).disabled = false;
-    }
-    else if (document.getElementById(idBox).value === "oneDepth") {
+    } else {
+        document.getElementById(idFrom).value = "";
         document.getElementById(idTo).value = "";
-        document.getElementById(idFrom).disabled = false;
+        document.getElementById(idFrom).disabled = true;
         document.getElementById(idTo).disabled = true;
+    }
+}
+
+
+/**
+ *
+ * This function will change the availability of the selection boxes.
+ *
+ * @param idFrom
+ * @param idTo
+ * @param idBox
+ */
+
+function changedBox2(idFrom, idTo, idBox) {
+    if (document.getElementById(idBox).value === "allData" && idBox === "howMuchDataDropDown") {
+        document.getElementById(idFrom).disabled = false;
+        document.getElementById(idTo).disabled = false;
     } else {
         document.getElementById(idFrom).value = "";
         document.getElementById(idTo).value = "";
