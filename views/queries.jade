@@ -29,63 +29,76 @@ append body
                 .sectionInput
                     +input("text", "toDate", "DD/MM/YYYY", "Sluttdato", "sluttdato")
             .infobutton
-                button.btn.btn-default(type="button",aria-label="#{info-sign}", title="Datoinformasjon", data-toggle="popover" ,data-trigger="hover",data-content="test")
-                    +icon("info-sign")
+                -dateInfo = "Første tilgjengelige dato er 12/05/15. <br/><br/>NB: Datovelger fungerer ikke i Firefox, så dato må skrives inn manuelt."
+                span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dateInfo}", data-html="true")
 
-            .select
-                select(id="parameterDropDown", name="parameter",title="Datoinformasjon", data-toggle="popover" ,data-trigger="hover",data-content="test")
-                    option(value="" selected=true disabled=true) Parameter
-                    option(value="timeseries.temp") Temperatur
-                    option(value="timeseries.oxygene") Oksygen
-                    option(value="timeseries.salt") Salt
-                    option(value="timeseries.turbidity") Turbiditet
-                    option(value="timeseries.fluorescens") Fluorescens
-                    option(value="airtemp") Lufttemperatur
-                span.caret
-            .select
-                select(id="howMuchDataDropDown" name="howMuchDataDropDown" onchange="changedBox2('fromHour','toHour',id);")
-                    option(value="" selected=true disabled=true) Type data
-                    option(value="allData") Alle målinger
-                    option(value="24hourAverage") Gjennomsnitt døgn
-                    option(value="weeklyAverage") Gjennomsnitt uke
-                    option(value="monthlyAverage") Gennomsnitt måned
-                    option(value="yearlyAverage") Gjennomsnitt år
-                span.caret
-            .select
-                select(id="fromHour", name="fromHour" disabled=true)
-                    option(value="0" disabled=true selected=true) Starttid
-                    -for(var i = 0;i<24;i++){
-                    option(value="#{i}") #{i}:00
-                    -}
-                span.caret
-            .select
-                select(id="toHour", name="toHour" disabled=true)
-                    option(value="23" disabled=true selected=true) Sluttid
-                    -for(var i = 0;i<24;i++){
-                    option(value="#{i}") #{i}:00
-                    -}
-                span.caret
-            .select
-                select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
-                    option(value="" selected=true disabled=true) Dybder
-                    option(value="allDepths") Alle dybder
-                    option(value="VerticalAverage") Vertikalt gjennomsnitt
-                    option(value="depthBetween") Dybde mellom
-                span.caret
-            .select
-                select(id="depthFrom", name="depthFrom" disabled=true)
-                    option(value="" disabled=true selected=true) Dybde fra
-                    -for(var i = 0.5;i<19;i++){
-                    option(value="#{i}") #{i}m
-                    -}
-                span.caret
-            .select
-                select(id="depthTo", name="depthTo" disabled=true)
-                    option(value="" disabled=true selected=true) Dybde til
-                    -for(var i = 0.5;i<19;i++){
-                    option(value="#{i}") #{i}m
-                    -}
-                span.caret
+            .test
+                .select
+                    select(id="parameterDropDown", name="parameter")
+                        option(value="" selected=true disabled=true) Parameter
+                        option(value="timeseries.temp") Temperatur
+                        option(value="timeseries.oxygene") Oksygen
+                        option(value="timeseries.salt") Salt
+                        option(value="timeseries.turbidity") Turbiditet
+                        option(value="timeseries.fluorescens") Fluorescens
+                        option(value="airtemp") Lufttemperatur
+                    span.caret
+                .select
+                    select(id="howMuchDataDropDown" name="howMuchDataDropDown" onchange="changedBox2('fromHour','toHour',id);")
+                        option(value="" selected=true disabled=true) Type data
+                        option(value="allData") Alle målinger
+                        option(value="24hourAverage") Gjennomsnitt døgn
+                        option(value="weeklyAverage") Gjennomsnitt uke
+                        option(value="monthlyAverage") Gennomsnitt måned
+                        option(value="yearlyAverage") Gjennomsnitt år
+                    span.caret
+                .infobutton
+                    -dataInfo = "Alle målinger gir alle målingene innenfor en gitt tidsperiode. <br/><br/>"
+                    -dataInfo += "Gjennomsnitt døgn gir døgngjennomsnitt for første dato valgt. <br/><br/>"
+                    -dataInfo += "Gjennomsnitt uke gir ukesgjennomsnitt fra første dato valgt, og en uke frem i tid. <br/><br/>"
+                    -dataInfo += "Gjennomsnitt måned gir månedsgjennomsnitt for måneden valgt i første datofelt. <br/><br/>"
+                    -dataInfo += "Gjennomsnitt år gir årsgjennomsnitt for året valgt i første datofelt."
+                    span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dataInfo}", data-html="true")
+                .select
+                    select(id="fromHour", name="fromHour" disabled=true)
+                        option(value="0" disabled=true selected=true) Starttid
+                        -for(var i = 0;i<24;i++){
+                        option(value="#{i}") #{i}:00
+                        -}
+                    span.caret
+                .select
+                    select(id="toHour", name="toHour" disabled=true)
+                        option(value="23" disabled=true selected=true) Sluttid
+                        -for(var i = 0;i<24;i++){
+                        option(value="#{i}") #{i}:00
+                        -}
+                    span.caret
+                .select
+                    select(id="depthDropDown", name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);")
+                        option(value="" selected=true disabled=true) Dybder
+                        option(value="allDepths") Alle dybder
+                        option(value="VerticalAverage") Vertikalt gjennomsnitt
+                        option(value="depthBetween") Dybde mellom
+                    span.caret
+                .infobutton
+                    -depthInfo = "Alle målinger gir målingene for alle dybdene i målingsperioden. <br/><br/>"
+                    -depthInfo += "Vertikalt gjennomsnitt gir gjennomsnittet av alle dybdene i målingsperioden. <br/><br/>"
+                    -depthInfo += "Dybde mellom gir alle målingene for de valgte dybdene i målingsperioden."
+                    span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{depthInfo}", data-html="true")
+                .select
+                    select(id="depthFrom", name="depthFrom" disabled=true)
+                        option(value="" disabled=true selected=true) Dybde fra
+                        -for(var i = 0.5;i<19;i++){
+                        option(value="#{i}") #{i}m
+                        -}
+                    span.caret
+                .select
+                    select(id="depthTo", name="depthTo" disabled=true)
+                        option(value="" disabled=true selected=true) Dybde til
+                        -for(var i = 0.5;i<19;i++){
+                        option(value="#{i}") #{i}m
+                        -}
+                    span.caret
 
             button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton")
                 +icon("ok")
