@@ -1,4 +1,5 @@
 var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate", "depthDropDown", "depthFrom", "depthTo", "fromHour", "toHour"];
+
 /**
  *
  * This function will change the availability of the selection boxes.
@@ -9,17 +10,34 @@ var dataTypes = ["parameterDropDown", "howMuchDataDropDown", "fromDate", "toDate
  */
 function changedBox(idFrom, idTo, idBox) {
 
-    if (document.getElementById(idBox).value === "depthBetween") {
+    if (document.getElementById(idBox).value === "depthBetween" && idBox === "depthDropDown") {
         document.getElementById(idFrom).disabled = false;
         document.getElementById(idTo).disabled = false;
-    }
-    else if (document.getElementById(idBox).value === "oneDepth") {
-        document.getElementById(idTo).value = "";
-        document.getElementById(idFrom).disabled = false;
-        document.getElementById(idTo).disabled = true;
     } else {
         document.getElementById(idFrom).value = "";
         document.getElementById(idTo).value = "";
+        document.getElementById(idFrom).disabled = true;
+        document.getElementById(idTo).disabled = true;
+    }
+}
+
+
+/**
+ *
+ * This function will change the availability of the selection boxes.
+ *
+ * @param idFrom
+ * @param idTo
+ * @param idBox
+ */
+
+function changedBox2(idFrom, idTo, idBox) {
+    if (document.getElementById(idBox).value === "allData") {
+        document.getElementById(idFrom).disabled = false;
+        document.getElementById(idTo).disabled = false;
+    } else {
+        document.getElementById(idFrom).value = "0";
+        document.getElementById(idTo).value = "23";
         document.getElementById(idFrom).disabled = true;
         document.getElementById(idTo).disabled = true;
     }
@@ -53,10 +71,12 @@ function getDataFromTextFields() {
 
     dataToQuery[2] = dataToQuery[7] + dataToQuery[2];
     dataToQuery[3] = dataToQuery[8] + dataToQuery[3];
+
+    console.log(dataToQuery[2] + "   " + dataToQuery[3]);
+
     return dataToQuery;
 
 }
-
 
 /**
  * Check if the input form the user is valid
@@ -67,19 +87,24 @@ function getDataFromTextFields() {
 function validateInput(dataList) {
     //To/From date tests
     var dateType = "";
-    var absoluteStartDate = "15-12-05-15";
+    var absoluteStartDate = "15-12-05-2015";
+
+    for(var i=0;i<5;i++)
+        if(dataList[i] === "") {
+        showError("Mangler verdi","Dato, Parameter, Gjennomsnitt og Dybder må ha en verdi");
+            return false;
+        }
+
      if (dataList[1] === 'allData' || dataList[1] === '24hourAverage' || dataList[1] === 'weeklyAverage') {
         dateType = 'day';
     }
 
     else if (dataList[1] === 'monthlyAverage') {
         dateType = 'month';
-        absoluteStartDate = "05-15";
     }
 
     else if (dataList[1] === 'yearlyAverage') {
         dateType = 'year';
-        absoluteStartDate = "15";
     }
      else {
         printError("Invalid input", "You have to choose a time period");
@@ -92,7 +117,6 @@ function validateInput(dataList) {
     var legalSecondDate = checkDate1BeforeDate2(dataList[3], getCurrentDate(dateType), dateType);
     //the first date is before the second date
     var legalStartEndDates = checkDate1BeforeDate2(dataList[2], dataList[3], dateType);
-
     if (!legalFirstDate || !legalSecondDate || !legalStartEndDates) {
         if (!legalStartEndDates) {
             showError("Invalid date", "Not possible to place end-date earlier than start-date");
@@ -152,17 +176,32 @@ function getCurrentDate(dateType) {
     if (mm < 10) {
         mm = '0' + mm
     }
-    if(dateType == "month") {
-        today = (mm + "-" + yy);
-    }
-    else if (dateType == "year") {
-        today = (yy);
-    }
-    else
-        today = (hh + "-" + dd + "-" + mm + "-" + yy);
+    today = (hh + "-" + dd + "-" + mm + "-" + yy);
     return today;
 
 }
+/**
+ *
+ * @param dateList
+ * @param dateType
+ * @returns {Array|*} a date, split on '-'
+ */
+function changeDateFormat(dateList,dateType){
+    var formatedDate = dateList;
+    switch (dateType){
+        case "month":
+            formatedDate = formatedDate.substring(6);
+            break;
+        case "year":
+            formatedDate = formatedDate.substring(9);
+            break;
+    }
+    var dateSplit = formatedDate.split("-");
+    return dateSplit;
+
+}
+
+
 /**
  * takes in two dates and checks that the first date occurs earlier than the second one
  * Also calls checkValidDate to assert that both dates are legal/existing dates
@@ -174,8 +213,10 @@ function getCurrentDate(dateType) {
  * @returns {boolean}
  */
 function checkDate1BeforeDate2(date1, date2, dateType) {
-    var list1 = date1.split("-");
-    var list2 = date2.split("-");
+
+    var list1 = changeDateFormat(date1,dateType);
+    var list2 = changeDateFormat(date2,dateType);
+
     var listPosOfMonth = "";
     var listPosOfYear = "";
 
