@@ -639,8 +639,6 @@ var depthList = [];
 
 function removeElements(input,parameter) {
 
-    console.log(input);
-
     var list;
     var containDepth = false;
 

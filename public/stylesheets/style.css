@@ -1,12 +1,16 @@
-.select {
-    position: relative;
-    display: block;
-    margin-bottom: 5px;
-    width: 40rem;
-    height: 3em
+.dropdownSection {
+    width: 50rem;
 }
 
-.select select {
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5px;
+    width: 40rem;
+    height: 3em;
+}
+
+.dropdown select {
     display: inline-block;
     width: 100%;
     height: auto;
@@ -22,17 +26,17 @@
     -moz-appearance: none;
 }
 
-.select select::-ms-expand {
+.dropdown select::-ms-expand {
     display: none;
 }
 
-.select select:hover,
-.select select:focus {
+.dropdown select:hover,
+.dropdown select:focus {
     color: #000;
     background: #ccc;
 }
 
-.select select:disabled {
+.dropdown select:disabled {
     opacity: 0.5;
     pointer-events: none;
 }
@@ -49,12 +53,12 @@ span.caret {
     border-color: #7b7b7b transparent transparent transparent;
 }
 
-.select select:hover ~ span.caret,
-.select select:focus ~ span.caret {
+.dropdown select:hover ~ span.caret,
+.dropdown select:focus ~ span.caret {
     border-top-color: #000000;
 }
 
-.select select:disabled ~ span.caret {
+.dropdown select:disabled ~ span.caret {
     border-top-color: #ccc;
 }
 
@@ -63,7 +67,7 @@ span.caret {
     display: block;
 }
 
-.sectionInput {
+.sectionInput, .section {
     display: inline-block;
 }
 
@@ -73,4 +77,9 @@ span.caret {
 
 #saveButton,#clipboardButton{
     width: auto;
+}
+
+.infoIcon{
+    display: inline-block;
+    padding-left: 4rem;
 }
