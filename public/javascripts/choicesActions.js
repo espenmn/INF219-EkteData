@@ -14,8 +14,8 @@ function changedBox(idFrom, idTo, idBox) {
         document.getElementById(idFrom).disabled = false;
         document.getElementById(idTo).disabled = false;
     } else {
-        document.getElementById(idFrom).value = "";
-        document.getElementById(idTo).value = "";
+        document.getElementById(idFrom).value = "0.5";
+        document.getElementById(idTo).value = "18.5";
         document.getElementById(idFrom).disabled = true;
         document.getElementById(idTo).disabled = true;
     }
