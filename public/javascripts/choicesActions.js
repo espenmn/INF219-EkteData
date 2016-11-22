@@ -72,8 +72,6 @@ function getDataFromTextFields() {
     dataToQuery[2] = dataToQuery[7] + dataToQuery[2];
     dataToQuery[3] = dataToQuery[8] + dataToQuery[3];
 
-    console.log(dataToQuery[2] + "   " + dataToQuery[3]);
-
     return dataToQuery;
 
 }
@@ -107,7 +105,7 @@ function validateInput(dataList) {
         dateType = 'year';
     }
      else {
-        printError("Invalid input", "You have to choose a time period");
+        showError("Ugyldig verdi", "Du må skrive inn dato");
         return false;
     }
 
@@ -119,20 +117,20 @@ function validateInput(dataList) {
     var legalStartEndDates = checkDate1BeforeDate2(dataList[2], dataList[3], dateType);
     if (!legalFirstDate || !legalSecondDate || !legalStartEndDates) {
         if (!legalStartEndDates) {
-            showError("Invalid date", "Not possible to place end-date earlier than start-date");
+            showError("Ugyldig dato", "Sluttdato kan ikke være før startdato");
         }
         else if(!legalFirstDate){
-            showError("Invalid date", "No data available before 15/12/05/15");
+            showError("Ugyldig dato", "Det eksisterer ikke data før 15/12/05/15");
         }
         else {
-            showError("Invalid date", "End-date cannot be later than the current date");
+            showError("Ugyldig dato", "Sluttdatoen kan ikke være senere enn dagens dato");
         }return false;
     }
 
     //validate that in "depth between", the first depth is less than the second depth
     if(dataList[4] === 'depthBetween'){
         if(!assertCorrectGapInDepths(dataList[5],dataList[6])){
-            showError("Invalid depths", " the start depth cannot be a higher value than the end depth");
+            showError("Ugyldig dybde", "Startdybden kan ikke være høyere enn sluttdybden");
             return false;
         }
     }
@@ -297,7 +295,7 @@ function checkValidDate(list, listPosOfMonth, listPosOfYear) {
         || list[listPosOfMonth] == 9 || list[listPosOfMonth] == 10 || list[listPosOfMonth] == 12) {
 
         if ((listPosOfMonth == 2) && (list[1] > 31)) {
-            showError("Invalid date", "Only 31 days in the selected month ");
+            showError("Ugyldig dato", "Det finnes bare 31 dager i denne måneden");
             return false;
         }
 
@@ -305,19 +303,19 @@ function checkValidDate(list, listPosOfMonth, listPosOfYear) {
     } else if (list[listPosOfMonth] == 4 || list[listPosOfMonth] == 6 || list[listPosOfMonth] == 8 || list[listPosOfMonth] == 11) {
 
         if ((listPosOfMonth == 2) && (list[1] > 30)) {
-            showError("Invalid date", "Only 30 days in the selected month ");
+            showError("Ugyldig dato", "Den finnes bare 30 dager i denne måneden");
             return false;
         }
     } else if (list[listPosOfMonth] == 2) {
         //if leap year
         if (((list[listPosOfYear] % 4 == 0) && (list[listPosOfYear] % 100 != 0)) || (list[listPosOfYear] % 400 == 0)) {
             if ((listPosOfMonth == 2) && (list[1] > 29)) {
-                showError("Invalid date", "Only 29 days in February in the selected year year");
+                showError("Ugyldig dato", "Det finnes bare 29 dager i februar dette året");
                 return false;
             }
         }
         else if ((listPosOfMonth == 2) && (list[1] > 28)) {
-            showError("Invalid date", "Only 28 days in February in the selected year");
+            showError("Invalid date", "Det finnes bare 28 dager i februar dette året");
             return false;
         }
     }
