@@ -29,7 +29,7 @@ append body
                 .sectionInput
                     +input("text", "toDate", "DD/MM/YYYY", "Sluttdato", "sluttdato")
             .infoIcon
-                -dateInfo = "Første tilgjengelige dato er 12/05/15. <br/><br/>NB: Datovelger fungerer ikke i Firefox, så dato må skrives inn manuelt."
+                -dateInfo = "Første tilgjengelige dato er 12/05/2015."
                 span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dateInfo}", data-html="true")
 
             .dropdownSection
@@ -53,11 +53,11 @@ append body
                         option(value="yearlyAverage") Gjennomsnitt år
                     span.caret
                 .infoIcon
-                    -dataInfo = "Alle målinger gir alle målingene innenfor en gitt tidsperiode. <br/><br/>"
-                    -dataInfo += "Gjennomsnitt døgn gir døgngjennomsnitt for første dato valgt. <br/><br/>"
-                    -dataInfo += "Gjennomsnitt uke gir ukesgjennomsnitt fra første dato valgt, og en uke frem i tid. <br/><br/>"
-                    -dataInfo += "Gjennomsnitt måned gir månedsgjennomsnitt for måneden valgt i første datofelt. <br/><br/>"
-                    -dataInfo += "Gjennomsnitt år gir årsgjennomsnitt for året valgt i første datofelt."
+                    -dataInfo =  "\"Alle målinger\" gir alle målingene innenfor en gitt tidsperiode. <br/><br/>"
+                    -dataInfo += "\"Gjennomsnitt døgn\" gir døgngjennomsnitt f.o.m. startdatoen  t.o.m. sluttdatoen. <br/><br/>"
+                    -dataInfo += "\"Gjennomsnitt uke\" gir ukesgjennomsnitt f.o.m. startdatoens ukenr. t.o.m. sluttdatoens ukenr. <br/><br/>"
+                    -dataInfo += "\"Gjennomsnitt måned\" gir månedsgjennomsnitt f.o.m. startdatoens måned, t.o.m. sluttdatoens måned. <br/><br/>"
+                    -dataInfo += "\"Gjennomsnitt år\" gir årsgjennomsnitt f.o.m. startdatoens årstall, t.o.m. sluttdatoens årstall."
                     span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dataInfo}", data-html="true")
                 .dropdown
                     select(id="fromHour", name="fromHour" disabled=true)
@@ -81,20 +81,20 @@ append body
                         option(value="depthBetween") Dybde mellom
                     span.caret
                 .infoIcon
-                    -depthInfo = "Alle målinger gir målingene for alle dybdene i målingsperioden. <br/><br/>"
-                    -depthInfo += "Vertikalt gjennomsnitt gir gjennomsnittet av alle dybdene i målingsperioden. <br/><br/>"
-                    -depthInfo += "Dybde mellom gir alle målingene for de valgte dybdene i målingsperioden."
+                    -depthInfo = "\"Alle målinger\" gir alle målinger gjort i den valgte målingsperioden. <br/><br/>"
+                    -depthInfo += "\"Vertikalt gjennomsnitt\" gir gjennomsnittet av alle dybdene, for alle valgte tidspunkt. <br/><br/>"
+                    -depthInfo += "\"Dybde mellom\" gir alle målingene f.o.m den første dybden t.o.m den andre dybden, for alle valgte tidspunkt."
                     span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{depthInfo}", data-html="true")
                 .dropdown
                     select(id="depthFrom", name="depthFrom" disabled=true)
-                        option(value="" disabled=true selected=true) Dybde fra
+                        option(value="0.5" disabled=true selected=true) Dybde fra
                         -for(var i = 0.5;i<19;i++){
                         option(value="#{i}") #{i}m
                         -}
                     span.caret
                 .dropdown
                     select(id="depthTo", name="depthTo" disabled=true)
-                        option(value="" disabled=true selected=true) Dybde til
+                        option(value="18.5" disabled=true selected=true) Dybde til
                         -for(var i = 0.5;i<19;i++){
                         option(value="#{i}") #{i}m
                         -}
