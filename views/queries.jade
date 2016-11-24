@@ -23,15 +23,6 @@ append body
                 | Fyll ut informasjon og trykk på OK
                 br
                 | Fyll deretter ut ønsket filnavn, og trykk på Last ned
-            .section
-                .sectionInput
-                    +input("text", "fromDate", "DD/MM/YYYY", "Startdato", "startdato")
-                .sectionInput
-                    +input("text", "toDate", "DD/MM/YYYY", "Sluttdato", "sluttdato")
-            .infoIcon
-                -dateInfo = "Første tilgjengelige dato er 12/05/15. <br/><br/>NB: Datovelger fungerer ikke i Firefox, så dato må skrives inn manuelt."
-                span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dateInfo}", data-html="true")
-
             .dropdownSection
                 .dropdown
                     select(id="parameterDropDown", name="parameter")
@@ -45,7 +36,7 @@ append body
                     span.caret
                 .dropdown
                     select(id="howMuchDataDropDown" name="howMuchDataDropDown" onchange="changedBox2('fromHour','toHour',id);")
-                        option(value="" selected=true disabled=true) Type data
+                        option(value="" selected=true disabled=true) Tidsintervall
                         option(value="allData") Alle målinger
                         option(value="24hourAverage") Gjennomsnitt døgn
                         option(value="weeklyAverage") Gjennomsnitt uke
@@ -59,17 +50,25 @@ append body
                     -dataInfo += "Gjennomsnitt måned gir månedsgjennomsnitt for måneden valgt i første datofelt. <br/><br/>"
                     -dataInfo += "Gjennomsnitt år gir årsgjennomsnitt for året valgt i første datofelt."
                     span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dataInfo}", data-html="true")
+                .section
+                    .sectionInput
+                        +input("text", "fromDate", "DD/MM/YYYY", "Startdato", "startdato")
+                    .sectionInput
+                        +input("text", "toDate", "DD/MM/YYYY", "Sluttdato", "sluttdato")
+                .infoIcon
+                    -dateInfo = "Første tilgjengelige dato er 12/05/15. <br/><br/>NB: Datovelger fungerer ikke i Firefox, så dato må skrives inn manuelt."
+                    span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dateInfo}", data-html="true")
                 .dropdown
                     select(id="fromHour", name="fromHour" disabled=true)
                         option(value="0" disabled=true selected=true) Starttid
-                        -for(var i = 0;i<24;i++){
+                        -for(var i = 0;i<24;i+=3){
                         option(value="#{i}") #{i}:00
                         -}
                     span.caret
                 .dropdown
                     select(id="toHour", name="toHour" disabled=true)
                         option(value="23" disabled=true selected=true) Sluttid
-                        -for(var i = 0;i<24;i++){
+                        -for(var i = 0;i<24;i += 3){
                         option(value="#{i}") #{i}:00
                         -}
                     span.caret
@@ -102,7 +101,7 @@ append body
 
             button.btn.btn-default(type="default" onclick="acceptButtonHit();" id="acceptButton")
                 +icon("ok")
-                | OK
+                | Hent data
             +modal("Last ned fil", "downloadModal")
                 +input("text", "fileNameIn", "Filnavn", "Filnavn")
                 button.btn.btn-default(type="default" onclick="saveFileHit();" id="saveButton")
