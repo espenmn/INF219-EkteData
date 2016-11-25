@@ -73,26 +73,23 @@ Info</a>
 		Fyll ut informasjon og trykk på OK<br>
 		Fyll deretter ut ønsket filnavn, og trykk på Last ned</p>
 	<div class="section">
-		<div class="sectionInput">
+		<div id="fromDate_section" class="sectionInput">
 			<div class="form-group">
 				<label for="fromDate">
 				Startdato</label>
 				<input id="fromDate" placeholder="DD/MM/YYYY" name="startdato" 	
-									class="form-control" value="05/01/2016" type="text">
+									class="form-control" value="" type="text">
 			</div>
 		</div>
-		<div class="sectionInput">
+		<div id="toDate_section" class="sectionInput">
 			<div class="form-group">
 				<label for="toDate">
 				Sluttdato</label>
-				<input id="toDate" placeholder="DD/MM/YYYY" name="sluttdato" class="form-control" value="25/11/2016" type="text">
+				<input id="toDate" placeholder="DD/MM/YYYY" name="sluttdato" class="form-control" value="" type="text">
 			</div>
 		</div>
 	</div>
-<div class="infoIcon">
-<span aria-hidden="true" data-toggle="popover" data-trigger="hover" data-content="Første tilgjengelige dato er 12/05/2015." data-html="true" class="glyphicon text-info glyphicon-info-sign" data-original-title="" title="">
-</span>
-</div>
+ 
 <div class="dropdownSection">
 <div class="dropdown">
 <select id="parameterDropDown" name="parameter">
@@ -424,6 +421,8 @@ Close</button>
 </div>
 <script>
 var queryString = "";
+var todays_date = new Date();
+
 function getStringFromBackEnd(stringIn) {
     queryString = stringIn;
     $('#downloadModal').modal('show');
@@ -450,9 +449,23 @@ function copyButtonHit() {
 }
 
 
+
 $(document).ready(function () {
     $('[data-toggle="popover"]').popover();
 });
+
+
+<!-- hide tofield on change -->
+$('#howMuchDataDropDown').change(function() {
+  $( "#toDate_section" ).show();
+  var i= $('#howMuchDataDropDown').val();
+      if(i=="yearlyAverage") // equal to selected option
+        {
+          $('#toDate_section').hide();
+          $('input[id="fromDate"]').data('daterangepicker').setMinDate('"05/12/2016');
+    }
+});
+
 
 $('input[id="fromDate"]').daterangepicker({
     "singleDatePicker": true,
@@ -491,8 +504,9 @@ $('input[id="fromDate"]').daterangepicker({
             "Desember"
         ],
         "firstDay": 1,
-        'startDate': '01/01/2015',
     },
+    "minDate": "12/05/2015",
+    "maxDate": todays_date,
 }, function (start, end, label) {
 });
 
@@ -535,6 +549,8 @@ $('input[id="toDate"]').daterangepicker({
         ],
         "firstDay": 1
     },
+    "minDate": "12/05/2015",
+    "maxDate": todays_date,
 }, function (start, end, label) {
 });</script>
 </div>
