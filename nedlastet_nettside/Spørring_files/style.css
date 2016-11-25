@@ -1,0 +1,85 @@
+.dropdownSection {
+    width: 50rem;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5px;
+    width: 40rem;
+    height: 3em;
+}
+
+.dropdown select {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    padding: 10px 15px;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    background: #e6e6e6;
+    color: #7b7b7b;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.dropdown select::-ms-expand {
+    display: none;
+}
+
+.dropdown select:hover,
+.dropdown select:focus {
+    color: #000;
+    background: #ccc;
+}
+
+.dropdown select:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+span.caret {
+    position: absolute;
+    top: 16px;
+    right: 15px;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 8px 5px 0 5px;
+    border-color: #7b7b7b transparent transparent transparent;
+}
+
+.dropdown select:hover ~ span.caret,
+.dropdown select:focus ~ span.caret {
+    border-top-color: #000000;
+}
+
+.dropdown select:disabled ~ span.caret {
+    border-top-color: #ccc;
+}
+
+#fromDate, #toDate, #fileNameIn{
+    width: 20rem;
+    display: block;
+}
+
+.sectionInput, .section {
+    display: inline-block;
+}
+
+#acceptButton {
+    display: block;
+}
+
+#saveButton,#clipboardButton{
+    width: auto;
+}
+
+.infoIcon{
+    display: inline-block;
+    padding-left: 4rem;
+}

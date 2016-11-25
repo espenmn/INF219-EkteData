@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="http://ektedata.herokuapp.com/favicon.ico">
+<title>
+Spørring</title>
+<link rel="stylesheet" href="Sp%C3%B8rring_files/bootstrap_003.css">
+</head>
+<body data-spy="scroll" data-target=".scrollspy">
+<div class="navbar">
+<nav role="navigation" class="navbar navbar-fixed-top navbar-inverse">
+<div class="container">
+<div class="navbar-header">
+<button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed">
+<span class="sr-only">
+Toggle navigation</span>
+<span class="icon-bar">
+</span>
+<span class="icon-bar">
+</span>
+<span class="icon-bar">
+</span>
+</button>
+<a href="#" class="navbar-brand">
+Ekte Data</a>
+</div>
+<div id="navbar" class="collapse navbar-collapse">
+<ul class="nav navbar-nav">
+
+<li class="active">
+<a href="http://ektedata.herokuapp.com/queries">
+Spørring</a>
+</li>
+<li>
+<a href="http://ektedata.herokuapp.com/about">
+Info</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+<link rel="stylesheet" href="Sp%C3%B8rring_files/style.css">
+<script type="text/javascript" src="Sp%C3%B8rring_files/choicesActions.js">
+</script>
+<script type="text/javascript" src="Sp%C3%B8rring_files/FileSaver.js">
+</script>
+<script type="text/javascript" src="Sp%C3%B8rring_files/clipboard.js">
+</script>
+<script type="text/javascript" src="Sp%C3%B8rring_files/jquery_002.js">
+</script>
+<script type="text/javascript" src="Sp%C3%B8rring_files/moment.js">
+</script>
+<link rel="stylesheet" href="Sp%C3%B8rring_files/bootstrap_002.css">
+<script type="text/javascript" src="Sp%C3%B8rring_files/daterangepicker.js">
+</script>
+<link rel="stylesheet" href="Sp%C3%B8rring_files/daterangepicker.css">
+<script type="text/javascript" src="Sp%C3%B8rring_files/bootstrap.js">
+</script>
+<link rel="stylesheet" href="Sp%C3%B8rring_files/bootstrap.css">
+<div class="starter-template">
+<div class="container">
+	<h1>Ekte Data</h1>
+	<p class="lead">
+		Fyll ut informasjon og trykk på OK<br>
+		Fyll deretter ut ønsket filnavn, og trykk på Last ned</p>
+	<div class="section">
+		<div class="sectionInput">
+			<div class="form-group">
+				<label for="fromDate">
+				Startdato</label>
+				<input id="fromDate" placeholder="DD/MM/YYYY" name="startdato" 	
+									class="form-control" value="05/01/2016" type="text">
+			</div>
+		</div>
+		<div class="sectionInput">
+			<div class="form-group">
+				<label for="toDate">
+				Sluttdato</label>
+				<input id="toDate" placeholder="DD/MM/YYYY" name="sluttdato" class="form-control" value="25/11/2016" type="text">
+			</div>
+		</div>
+	</div>
+<div class="infoIcon">
+<span aria-hidden="true" data-toggle="popover" data-trigger="hover" data-content="Første tilgjengelige dato er 12/05/2015." data-html="true" class="glyphicon text-info glyphicon-info-sign" data-original-title="" title="">
+</span>
+</div>
+<div class="dropdownSection">
+<div class="dropdown">
+<select id="parameterDropDown" name="parameter">
+<option value="" disabled="disabled">
+Parameter</option>
+<option value="timeseries.temp">
+Temperatur</option>
+<option value="timeseries.oxygene" selected="selected">
+Oksygen</option>
+<option value="timeseries.salt">
+Salt</option>
+<option value="timeseries.turbidity">
+Turbiditet</option>
+<option value="timeseries.fluorescens">
+Fluorescens</option>
+<option value="airtemp">
+Lufttemperatur</option>
+</select>
+<span class="caret">
+</span>
+</div>
+<div class="dropdown">
+<select id="howMuchDataDropDown" name="howMuchDataDropDown" onchange="changedBox2('fromHour','toHour',id);">
+<option value="" disabled="disabled">
+Type data</option>
+<option value="allData" selected="selected">
+Alle målinger</option>
+<option value="24hourAverage">
+Gjennomsnitt døgn</option>
+<option value="weeklyAverage">
+Gjennomsnitt uke</option>
+<option value="monthlyAverage">
+Gennomsnitt måned</option>
+<option value="yearlyAverage">
+Gjennomsnitt år</option>
+</select>
+<span class="caret">
+</span>
+</div>
+<div class="infoIcon">
+<span aria-hidden="true" data-toggle="popover" data-trigger="hover" data-content="&quot;Alle målinger&quot; gir alle målingene innenfor en gitt tidsperiode. &lt;br/&gt;&lt;br/&gt;&quot;Gjennomsnitt døgn&quot; gir døgngjennomsnitt f.o.m. startdatoen  t.o.m. sluttdatoen. &lt;br/&gt;&lt;br/&gt;&quot;Gjennomsnitt uke&quot; gir ukesgjennomsnitt f.o.m. startdatoens ukenr. t.o.m. sluttdatoens ukenr. &lt;br/&gt;&lt;br/&gt;&quot;Gjennomsnitt måned&quot; gir månedsgjennomsnitt f.o.m. startdatoens måned, t.o.m. sluttdatoens måned. &lt;br/&gt;&lt;br/&gt;&quot;Gjennomsnitt år&quot; gir årsgjennomsnitt f.o.m. startdatoens årstall, t.o.m. sluttdatoens årstall." data-html="true" class="glyphicon text-info glyphicon-info-sign" data-original-title="" title="">
+</span>
+</div>
+<div class="dropdown">
+<select id="fromHour" name="fromHour">
+<option value="0" disabled="disabled">
+Starttid</option>
+<option value="0">
+0:00</option>
+<option value="1">
+1:00</option>
+<option value="2" selected="selected">
+2:00</option>
+<option value="3">
+3:00</option>
+<option value="4">
+4:00</option>
+<option value="5">
+5:00</option>
+<option value="6">
+6:00</option>
+<option value="7">
+7:00</option>
+<option value="8">
+8:00</option>
+<option value="9">
+9:00</option>
+<option value="10">
+10:00</option>
+<option value="11">
+11:00</option>
+<option value="12">
+12:00</option>
+<option value="13">
+13:00</option>
+<option value="14">
+14:00</option>
+<option value="15">
+15:00</option>
+<option value="16">
+16:00</option>
+<option value="17">
+17:00</option>
+<option value="18">
+18:00</option>
+<option value="19">
+19:00</option>
+<option value="20">
+20:00</option>
+<option value="21">
+21:00</option>
+<option value="22">
+22:00</option>
+<option value="23">
+23:00</option>
+</select>
+<span class="caret">
+</span>
+</div>
+<div class="dropdown">
+<select id="toHour" name="toHour">
+<option value="23" disabled="disabled">
+Sluttid</option>
+<option value="0">
+0:00</option>
+<option value="1">
+1:00</option>
+<option value="2">
+2:00</option>
+<option value="3">
+3:00</option>
+<option value="4">
+4:00</option>
+<option value="5">
+5:00</option>
+<option value="6">
+6:00</option>
+<option value="7">
+7:00</option>
+<option value="8">
+8:00</option>
+<option value="9">
+9:00</option>
+<option value="10">
+10:00</option>
+<option value="11">
+11:00</option>
+<option value="12">
+12:00</option>
+<option value="13">
+13:00</option>
+<option value="14">
+14:00</option>
+<option value="15" selected="selected">
+15:00</option>
+<option value="16">
+16:00</option>
+<option value="17">
+17:00</option>
+<option value="18">
+18:00</option>
+<option value="19">
+19:00</option>
+<option value="20">
+20:00</option>
+<option value="21">
+21:00</option>
+<option value="22">
+22:00</option>
+<option value="23">
+23:00</option>
+</select>
+<span class="caret">
+</span>
+</div>
+<div class="dropdown">
+<select id="depthDropDown" name="depthDropDown" onchange="changedBox('depthFrom','depthTo',id);">
+<option value="" disabled="disabled">
+Dybder</option>
+<option value="allDepths" selected="selected">
+Alle dybder</option>
+<option value="VerticalAverage">
+Vertikalt gjennomsnitt</option>
+<option value="depthBetween">
+Dybde mellom</option>
+</select>
+<span class="caret">
+</span>
+</div>
+<div class="infoIcon">
+<span aria-hidden="true" data-toggle="popover" data-trigger="hover" data-content="&quot;Alle målinger&quot; gir alle målinger gjort i den valgte målingsperioden. &lt;br/&gt;&lt;br/&gt;&quot;Vertikalt gjennomsnitt&quot; gir gjennomsnittet av alle dybdene, for alle valgte tidspunkt. &lt;br/&gt;&lt;br/&gt;&quot;Dybde mellom&quot; gir alle målingene f.o.m den første dybden t.o.m den andre dybden, for alle valgte tidspunkt." data-html="true" class="glyphicon text-info glyphicon-info-sign" data-original-title="" title="">
+</span>
+</div>
+<div class="dropdown">
+<select id="depthFrom" name="depthFrom" disabled="disabled">
+<option value="0.5" disabled="disabled" selected="selected">
+Dybde fra</option>
+<option value="0.5">
+0.5m</option>
+<option value="1.5">
+1.5m</option>
+<option value="2.5">
+2.5m</option>
+<option value="3.5">
+3.5m</option>
+<option value="4.5">
+4.5m</option>
+<option value="5.5">
+5.5m</option>
+<option value="6.5">
+6.5m</option>
+<option value="7.5">
+7.5m</option>
+<option value="8.5">
+8.5m</option>
+<option value="9.5">
+9.5m</option>
+<option value="10.5">
+10.5m</option>
+<option value="11.5">
+11.5m</option>
+<option value="12.5">
+12.5m</option>
+<option value="13.5">
+13.5m</option>
+<option value="14.5">
+14.5m</option>
+<option value="15.5">
+15.5m</option>
+<option value="16.5">
+16.5m</option>
+<option value="17.5">
+17.5m</option>
+<option value="18.5">
+18.5m</option>
+</select>
+<span class="caret">
+</span>
+</div>
+<div class="dropdown">
+<select id="depthTo" name="depthTo" disabled="disabled">
+<option value="18.5" disabled="disabled" selected="selected">
+Dybde til</option>
+<option value="0.5">
+0.5m</option>
+<option value="1.5">
+1.5m</option>
+<option value="2.5">
+2.5m</option>
+<option value="3.5">
+3.5m</option>
+<option value="4.5">
+4.5m</option>
+<option value="5.5">
+5.5m</option>
+<option value="6.5">
+6.5m</option>
+<option value="7.5">
+7.5m</option>
+<option value="8.5">
+8.5m</option>
+<option value="9.5">
+9.5m</option>
+<option value="10.5">
+10.5m</option>
+<option value="11.5">
+11.5m</option>
+<option value="12.5">
+12.5m</option>
+<option value="13.5">
+13.5m</option>
+<option value="14.5">
+14.5m</option>
+<option value="15.5">
+15.5m</option>
+<option value="16.5">
+16.5m</option>
+<option value="17.5">
+17.5m</option>
+<option value="18.5">
+18.5m</option>
+</select>
+<span class="caret">
+</span>
+</div>
+</div>
+<button type="default" onclick="acceptButtonHit();" id="acceptButton" class="btn btn-default">
+<span aria-hidden="true" class="glyphicon glyphicon-ok">
+</span>
+OK</button>
+<div id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadModalLabel" aria-hidden="true" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" data-dismiss="modal" class="close">
+<span aria-hidden="true">
+×</span>
+<span class="sr-only">
+Close</span>
+</button>
+<h4 id="downloadModalLabel" class="modal-title">
+Last ned fil</h4>
+</div>
+<div class="modal-body">
+<div class="form-group">
+<label for="fileNameIn">
+Filnavn</label>
+<input id="fileNameIn" placeholder="Filnavn" name="undefined" class="form-control" type="text">
+</div>
+<button type="default" onclick="saveFileHit();" id="saveButton" class="btn btn-default">
+<span aria-hidden="true" class="glyphicon glyphicon-download">
+</span>
+Last ned</button>
+<button type="default" id="clipboardButton" onclick="copyButtonHit();" class="btn btn-default">
+<span aria-hidden="true" class="glyphicon glyphicon-copy">
+</span>
+Kopier til utklippstavle</button>
+</div>
+<div class="modal-footer">
+<button type="button" data-dismiss="modal" class="btn btn-default">
+Close</button>
+</div>
+</div>
+</div>
+</div>
+<div id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" data-dismiss="modal" class="close">
+<span aria-hidden="true">
+×</span>
+<span class="sr-only">
+Close</span>
+</button>
+<h4 id="errorModalLabel" class="modal-title">
+Error</h4>
+</div>
+<div class="modal-body">
+<p>
+Error</p>
+</div>
+<div class="modal-footer">
+<button type="button" data-dismiss="modal" class="btn btn-default">
+Close</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+var queryString = "";
+function getStringFromBackEnd(stringIn) {
+    queryString = stringIn;
+    $('#downloadModal').modal('show');
+}
+
+function showError(title, error) {
+    $('#errorModal').on('show.bs.modal', function (event) {
+        var modal = $(this);
+        modal.find('.modal-title').text(title);
+        modal.find('.modal-body').text(error);
+    })
+    $('#errorModal').modal('show');
+}
+
+function saveFileHit() {
+    var filename = fileNameIn.value;
+    var FileDownload = new Blob([queryString], {type: "text/plain;charset=utf-8"});
+    saveAs(FileDownload, filename + ".txt");
+    fileNameIn.value = "";
+}
+
+function copyButtonHit() {
+    clipboard.copy(queryString);
+}
+
+
+$(document).ready(function () {
+    $('[data-toggle="popover"]').popover();
+});
+
+$('input[id="fromDate"]').daterangepicker({
+    "singleDatePicker": true,
+    "timePicker": false,
+    "timePicker24Hour": false,
+    "locale": {
+        "format": "DD/MM/YYYY",
+        "separator": " / ",
+        "applyLabel": "OK",
+        "cancelLabel": "Avbryt",
+        "fromLabel": "Fra",
+        "toLabel": "Til",
+        "customRangeLabel": "Custom",
+        "weekLabel": "UkeNr",
+        "daysOfWeek": [
+            "Søn",
+            "Man",
+            "Tir",
+            "Ons",
+            "Tor",
+            "Fre",
+            "Lør"
+        ],
+        "monthNames": [
+            "Januar",
+            "Februar",
+            "Mars",
+            "April",
+            "Mai",
+            "Juni",
+            "Juli",
+            "August",
+            "September",
+            "Oktober",
+            "November",
+            "Desember"
+        ],
+        "firstDay": 1,
+        'startDate': '01/01/2015',
+    },
+}, function (start, end, label) {
+});
+
+
+$('input[id="toDate"]').daterangepicker({
+    "singleDatePicker": true,
+    "timePicker": false,
+    "timePicker24Hour": false,
+    "locale": {
+        "format": "DD/MM/YYYY",
+        "separator": " / ",
+        "applyLabel": "OK",
+        "cancelLabel": "Avbryt",
+        "fromLabel": "Fra",
+        "toLabel": "Til",
+        "customRangeLabel": "Custom",
+        "weekLabel": "UkeNr",
+        "daysOfWeek": [
+            "Søn",
+            "Man",
+            "Tir",
+            "Ons",
+            "Tor",
+            "Fre",
+            "Lør"
+        ],
+        "monthNames": [
+            "Januar",
+            "Februar",
+            "Mars",
+            "April",
+            "Mai",
+            "Juni",
+            "Juli",
+            "August",
+            "September",
+            "Oktober",
+            "November",
+            "Desember"
+        ],
+        "firstDay": 1
+    },
+}, function (start, end, label) {
+});</script>
+</div>
+</div>
+<div class="daterangepicker dropdown-menu ltr single opensright">
+<div class="calendar left single" style="display: block;">
+<div class="daterangepicker_input">
+<input class="input-mini form-control" name="daterangepicker_start" value="05/01/2016" style="display: none;" type="text">
+<i class="fa fa-calendar glyphicon glyphicon-calendar" style="display: none;">
+</i>
+<div class="calendar-time" style="display: none;">
+<div>
+</div>
+<i class="fa fa-clock-o glyphicon glyphicon-time">
+</i>
+</div>
+</div>
+<div class="calendar-table">
+</div>
+</div>
+<div class="calendar right" style="display: none;">
+<div class="daterangepicker_input">
+<input class="input-mini form-control" name="daterangepicker_end" value="05/01/2016" style="display: none;" type="text">
+<i class="fa fa-calendar glyphicon glyphicon-calendar" style="display: none;">
+</i>
+<div class="calendar-time" style="display: none;">
+<div>
+</div>
+<i class="fa fa-clock-o glyphicon glyphicon-time">
+</i>
+</div>
+</div>
+<div class="calendar-table">
+</div>
+</div>
+<div class="ranges" style="display: none;">
+<div class="range_inputs">
+<button class="applyBtn btn btn-sm btn-success" disabled="disabled" type="button">
+OK</button>
+ <button class="cancelBtn btn btn-sm btn-default" type="button">
+Avbryt</button>
+</div>
+</div>
+</div>
+<div class="daterangepicker dropdown-menu ltr single opensright">
+<div class="calendar left single" style="display: block;">
+<div class="daterangepicker_input">
+<input class="input-mini form-control" name="daterangepicker_start" value="25/11/2016" style="display: none;" type="text">
+<i class="fa fa-calendar glyphicon glyphicon-calendar" style="display: none;">
+</i>
+<div class="calendar-time" style="display: none;">
+<div>
+</div>
+<i class="fa fa-clock-o glyphicon glyphicon-time">
+</i>
+</div>
+</div>
+<div class="calendar-table">
+</div>
+</div>
+<div class="calendar right" style="display: none;">
+<div class="daterangepicker_input">
+<input class="input-mini form-control" name="daterangepicker_end" value="25/11/2016" style="display: none;" type="text">
+<i class="fa fa-calendar glyphicon glyphicon-calendar" style="display: none;">
+</i>
+<div class="calendar-time" style="display: none;">
+<div>
+</div>
+<i class="fa fa-clock-o glyphicon glyphicon-time">
+</i>
+</div>
+</div>
+<div class="calendar-table">
+</div>
+</div>
+<div class="ranges" style="display: none;">
+<div class="range_inputs">
+<button class="applyBtn btn btn-sm btn-success" disabled="disabled" type="button">
+OK</button>
+ <button class="cancelBtn btn btn-sm btn-default" type="button">
+Avbryt</button>
+</div>
+</div>
+</div>
+<script src="Sp%C3%B8rring_files/jquery.js">
+</script>
+<script src="Sp%C3%B8rring_files/bootstrap_002.js">
+</script>
+</body>
+</html>
