@@ -56,7 +56,7 @@ append body
                     .sectionInput
                         +input("text", "toDate", "DD/MM/YYYY", "Sluttdato", "sluttdato")
                 .infoIcon
-                    -dateInfo = "Første tilgjengelige dato er 12/05/15. <br/><br/>NB: Datovelger fungerer ikke i Firefox, så dato må skrives inn manuelt."
+                    -dateInfo = "Første tilgjengelige dato er 12/05/15."
                     span.glyphicon.text-info(class="glyphicon-info-sign",aria-hidden="true", data-toggle="popover" ,data-trigger="hover",data-content="#{dateInfo}", data-html="true")
                 .dropdown
                     select(id="fromHour", name="fromHour" disabled=true)

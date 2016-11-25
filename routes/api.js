@@ -662,11 +662,13 @@ function removeElements(input,parameter) {
         }
     }
 
+    if(input === "")
+        return "Ingen data ble funnet";
+
     if(containDepth)
         return addToList(list,parameterInput);
     else
         return addToAverage(list,parameterInput);
-
 }
 
 
