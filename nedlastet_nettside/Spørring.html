@@ -458,12 +458,22 @@ $(document).ready(function () {
 <!-- hide tofield on change -->
 $('#howMuchDataDropDown').change(function() {
   $( "#toDate_section" ).show();
+  $('.daterangepicker').removeClass('weekly monthly yearly');
   var i= $('#howMuchDataDropDown').val();
-      if(i=="yearlyAverage") // equal to selected option
+  if(i=="yearlyAverage") // equal to selected option
         {
+          $('.daterangepicker').addClass('yearly');
           $('#toDate_section').hide();
           $('input[id="fromDate"]').data('daterangepicker').setMinDate('"05/12/2016');
-    }
+  }
+  if(i=="weeklyAverage") // equal to selected option
+        {
+          $('.daterangepicker').addClass('weekly');
+  }
+   if(i=="monthlyAverage") // equal to selected option
+        {
+          $('.daterangepicker').addClass('monthly ');
+  } 
 });
 
 

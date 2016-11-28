@@ -77,7 +77,7 @@
     border: 1px solid #fff;
     padding: 4px;
     border-radius: 4px;
-    background: #fff; }
+    }
   .daterangepicker table {
     width: 100%;
     margin: 0; }
@@ -97,7 +97,6 @@
       font-size: 80%;
       color: #ccc; }
   .daterangepicker td.off, .daterangepicker td.off.in-range, .daterangepicker td.off.start-date, .daterangepicker td.off.end-date {
-    background-color: #fff;
     border-color: transparent;
     color: #999; }
   .daterangepicker td.in-range {
@@ -111,10 +110,14 @@
     border-radius: 0 4px 4px 0; }
   .daterangepicker td.start-date.end-date {
     border-radius: 4px; }
+   .yearly :hover,
+  .monthly tbody:hover,
+  .weekly tr:hover {
+	background-color: #eee;}
   .daterangepicker td.active, .daterangepicker td.active:hover {
     background-color: #357ebd;
     border-color: transparent;
-    color: #fff; }
+    color: #fff; } 
   .daterangepicker th.month {
     width: auto; }
   .daterangepicker td.disabled, .daterangepicker option.disabled {
