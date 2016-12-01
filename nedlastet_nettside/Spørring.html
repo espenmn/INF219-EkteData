@@ -457,7 +457,6 @@ $(document).ready(function () {
 
 <!-- hide tofield on change -->
 $('#howMuchDataDropDown').change(function() {
-  $( "#toDate_section" ).show();
   $('.daterangepicker').removeClass('weekly monthly yearly');
   var i= $('#howMuchDataDropDown').val();
   if(i=="yearlyAverage") // equal to selected option
